@@ -1,258 +1,36 @@
+extends includes/layout.pug
 
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8" />
-    <title> | funtim</title>
-    <meta name="author" content="XH" />
-    <meta name="description" content="ddd" />
-    <meta name="keywords" content="" />
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-    />
-    <link rel="icon" href="/images/avatar.jpg" />
-    <link rel="preconnect" href="https://s4.zstatic.net" />
-<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
-<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-<link rel="preconnect" href="https://fonts.googleapis.cn" />
-<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
-<link
-    rel="stylesheet"
-    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
-/>
-<script> const mixins = {}; </script>
+block content
+  #post
+    if top_img === false
+      include includes/header/post-info.pug
 
-<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
-
-
-<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
-<link
-    rel="stylesheet"
-    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
-/>
-<script src="/js/lib/highlight.js"></script>
-
-
-
-<script src="/js/lib/preview.js"></script>
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/main.css" />
-
-<meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-    <div id="layout">
-        <transition name="fade">
-            <div id="loading" v-show="loading">
-                <div id="loading-circle">
-                    <h2>LOADING</h2>
-                    <p>加载过慢请开启缓存 浏览器默认开启</p>
-                    <img src="/images/loading.gif" />
-                </div>
-            </div>
-        </transition>
-        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
-    <nav id="desktop-menu">
-        <a class="title" href="/">
-            <span>FUNTIM</span>
-        </a>
+    article#article-container.container.post-content
+      if theme.noticeOutdate.enable && page.noticeOutdate !== false 
+        include includes/post/outdate-notice.pug
+      else
+        !=page.content
+    include includes/post/post-copyright.pug
+    .tag_share
+      if (page.tags.length > 0 && theme.post_meta.post.tags)
+        .post-meta__tag-list
+          each item, index in page.tags.data
+            a(href=url_for(item.path)).post-meta__tags #[=item.name]
+      include includes/third-party/share/index.pug
         
-        <a href="/">
-            <i class="fa-solid fa-house fa-fw"></i>
-            <span>&ensp;Home</span>
-        </a>
-        
-        <a href="/about">
-            <i class="fa-solid fa-id-card fa-fw"></i>
-            <span>&ensp;About</span>
-        </a>
-        
-        <a href="/archives">
-            <i class="fa-solid fa-box-archive fa-fw"></i>
-            <span>&ensp;Archives</span>
-        </a>
-        
-        <a href="/categories">
-            <i class="fa-solid fa-bookmark fa-fw"></i>
-            <span>&ensp;Categories</span>
-        </a>
-        
-        <a href="/tags">
-            <i class="fa-solid fa-tags fa-fw"></i>
-            <span>&ensp;Tags</span>
-        </a>
-        
-    </nav>
-    <nav id="mobile-menu">
-        <div class="title" @click="showMenuItems = !showMenuItems">
-            <i class="fa-solid fa-bars fa-fw"></i>
-            <span>&emsp;FUNTIM</span>
-        </div>
-        <transition name="slide">
-            <div class="items" v-show="showMenuItems">
-                
-                <a href="/">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-house fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
-                    </div>
-                </a>
-                
-                <a href="/about">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-id-card fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
-                    </div>
-                </a>
-                
-                <a href="/archives">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-box-archive fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
-                    </div>
-                </a>
-                
-                <a href="/categories">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
-                    </div>
-                </a>
-                
-                <a href="/tags">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-tags fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
-                    </div>
-                </a>
-                
-            </div>
-        </transition>
-    </nav>
-</div>
-<transition name="fade">
-    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
-</transition>
+    if theme.reward.enable && theme.reward.QR_code
+      !=partial('includes/post/reward', {}, {cache: true})
 
-        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div class="article">
-    <div>
-        <h1></h1>
-    </div>
-    <div class="info">
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/12/28
-        </span>
-        
-        
-    </div>
-    
-    <div class="content" v-pre>
-        <h1 id="集合"><a href="#集合" class="headerlink" title="集合"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Basic_Interaction_with_Revit_Elements_Collections_Collections_and_Iterators_html">集合</a></h1><p>大多数Revit Platform API属性和方法在提供对一组相关项的访问时都使用.NET Framework集合类。</p>
-<p>在Revit集合类型中实现的IEnumerator和IEnumerator接口在System.Collection命名空间中定义。</p>
-<p>Pages in this section 本节中的页面</p>
-<ul>
-<li>Interface 接口</li>
-<li>Collections and Iterators 集合和迭代器</li>
-</ul>
-<h2 id="Interface-接口"><a href="#Interface-接口" class="headerlink" title="Interface 接口"></a>Interface 接口</h2><p>以下各节讨论与接口相关的集合类型。</p>
-<h3 id="IEnumerable"><a href="#IEnumerable" class="headerlink" title="IEnumerable"></a>IEnumerable</h3><p>IELTS接口位于System.Collections命名空间中。它公开枚举数，该枚举数支持对非泛型集合进行简单迭代。GetEnumerator（）方法获取实现此接口的枚举器。返回的IEnumerator对象在整个集合中迭代。GetEnumerator（）方法由C#中的foreach循环隐式使用。</p>
-<h3 id="IEnumerator"><a href="#IEnumerator" class="headerlink" title="IEnumerator"></a>IEnumerator</h3><p>IEnumerator接口位于System.Collections命名空间中。它支持对非泛型集合进行简单迭代。IEnumerator是所有非泛型枚举器的基接口。C#中的foreach语句隐藏了枚举器的复杂性。</p>
-<p>注意：建议使用foreach而不是直接操作枚举器。</p>
-<p>枚举数用于读取集合数据，但不能用于修改基础集合。使用IEnumerator如下：</p>
-<ul>
-<li>最初，枚举数位于集合中第一个元素的前面。但是，最好总是在第一次获取枚举数时调用Reset（）。<ul>
-<li>Reset（）方法将枚举数移回原始位置。在此位置，调用Current属性将引发异常。</li>
-<li>调用MoveNext（）方法，在阅读当前迭代器值之前，将枚举器前进到集合的第一个元素。</li>
-</ul>
-</li>
-<li>在调用MoveNext（）方法或Reset（）方法之前，Current属性返回相同的对象。MoveNext（）方法将当前迭代器设置为下一个元素。</li>
-<li>如果MoveNext通过了集合的末尾，则枚举数位于集合中最后一个元素之后，MoveNext返回false。<ul>
-<li>当枚举数处于此位置时，对MoveNext的后续调用也返回false。</li>
-<li>如果对MoveNext的最后一次调用返回false，则调用Current属性将引发异常。</li>
-<li>要再次将当前迭代器设置为集合中的第一个元素，请调用Reset（）方法，然后调用MoveNext（）。</li>
-</ul>
-</li>
-<li>只要集合保持不变，枚举数就保持有效。<ul>
-<li>如果对集合进行了更改（如添加、修改或删除元素），则枚举数将失效，并且下次调用MoveNext（）或Reset（）方法时将引发InvalidOperationException。</li>
-<li>如果在MoveNext和当前迭代器之间修改了集合，则Current属性返回到指定的元素，即使枚举器已经无效。</li>
-</ul>
-</li>
-</ul>
-<p>注意：所有对Reset（）方法的调用都必须导致枚举数的相同状态。首选的实现是将枚举数移动到集合的开头，在第一个元素之前。如果在创建枚举数之后修改了集合，则这将使枚举数无效，这与MoveNext（）和Current属性一致。</p>
-<h2 id="Collections-and-Iterators-集合和迭代器"><a href="#Collections-and-Iterators-集合和迭代器" class="headerlink" title="Collections and Iterators 集合和迭代器"></a>Collections and Iterators 集合和迭代器</h2><p>在Revit Platform API中，集合和迭代器是通用且类型安全的。</p>
-<p>所有集合都实现IEnumerator接口，所有相关迭代器都实现IEnumerator接口。因此，所有方法和属性都在Revit Platform API中实现，并且可以在相关集合中发挥作用。</p>
-<p>所有集合的实现都是类似的。下面的示例使用ModelCurveArray演示如何使用主集合属性：</p>
-<p>代码区域9-2：使用集合</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">UIDocument uidoc = <span class="keyword">new</span> UIDocument(document); </span><br><span class="line">ICollection selectedIds = uidoc.Selection.GetElementIds();</span><br><span class="line"></span><br><span class="line"><span class="comment">// Store the ModelLine references</span></span><br><span class="line">ModelCurveArray lineArray = <span class="keyword">new</span> ModelCurveArray();</span><br><span class="line"></span><br><span class="line"><span class="comment">// … Store operation</span></span><br><span class="line">Autodesk.Revit.DB.ElementId id = <span class="keyword">new</span> Autodesk.Revit.DB.ElementId(<span class="number">131943</span>); <span class="comment">//assume 131943 is a model line element id</span></span><br><span class="line">lineArray.Append(document.GetElement(id) <span class="keyword">as</span> ModelLine);</span><br><span class="line"></span><br><span class="line"><span class="comment">// use Size property of Array</span></span><br><span class="line">TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,<span class="string">&quot;Before Insert: &quot;</span> + lineArray.Size + <span class="string">&quot; in lineArray.&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// use IsEmpty property of Array</span></span><br><span class="line"><span class="keyword">if</span> (!lineArray.IsEmpty)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// use Item(int) property of Array</span></span><br><span class="line">    ModelCurve modelCurve = lineArray.get_Item(<span class="number">0</span>) <span class="keyword">as</span> ModelCurve;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// erase the specific element from the set of elements</span></span><br><span class="line">    selectedIds.Remove(modelCurve.Id);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// create a new model line and insert to array of model line</span></span><br><span class="line">    SketchPlane sketchPlane = modelCurve.SketchPlane;</span><br><span class="line"></span><br><span class="line">    XYZ startPoint = <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);  <span class="comment">// the start point of the line</span></span><br><span class="line">    XYZ endPoint = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">10</span>, <span class="number">0</span>);  <span class="comment">// the end point of the line</span></span><br><span class="line">    <span class="comment">// create geometry line</span></span><br><span class="line">    Line geometryLine = Line.CreateBound(startPoint, endPoint);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// create the ModelLine</span></span><br><span class="line">    ModelLine line = document.Create.NewModelCurve(geometryLine, sketchPlane) <span class="keyword">as</span> ModelLine;</span><br><span class="line"></span><br><span class="line">    lineArray.Insert(line, lineArray.Size - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,<span class="string">&quot;After Insert: &quot;</span> + lineArray.Size + <span class="string">&quot; in lineArray.&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// use the Clear() method to remove all elements in lineArray</span></span><br><span class="line">lineArray.Clear();</span><br><span class="line"></span><br><span class="line">TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,<span class="string">&quot;After Clear: &quot;</span> + lineArray.Size + <span class="string">&quot; in lineArray.&quot;</span>);</span><br></pre></td></tr></table></figure>
+    //- ad
+    if theme.ad && theme.ad.post
+      .ads-wrap!=theme.ad.post
 
-<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-</div>
+    if theme.post_pagination
+      include includes/pagination.pug
+    if theme.related_post && theme.related_post.enable
+      != related_posts(page,site.posts)
 
-            <footer id="footer">
-    <div id="footer-wrap">
-        <div>
-            &copy;
-            2022 - 2024 funtim
-            <span id="footer-icon">
-                <i class="fa-solid fa-font-awesome fa-fw"></i>
-            </span>
-            &commat;XH
-        </div>
-        <div>
-            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
-            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
-        </div>
-        
-    </div>
-</footer>
-
-        </div>
-        
-        <transition name="fade">
-            <div id="preview" ref="preview" v-show="previewShow">
-                <img id="preview-content" ref="previewContent" />
-            </div>
-        </transition>
-        
-    </div>
-    <script src="/js/main.js"></script>
-    
-    
-
-
-
-
-    
-</body>
-</html>
+    if page.comments !== false && theme.comments.use
+      - var commentsJsLoad = true
+      !=partial('includes/third-party/comments/index', {}, {cache: true})
+      

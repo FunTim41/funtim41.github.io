@@ -1,227 +1,36 @@
+extends includes/layout.pug
 
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8" />
-    <title> | funtim</title>
-    <meta name="author" content="XH" />
-    <meta name="description" content="ddd" />
-    <meta name="keywords" content="" />
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-    />
-    <link rel="icon" href="/images/avatar.jpg" />
-    <link rel="preconnect" href="https://s4.zstatic.net" />
-<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
-<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-<link rel="preconnect" href="https://fonts.googleapis.cn" />
-<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
-<link
-    rel="stylesheet"
-    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
-/>
-<script> const mixins = {}; </script>
+block content
+  #post
+    if top_img === false
+      include includes/header/post-info.pug
 
-<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
-
-
-<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
-<link
-    rel="stylesheet"
-    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
-/>
-<script src="/js/lib/highlight.js"></script>
-
-
-
-<script src="/js/lib/preview.js"></script>
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/main.css" />
-
-<meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-    <div id="layout">
-        <transition name="fade">
-            <div id="loading" v-show="loading">
-                <div id="loading-circle">
-                    <h2>LOADING</h2>
-                    <p>加载过慢请开启缓存 浏览器默认开启</p>
-                    <img src="/images/loading.gif" />
-                </div>
-            </div>
-        </transition>
-        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
-    <nav id="desktop-menu">
-        <a class="title" href="/">
-            <span>FUNTIM</span>
-        </a>
+    article#article-container.container.post-content
+      if theme.noticeOutdate.enable && page.noticeOutdate !== false 
+        include includes/post/outdate-notice.pug
+      else
+        !=page.content
+    include includes/post/post-copyright.pug
+    .tag_share
+      if (page.tags.length > 0 && theme.post_meta.post.tags)
+        .post-meta__tag-list
+          each item, index in page.tags.data
+            a(href=url_for(item.path)).post-meta__tags #[=item.name]
+      include includes/third-party/share/index.pug
         
-        <a href="/">
-            <i class="fa-solid fa-house fa-fw"></i>
-            <span>&ensp;Home</span>
-        </a>
-        
-        <a href="/about">
-            <i class="fa-solid fa-id-card fa-fw"></i>
-            <span>&ensp;About</span>
-        </a>
-        
-        <a href="/archives">
-            <i class="fa-solid fa-box-archive fa-fw"></i>
-            <span>&ensp;Archives</span>
-        </a>
-        
-        <a href="/categories">
-            <i class="fa-solid fa-bookmark fa-fw"></i>
-            <span>&ensp;Categories</span>
-        </a>
-        
-        <a href="/tags">
-            <i class="fa-solid fa-tags fa-fw"></i>
-            <span>&ensp;Tags</span>
-        </a>
-        
-    </nav>
-    <nav id="mobile-menu">
-        <div class="title" @click="showMenuItems = !showMenuItems">
-            <i class="fa-solid fa-bars fa-fw"></i>
-            <span>&emsp;FUNTIM</span>
-        </div>
-        <transition name="slide">
-            <div class="items" v-show="showMenuItems">
-                
-                <a href="/">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-house fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
-                    </div>
-                </a>
-                
-                <a href="/about">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-id-card fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
-                    </div>
-                </a>
-                
-                <a href="/archives">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-box-archive fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
-                    </div>
-                </a>
-                
-                <a href="/categories">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
-                    </div>
-                </a>
-                
-                <a href="/tags">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-tags fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
-                    </div>
-                </a>
-                
-            </div>
-        </transition>
-    </nav>
-</div>
-<transition name="fade">
-    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
-</transition>
+    if theme.reward.enable && theme.reward.QR_code
+      !=partial('includes/post/reward', {}, {cache: true})
 
-        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div class="article">
-    <div>
-        <h1></h1>
-    </div>
-    <div class="info">
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/12/28
-        </span>
-        
-        
-    </div>
-    
-    <div class="content" v-pre>
-        <h1 id="可停靠对话框窗格"><a href="#可停靠对话框窗格" class="headerlink" title="可停靠对话框窗格"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Advanced_Topics_Dockable_Dialog_Panes_html">可停靠对话框窗格</a></h1><p>自Revit 2013以来，应用程序可以通过利用Revit API中的Idling事件（用户界面事件和外部事件）类来使用无模式对话框。需要非模态对话框的加载项也可以选择使用可停靠的非模态对话框。与标准的无模式对话框类似，可停靠对话框是注册的Windows Presentation Foundation（WPF）对话框窗格，参与Revit的窗口对接系统。注册的可停靠窗格可以停靠在主Revit窗口的顶部、左侧、右侧和底部，也可以作为选项卡添加到现有系统窗格（例如项目浏览器）。此外，可停靠窗格可以浮动，表现得很像标准的非模态对话框。</p>
-<h2 id="IDockablePaneProvider"><a href="#IDockablePaneProvider" class="headerlink" title="IDockablePaneProvider"></a>IDockablePaneProvider</h2><p>注册可停靠窗格需要IDockablePaneProvider接口的实例。在Revit用户界面初始化期间调用此界面的SetupDockableWindow（）方法，以收集有关附加模块可固定窗格窗口的信息。SetupDockableData（）有一个DockablePaneProviderData类型的参数，它是关于新可停靠窗格的信息的容器。</p>
-<p>IDockablePaneProvider接口的实现应设置DockablePaneProviderData的FrameworkElement和InitialState属性。FrameworkElement属性是包含窗格用户界面的Windows Presentation Framework对象。</p>
-<p><strong>注意：</strong>建议外接程序中的可停靠对话框是实现IDockablePaneProvider的类，并从System.Windows.Controls.Page子类化它。</p>
-<p>InitialState属性是对接窗格的初始位置和设置，由DockablePaneState类指示。窗格的停靠位置可以是上、下、左、右、浮动或选项卡式。如果位置为Tabbed，则DockablePaneState.TabBehind属性可用于指定新窗格将显示在哪个窗格后面。如果位置为Floating，则DockablePaneState.FloatingRectangle属性包含确定窗格大小和位置的矩形。</p>
-<h2 id="DockablePane-Dockable"><a href="#DockablePane-Dockable" class="headerlink" title="DockablePane Dockable"></a>DockablePane Dockable</h2><p>要在运行时访问可停靠窗格，需要通过调用UIApplication. RegisterDockableList（）方法来注册它。此方法需要新窗格的唯一标识符（DockablePaneId）、指定窗格标题的字符串以及IDockablePaneProvider接口的实现。</p>
-<p>可停靠窗格可以通过调用UIApplication. GetDockablePanId（）并传入唯一的DockablePaneId来访问。此方法返回一个DockablePanId。DockablePane.Show（）将在Revit用户界面中的最后停靠位置（如果当前不可见）显示窗格。Dockable.Hide（）将隐藏可见的可停靠窗格。但是，它对内置的Revit可固定窗格没有影响。</p>
-<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-</div>
+    //- ad
+    if theme.ad && theme.ad.post
+      .ads-wrap!=theme.ad.post
 
-            <footer id="footer">
-    <div id="footer-wrap">
-        <div>
-            &copy;
-            2022 - 2024 funtim
-            <span id="footer-icon">
-                <i class="fa-solid fa-font-awesome fa-fw"></i>
-            </span>
-            &commat;XH
-        </div>
-        <div>
-            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
-            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
-        </div>
-        
-    </div>
-</footer>
+    if theme.post_pagination
+      include includes/pagination.pug
+    if theme.related_post && theme.related_post.enable
+      != related_posts(page,site.posts)
 
-        </div>
-        
-        <transition name="fade">
-            <div id="preview" ref="preview" v-show="previewShow">
-                <img id="preview-content" ref="previewContent" />
-            </div>
-        </transition>
-        
-    </div>
-    <script src="/js/main.js"></script>
-    
-    
-
-
-
-
-    
-</body>
-</html>
+    if page.comments !== false && theme.comments.use
+      - var commentsJsLoad = true
+      !=partial('includes/third-party/comments/index', {}, {cache: true})
+      

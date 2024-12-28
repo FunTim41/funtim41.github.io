@@ -1,244 +1,36 @@
+extends includes/layout.pug
 
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8" />
-    <title> | funtim</title>
-    <meta name="author" content="XH" />
-    <meta name="description" content="ddd" />
-    <meta name="keywords" content="" />
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-    />
-    <link rel="icon" href="/images/avatar.jpg" />
-    <link rel="preconnect" href="https://s4.zstatic.net" />
-<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
-<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-<link rel="preconnect" href="https://fonts.googleapis.cn" />
-<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
-<link
-    rel="stylesheet"
-    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
-/>
-<script> const mixins = {}; </script>
+block content
+  #post
+    if top_img === false
+      include includes/header/post-info.pug
 
-<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
-
-
-<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
-<link
-    rel="stylesheet"
-    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
-/>
-<script src="/js/lib/highlight.js"></script>
-
-
-
-<script src="/js/lib/preview.js"></script>
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/main.css" />
-
-<meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-    <div id="layout">
-        <transition name="fade">
-            <div id="loading" v-show="loading">
-                <div id="loading-circle">
-                    <h2>LOADING</h2>
-                    <p>加载过慢请开启缓存 浏览器默认开启</p>
-                    <img src="/images/loading.gif" />
-                </div>
-            </div>
-        </transition>
-        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
-    <nav id="desktop-menu">
-        <a class="title" href="/">
-            <span>FUNTIM</span>
-        </a>
+    article#article-container.container.post-content
+      if theme.noticeOutdate.enable && page.noticeOutdate !== false 
+        include includes/post/outdate-notice.pug
+      else
+        !=page.content
+    include includes/post/post-copyright.pug
+    .tag_share
+      if (page.tags.length > 0 && theme.post_meta.post.tags)
+        .post-meta__tag-list
+          each item, index in page.tags.data
+            a(href=url_for(item.path)).post-meta__tags #[=item.name]
+      include includes/third-party/share/index.pug
         
-        <a href="/">
-            <i class="fa-solid fa-house fa-fw"></i>
-            <span>&ensp;Home</span>
-        </a>
-        
-        <a href="/about">
-            <i class="fa-solid fa-id-card fa-fw"></i>
-            <span>&ensp;About</span>
-        </a>
-        
-        <a href="/archives">
-            <i class="fa-solid fa-box-archive fa-fw"></i>
-            <span>&ensp;Archives</span>
-        </a>
-        
-        <a href="/categories">
-            <i class="fa-solid fa-bookmark fa-fw"></i>
-            <span>&ensp;Categories</span>
-        </a>
-        
-        <a href="/tags">
-            <i class="fa-solid fa-tags fa-fw"></i>
-            <span>&ensp;Tags</span>
-        </a>
-        
-    </nav>
-    <nav id="mobile-menu">
-        <div class="title" @click="showMenuItems = !showMenuItems">
-            <i class="fa-solid fa-bars fa-fw"></i>
-            <span>&emsp;FUNTIM</span>
-        </div>
-        <transition name="slide">
-            <div class="items" v-show="showMenuItems">
-                
-                <a href="/">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-house fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
-                    </div>
-                </a>
-                
-                <a href="/about">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-id-card fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
-                    </div>
-                </a>
-                
-                <a href="/archives">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-box-archive fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
-                    </div>
-                </a>
-                
-                <a href="/categories">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
-                    </div>
-                </a>
-                
-                <a href="/tags">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-tags fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
-                    </div>
-                </a>
-                
-            </div>
-        </transition>
-    </nav>
-</div>
-<transition name="fade">
-    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
-</transition>
+    if theme.reward.enable && theme.reward.QR_code
+      !=partial('includes/post/reward', {}, {cache: true})
 
-        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div class="article">
-    <div>
-        <h1></h1>
-    </div>
-    <div class="info">
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/12/28
-        </span>
-        
-        
-    </div>
-    
-    <div class="content" v-pre>
-        <h1 id="外部事件"><a href="#外部事件" class="headerlink" title="外部事件"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Advanced_Topics_External_Events_html">外部事件</a></h1><p>Revit API提供了一个外部事件框架，以适应非模态对话框的使用。它是为异步处理量身定制的，其操作类似于具有默认频率的Idling事件。</p>
-<p>要使用外部事件框架实现无模式对话框，请执行以下步骤：</p>
-<ol>
-<li>通过从IExternalEventException接口派生来实现外部事件处理程序</li>
-<li>使用静态ExternalEvent.Create（）方法创建ExternalEvent</li>
-<li>当需要执行Revit操作的无模式对话框中发生事件时，调用ExternalEvent.Raise（）</li>
-<li>当存在可用的空闲时间周期时，Revit将调用IExternalEvents.Execute（）方法的实现。</li>
-</ol>
-<h3 id="IExternalEventHandler"><a href="#IExternalEventHandler" class="headerlink" title="IExternalEventHandler"></a>IExternalEventHandler</h3><p>这是要为外部事件实现的接口。实现此接口的类的实例注册到Revit中，每次引发相应的外部事件时，都会调用此接口的Execute方法。</p>
-<p>IExternalEventHandler 只有两个方法要实现，Execute（）方法和GetName（），后者应该返回事件的名称。下面是一个基本的实现，它将在引发事件时显示TaskDialog。</p>
-<p>**代码区域：实现IExternalEventHandler **</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ExternalEventExample</span> : <span class="title">IExternalEventHandler</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Execute</span>(<span class="params">UIApplication app</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;External Event&quot;</span>, <span class="string">&quot;Click Close to close.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetName</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;External Event Example&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    //- ad
+    if theme.ad && theme.ad.post
+      .ads-wrap!=theme.ad.post
 
-<h3 id="外部事件-1"><a href="#外部事件-1" class="headerlink" title="外部事件"></a>外部事件</h3><p>ExternalEvent类用于创建ExternalEvent。此类的实例将在事件创建时返回给外部事件的所有者。事件的所有者将使用此实例来通知Revit应调用该事件。Revit将定期检查是否有任何事件已发出信号（引发），并将执行通过调用事件各自处理程序上的Execute方法引发的所有事件。</p>
-<p>下面的示例演示IExternalApplication的实现，该IExternalApplication具有从ExternalCommand（显示在代码区域的末尾）调用的ShowForm（）方法。ShowForm（）方法从上面的例子中创建了一个外部事件处理程序的新实例，创建了一个新的ExternalEvent，然后显示无模式对话框，该对话框稍后将使用传入的ExternalEvent对象来引发事件。</p>
-<p><strong>代码区域：创建外部事件</strong></p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ExternalEventExampleApp</span> : <span class="title">IExternalApplication</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// class instance</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ExternalEventExampleApp thisApp = <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">// ModelessForm instance</span></span><br><span class="line">    <span class="keyword">private</span> ExternalEventExampleDialog m_MyForm;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Result <span class="title">OnShutdown</span>(<span class="params">UIControlledApplication application</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (m_MyForm != <span class="literal">null</span> &amp;&amp; m_MyForm.Visible)</span><br><span class="line">        &#123;</span><br><span class="line">            m_MyForm.Close();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Result.Succeeded;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Result <span class="title">OnStartup</span>(<span class="params">UIControlledApplication application</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_MyForm = <span class="literal">null</span>;   <span class="comment">// no dialog needed yet; the command will bring it</span></span><br><span class="line">        thisApp = <span class="keyword">this</span>;  <span class="comment">// static access to this application instance</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Result.Succeeded;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//   The external command invokes this on the end-user&#x27;s request</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ShowForm</span>(<span class="params">UIApplication uiapp</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// If we do not have a dialog yet, create and show it</span></span><br><span class="line">        <span class="keyword">if</span> (m_MyForm == <span class="literal">null</span> || m_MyForm.IsDisposed)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// A new handler to handle request posting by the dialog</span></span><br><span class="line">            ExternalEventExample handler = <span class="keyword">new</span> ExternalEventExample();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// External Event for the dialog to use (to post requests)</span></span><br><span class="line">            ExternalEvent exEvent = ExternalEvent.Create(handler);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// We give the objects to the new dialog;</span></span><br><span class="line">            <span class="comment">// The dialog becomes the owner responsible for disposing them, eventually.</span></span><br><span class="line">            m_MyForm = <span class="keyword">new</span> ExternalEventExampleDialog(exEvent, handler);</span><br><span class="line">            m_MyForm.Show();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="meta">Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.Manual)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Command</span> : <span class="title">IExternalCommand</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> Result <span class="title">Execute</span>(<span class="params">ExternalCommandData commandData, <span class="keyword">ref</span> <span class="built_in">string</span> message, ElementSet elements</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            ExternalEventExampleApp.thisApp.ShowForm(commandData.Application);</span><br><span class="line">            <span class="keyword">return</span> Result.Succeeded;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (Exception ex)</span><br><span class="line">        &#123;</span><br><span class="line">            message = ex.Message;</span><br><span class="line">            <span class="keyword">return</span> Result.Failed;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    if theme.post_pagination
+      include includes/pagination.pug
+    if theme.related_post && theme.related_post.enable
+      != related_posts(page,site.posts)
 
-<p>一旦显示非模态对话框，用户就可以与之交互。对话框中的操作可能需要触发Revit中的某些操作。发生这种情况时，将调用ExternalEvent.Raise（）方法。下面的示例是一个简单的无模式对话框的代码，该对话框有两个按钮：一个用于引发事件，另一个用于关闭对话框。</p>
-<p>代码区域：引发事件</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">ExternalEventExampleDialog</span> : <span class="title">Form</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> ExternalEvent m_ExEvent;</span><br><span class="line">    <span class="keyword">private</span> ExternalEventExample m_Handler;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ExternalEventExampleDialog</span>(<span class="params">ExternalEvent exEvent, ExternalEventExample handler</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        InitializeComponent();</span><br><span class="line">        m_ExEvent = exEvent;</span><br><span class="line">        m_Handler = handler;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnFormClosed</span>(<span class="params">FormClosedEventArgs e</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// we own both the event and the handler</span></span><br><span class="line">        <span class="comment">// we should dispose it before we are closed</span></span><br><span class="line">        m_ExEvent.Dispose();</span><br><span class="line">        m_ExEvent = <span class="literal">null</span>;</span><br><span class="line">        m_Handler = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// do not forget to call the base class</span></span><br><span class="line">        <span class="keyword">base</span>.OnFormClosed(e);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">closeButton_Click</span>(<span class="params"><span class="built_in">object</span> sender, EventArgs e</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">showMessageButton_Click</span>(<span class="params"><span class="built_in">object</span> sender, EventArgs e</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_ExEvent.Raise();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>调用ExternalEvent.Raise（）方法时，Revit将等待可用的Idling计时器，然后调用IExternalEventEvent.Execute（）方法。在这个简单的例子中，它将显示一个TaskDialog，文本为“Click Close to close.”“，如上面第一个代码区域所示。</p>
-<p>有关使用外部事件框架的更复杂示例，请参见SDK中ModelessDialog\ModelessForm_ExternalEvent文件夹下的示例代码。它使用一个带有许多按钮的非模态对话框，IExternalEventEvent实现有一个公共属性来跟踪按下了哪个按钮，因此它可以在Execute（）方法中打开该值。</p>
-<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-</div>
-
-            <footer id="footer">
-    <div id="footer-wrap">
-        <div>
-            &copy;
-            2022 - 2024 funtim
-            <span id="footer-icon">
-                <i class="fa-solid fa-font-awesome fa-fw"></i>
-            </span>
-            &commat;XH
-        </div>
-        <div>
-            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
-            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
-        </div>
-        
-    </div>
-</footer>
-
-        </div>
-        
-        <transition name="fade">
-            <div id="preview" ref="preview" v-show="previewShow">
-                <img id="preview-content" ref="previewContent" />
-            </div>
-        </transition>
-        
-    </div>
-    <script src="/js/main.js"></script>
-    
-    
-
-
-
-
-    
-</body>
-</html>
+    if page.comments !== false && theme.comments.use
+      - var commentsJsLoad = true
+      !=partial('includes/third-party/comments/index', {}, {cache: true})
+      

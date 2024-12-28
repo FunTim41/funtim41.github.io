@@ -1,296 +1,36 @@
+extends includes/layout.pug
 
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8" />
-    <title> | funtim</title>
-    <meta name="author" content="XH" />
-    <meta name="description" content="ddd" />
-    <meta name="keywords" content="" />
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-    />
-    <link rel="icon" href="/images/avatar.jpg" />
-    <link rel="preconnect" href="https://s4.zstatic.net" />
-<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
-<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-<link rel="preconnect" href="https://fonts.googleapis.cn" />
-<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
-<link
-    rel="stylesheet"
-    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
-/>
-<script> const mixins = {}; </script>
+block content
+  #post
+    if top_img === false
+      include includes/header/post-info.pug
 
-<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
-
-
-<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
-<link
-    rel="stylesheet"
-    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
-/>
-<script src="/js/lib/highlight.js"></script>
-
-
-
-<script src="/js/lib/preview.js"></script>
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/main.css" />
-
-<meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-    <div id="layout">
-        <transition name="fade">
-            <div id="loading" v-show="loading">
-                <div id="loading-circle">
-                    <h2>LOADING</h2>
-                    <p>加载过慢请开启缓存 浏览器默认开启</p>
-                    <img src="/images/loading.gif" />
-                </div>
-            </div>
-        </transition>
-        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
-    <nav id="desktop-menu">
-        <a class="title" href="/">
-            <span>FUNTIM</span>
-        </a>
+    article#article-container.container.post-content
+      if theme.noticeOutdate.enable && page.noticeOutdate !== false 
+        include includes/post/outdate-notice.pug
+      else
+        !=page.content
+    include includes/post/post-copyright.pug
+    .tag_share
+      if (page.tags.length > 0 && theme.post_meta.post.tags)
+        .post-meta__tag-list
+          each item, index in page.tags.data
+            a(href=url_for(item.path)).post-meta__tags #[=item.name]
+      include includes/third-party/share/index.pug
         
-        <a href="/">
-            <i class="fa-solid fa-house fa-fw"></i>
-            <span>&ensp;Home</span>
-        </a>
-        
-        <a href="/about">
-            <i class="fa-solid fa-id-card fa-fw"></i>
-            <span>&ensp;About</span>
-        </a>
-        
-        <a href="/archives">
-            <i class="fa-solid fa-box-archive fa-fw"></i>
-            <span>&ensp;Archives</span>
-        </a>
-        
-        <a href="/categories">
-            <i class="fa-solid fa-bookmark fa-fw"></i>
-            <span>&ensp;Categories</span>
-        </a>
-        
-        <a href="/tags">
-            <i class="fa-solid fa-tags fa-fw"></i>
-            <span>&ensp;Tags</span>
-        </a>
-        
-    </nav>
-    <nav id="mobile-menu">
-        <div class="title" @click="showMenuItems = !showMenuItems">
-            <i class="fa-solid fa-bars fa-fw"></i>
-            <span>&emsp;FUNTIM</span>
-        </div>
-        <transition name="slide">
-            <div class="items" v-show="showMenuItems">
-                
-                <a href="/">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-house fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
-                    </div>
-                </a>
-                
-                <a href="/about">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-id-card fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
-                    </div>
-                </a>
-                
-                <a href="/archives">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-box-archive fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
-                    </div>
-                </a>
-                
-                <a href="/categories">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
-                    </div>
-                </a>
-                
-                <a href="/tags">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-tags fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
-                    </div>
-                </a>
-                
-            </div>
-        </transition>
-    </nav>
-</div>
-<transition name="fade">
-    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
-</transition>
+    if theme.reward.enable && theme.reward.QR_code
+      !=partial('includes/post/reward', {}, {cache: true})
 
-        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div class="article">
-    <div>
-        <h1></h1>
-    </div>
-    <div class="info">
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/12/28
-        </span>
-        
-        
-    </div>
-    
-    <div class="content" v-pre>
-        <h1 id="动态模型更新"><a href="#动态模型更新" class="headerlink" title="动态模型更新"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Advanced_Topics_Dynamic_Model_Update_html">动态模型更新</a></h1><p>动态模型更新为Revit API应用程序提供了修改Revit模型的能力，作为对模型中发生的更改（当这些更改即将在事务结束时提交时）的反应。Revit API应用程序可以通过实现IUpdater接口并将其注册到UpdaterRegistry类来创建更新程序。注册包括指定模型中的哪些更改应该触发更新程序。</p>
-<p>Pages in this section 本节中的页面</p>
-<ul>
-<li>实现IUpdater</li>
-<li>Execute方法</li>
-<li>注册更新程序</li>
-<li>Exposure to End-User</li>
-</ul>
-<h2 id="实现IUpdater"><a href="#实现IUpdater" class="headerlink" title="实现IUpdater"></a>实现IUpdater</h2><p>IUpdater接口要求实现以下5个方法：</p>
-<ul>
-<li>GetUpdaterId()-此方法应为更新程序返回一个全局唯一的ID，包括应用程序ID和此更新程序的ID。此方法在更新程序注册期间调用一次。</li>
-<li>GetUpdateName()-如果在运行时更新程序有问题，则返回一个名称，通过该名称可以向用户标识更新程序。</li>
-<li>GetAdditionalInformation()-此方法应返回辅助文本，Revit将使用该文本在未加载更新程序时通知最终用户。</li>
-<li>GetChangePriority()-此方法标识更新程序将执行的更改的性质。它用于标识更新程序的执行顺序。此方法在更新程序注册期间调用一次。</li>
-<li>Execute()-这是Revit将调用以执行更新的方法。有关Execute()方法的更多信息，请参见下一节。</li>
-</ul>
-<p>如果一个文档被一个Updater修改了，那么这个文档将存储Updater的唯一ID。如果用户稍后打开文档，但Updater不存在，则Revit将警告用户，以前编辑文档的第三方Updater不可用，除非将Updater标记为可选。默认情况下，Updater是非可选的，只有在必要时才应使用可选Updater。</p>
-<p>下面的代码是实现IUpdater接口（为新添加的墙更改WallType）并在OnStartup()方法中注册更新程序的简单示例。它演示了创建和使用Updater的所有关键方面。</p>
-<p>代码区域25-1：实现IUpdater的示例</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">WallUpdaterApplication</span> : <span class="title">Autodesk.Revit.UI.IExternalApplication</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> Result <span class="title">OnStartup</span>(<span class="params">Autodesk.Revit.UI.UIControlledApplication application</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="comment">// Register wall updater with Revit</span></span><br><span class="line">                WallUpdater updater = <span class="keyword">new</span> WallUpdater(application.ActiveAddInId);</span><br><span class="line">                UpdaterRegistry.RegisterUpdater(updater);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Change Scope = any Wall element</span></span><br><span class="line">                ElementClassFilter wallFilter = <span class="keyword">new</span> ElementClassFilter(<span class="keyword">typeof</span>(Wall));</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Change type = element addition</span></span><br><span class="line">                UpdaterRegistry.AddTrigger(updater.GetUpdaterId(), wallFilter, Element.GetChangeTypeElementAddition());</span><br><span class="line">                <span class="keyword">return</span> Result.Succeeded;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Result <span class="title">OnShutdown</span>(<span class="params">Autodesk.Revit.UI.UIControlledApplication application</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                WallUpdater updater = <span class="keyword">new</span> WallUpdater(application.ActiveAddInId);</span><br><span class="line">                UpdaterRegistry.UnregisterUpdater(updater.GetUpdaterId());</span><br><span class="line">                <span class="keyword">return</span> Result.Succeeded;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">WallUpdater</span> : <span class="title">IUpdater</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">static</span> AddInId m_appId;</span><br><span class="line">        <span class="keyword">static</span> UpdaterId m_updaterId;</span><br><span class="line">        WallType m_wallType = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// constructor takes the AddInId for the add-in associated with this updater</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">WallUpdater</span>(<span class="params">AddInId id</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                m_appId = id;</span><br><span class="line">                m_updaterId = <span class="keyword">new</span> UpdaterId(m_appId, <span class="keyword">new</span> Guid(<span class="string">&quot;FBFBF6B2-4C06-42d4-97C1-D1B4EB593EFF&quot;</span>));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Execute</span>(<span class="params">UpdaterData data</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                Document doc = data.GetDocument();</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Cache the wall type</span></span><br><span class="line">                <span class="keyword">if</span> (m_wallType == <span class="literal">null</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        FilteredElementCollector collector = <span class="keyword">new</span> FilteredElementCollector(doc);</span><br><span class="line">                        collector.OfClass(<span class="keyword">typeof</span>(WallType));</span><br><span class="line">                        <span class="keyword">var</span> wallTypes = <span class="keyword">from</span> element <span class="keyword">in</span> collector</span><br><span class="line">                                                        <span class="keyword">where</span></span><br><span class="line">                                                                element.Name == <span class="string">&quot;Exterior - Brick on CMU&quot;</span></span><br><span class="line">                                                        <span class="keyword">select</span> element;</span><br><span class="line">                        <span class="keyword">if</span> (wallTypes.Count() &gt; <span class="number">0</span>)</span><br><span class="line">                        &#123;</span><br><span class="line">                                m_wallType = wallTypes.Cast().ElementAt(<span class="number">0</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (m_wallType != <span class="literal">null</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="comment">// Change the wall to the cached wall type.</span></span><br><span class="line">                        <span class="keyword">foreach</span> (ElementId addedElemId <span class="keyword">in</span> data.GetAddedElementIds())</span><br><span class="line">                        &#123;</span><br><span class="line">                                Wall wall = doc.GetElement(addedElemId) <span class="keyword">as</span> Wall;</span><br><span class="line">                                <span class="keyword">if</span> (wall != <span class="literal">null</span>)</span><br><span class="line">                                &#123;</span><br><span class="line">                                        wall.WallType = m_wallType;</span><br><span class="line">                                &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetAdditionalInformation</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;Wall type updater example: updates all newly created walls to a special wall&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> ChangePriority <span class="title">GetChangePriority</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">return</span> ChangePriority.FloorsRoofsStructuralWalls;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> UpdaterId <span class="title">GetUpdaterId</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">return</span> m_updaterId;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetUpdaterName</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;Wall Type Updater&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    //- ad
+    if theme.ad && theme.ad.post
+      .ads-wrap!=theme.ad.post
 
-<h2 id="Execute方法"><a href="#Execute方法" class="headerlink" title="Execute方法"></a>Execute方法</h2><p>Execute()方法的目的是允许你的Updater对文档的更改做出反应，并做出适当的关联。此方法由Revit在文档事务结束时调用，其中添加、更改或删除了与此Updater的UpdateTrigger匹配的元素。由于其他Updater所做的更改，该方法可能会为同一事务调用多次。更新程序在DocumentChanged事件之前调用，因此此事件将包含所有Updater所做的更改。</p>
-<p>在调用此方法期间对文档所做的所有更改都将成为调用事务的一部分，并为撤消和重做操作进行维护。在实现此方法时，您可能不会打开任何新事务（将抛出异常），但可以根据需要使用子事务。</p>
-<p>虽然它也可以用于更新文档外部的数据，但这些更改不会成为原始事务的一部分，并且在原始事务撤消或重做时不会受到撤消或重做的影响。如果确实使用此方法修改文档外部的数据，则还应订阅DocumentChanged事件，以便在撤消或重做原始事务时更新数据。</p>
-<h3 id="变更范围"><a href="#变更范围" class="headerlink" title="变更范围"></a>变更范围</h3><p>Execute()方法有一个UpdaterData参数，它提供执行更新所需的所有必要数据，包括文档和有关触发更新的更改的信息。三个基本方法（GetAddedElementIds()、GetDeletedElementIds()和GetModifiedElementIds()）标识触发更新的元素。Updater还可以使用IsChangeTriggered()方法来检查特定的更改是否触发了更新。</p>
-<h3 id="禁止和警告性变更"><a href="#禁止和警告性变更" class="headerlink" title="禁止和警告性变更"></a>禁止和警告性变更</h3><p>执行Updater时不能调用以下方法，因为它们会在元素之间引入交叉引用。(当这些更改与工作集操作结合使用时，可能导致文档损坏）。当更新程序尝试调用以下任何方法时，将引发ForbiddenForDynamicUpdateException：</p>
-<ul>
-<li>Autodesk.Revit.DB.ViewSheet.AddView()</li>
-<li>Autodesk.Revit.DB.Document.LoadFamily（Autodesk.Revit.DB.Document、Autodesk.Revit.DB.IFamilyLoadOptions）</li>
-<li>AreaReinforcement.Create()</li>
-<li>PathReinforcement.Create()</li>
-</ul>
-<p>除了上面列出的禁用方法外，其他要求文档处于无事务状态的API方法也不能被调用。这些方法包括但不限于Save（）、SaveAs（）、Close（）、LoadFamily（）等。有关详细信息，请参阅相应方法的文档。</p>
-<p>还禁止从更新程序的Execute（）方法内调用UpdaterRegistry类，例如RegistryUpdater（）或AddTrigger（）。调用任何UpdaterRegistry方法都将引发异常。此规则的一个例外是UpdaterRegistry.UnregisterUpdater（）方法，只要要注销的更新程序不是当前正在执行的更新程序，就可以在执行更新程序期间调用该方法。</p>
-<p>尽管在执行Updater期间允许使用以下方法，但当调用的结果是建立元素之间的交叉引用时，它们也可以抛出ForbiddenForDynamicUpdateException。其中一个例子是创建一个与现有面墙相交的面墙，因此这两个面墙必定连接在一起。从Updater调用这些方法时要小心：</p>
-<ul>
-<li>Autodesk.Revit.Creation.ItemFactoryBase.NewFamilyInstances2()</li>
-<li>Autodesk.Revit.Creation.ItemFactoryBase.NewFamilyInstance(Autodesk.Revit.DB.XYZ, Autodesk.Revit.DB.FamilySymbol, Autodesk.Revit.DB.Element,Autodesk.Revit.DB.Structure.StructuralType)</li>
-<li>Autodesk.Revit.Creation.Document.NewFamilyInstance(Autodesk.Revit.DB.XYZ, Autodesk.Revit.DB.FamilySymbol, Autodesk.Revit.DB.Element, Autodesk.Revit.DB.Level, Autodesk.Revit.DB.Structure.StructuralType)</li>
-<li>Autodesk.Revit.DB.FaceWall.Create()</li>
-</ul>
-<p>因此，应该注意的是，如果修改它们将是有效的，那么删除和重新创造现有元素应该是有效的。如果删除元素可能是一个简单的解决方案，它不仅会影响Revit的性能，但它将销毁任何引用以“重新创建”其他元素的对象。用户可能会失去工作，因为他们已经完成了限制并宣布了问题中的元素。</p>
-<h3 id="管理变更"><a href="#管理变更" class="headerlink" title="管理变更"></a>管理变更</h3><p>更新程序需要能够处理使用它们时可能出现的复杂问题，可能需要协调对元素的后续更改。由更新器修改的元素可能在更新器下一次被调用时改变，并且那些改变可能影响由更新器修改的信息。例如，元素可以由用户显式编辑，或者由于再生触发的传播更改而隐式编辑。</p>
-<p>同一个元素也可能被另一个更新器修改，甚至可能在同一个事务中。虽然对完全相同的数据进行显式更改会被跟踪和禁止，但间接或传播的更改仍然是可能的。也许最复杂的情况是，用户和&#x2F;或同一更新程序可以在文件的不同版本中更改元素。在用户重新加载最新图元或将其保存到中心图元后，将从其他文件中引入修改后的目标图元，更新程序将需要协调更改。</p>
-<p>同样重要的是要认识到，当文档与中心文件同步时，元素的ElementId可能会受到影响。如果新元素已添加到同一文件的两个版本中，并且在两个位置使用相同的ElementId，则在将文件同步到中央数据库时，将进行协调。出于这个原因，当使用更新器交叉引用另一个元素中的一个元素时，它们应该使用Element.UniqueId，这可以保证是唯一的。</p>
-<p>另一个需要考虑的问题是，如果更新器将某些数据（即作为参数）附加到元素，则它不仅必须确保在添加该数据的元素中维护该信息，而且还必须在该元素通过复制&#x2F;粘贴或组传播复制时协调数据。例如，如果更新程序将参数“钢筋的总重量”添加到钢筋主体，则该参数及其值将复制到复制的钢筋主体，即使钢筋本身可能未与主体一起复制。在这种情况下，更新程序需要确保在新复制的钢筋主体中重置参数值。</p>
-<h2 id="注册Updater"><a href="#注册Updater" class="headerlink" title="注册Updater"></a>注册Updater</h2><p>Updater必须注册，以便在模型更改时得到通知。应用程序级别的UpdaterRegistry类提供了注册&#x2F;取消注册以及操作为Updater设置的选项的能力。Updater可以从任何API回调中注册，并且可以注册为应用程序范围或特定于文档，这意味着它们将仅由对指定文档的更改触发。为了使用UpdaterRegistry功能，Revit附加模块必须在清单文件中注册，并且UpdaterId返回的ID。任何更新程序的GetAddInId（）（从GetUpdaterId（）获得）必须与附加模块清单文件中的AddInId字段匹配。外接程序不能添加、删除或修改不属于它的更新程序。</p>
-<h3 id="触发"><a href="#触发" class="headerlink" title="触发"></a>触发</h3><p>除了调用UpdaterRegistry.RegisterUpdater（）方法之外，Updater还应该通过AddTrigger（）方法添加一个或多个更新触发器。这些触发器向UpdaterRegistry指示哪些事件应该触发Updaters Execute（）方法运行。它们可以在应用程序范围内设置，也可以应用于特定文档中所做的更改。更新触发器是通过将更改范围和更改类型配对来指定的。</p>
-<p>变更范围是这两种之一：</p>
-<ul>
-<li>文档中元素ID的显式列表-只有对这些元素的更改才会触发Updater</li>
-<li>通过ElementFilter传递的元素的隐式列表-每个更改的元素都将针对过滤器运行，如果有任何通过，则会触发Updater</li>
-</ul>
-<p>有几个选项可用于更改类型。ChangeTypes从Element类的静态方法中获得。</p>
-<ul>
-<li>Element addition - 通过Element.GetChangeTypeElementAddition（）</li>
-<li>Element deletion - 通过Element.GetChangeTypeElementDeletion（）</li>
-<li>Change of element geometry (shape or position) - 通过Element.GetChangeTypeGeometry（）</li>
-<li>Changing value of a specific parameter - 通过Element.GetChangeTypeParameter（）</li>
-<li>Any change of element - 通过Element.GetChangeTypeAny（）。</li>
-</ul>
-<p>请注意，几何图形更改可能由于多种原因而触发，例如图元类型更改、属性和参数修改、移动和旋转，或者在再生期间从其他修改的图元对图元施加的更改。</p>
-<p>还要注意的是，最后一个选项，任何元素的更改，只会触发Updater修改预先存在的元素，而不会触发Updater修改新添加或删除的元素。此外，当对实例使用此触发器时，只有对其类型的某些修改才会触发Updater。影响实例本身的更改（如修改实例的几何体）将触发Updater。但是，不直接修改实例并且不会导致对实例进行任何可识别的更改的更改（例如对文本参数的更改）将不会触发实例的Updater。要根据这些更改触发，Type也必须包含在触发器的更改范围中。</p>
-<h3 id="执行顺序"><a href="#执行顺序" class="headerlink" title="执行顺序"></a>执行顺序</h3><p>Revit对多个Updater进行排序以按正确顺序执行的主要方法是查看给定Updater返回的ChangePriority。一个Updater报告一组更基本的元素（例如GridsLevelsReferencePlanes）的优先级，将在Updater报告由这些基本元素（例如Annotations）驱动的元素的优先级之前执行。为Updater修改的图元报告适当的更改优先级将使应用程序的用户受益：Revit不太可能由于其他Updater所做的更改而不得不再次执行Updater。</p>
-<p>对于报告相同更改优先级的Updater，执行顺序基于UpdaterId的排序。方法UpdaterRegistry.SetExecutionOrder（）允许您在任何两个注册的Updater（甚至是由其他API外接程序注册的Updater）之间设置执行顺序，只要您的代码知道这两个Updater的ID。</p>
-<h2 id="Exposure-to-End-User"><a href="#Exposure-to-End-User" class="headerlink" title="Exposure to End-User"></a>Exposure to End-User</h2><p>当更新程序正常工作时，它们对用户是透明的。但在某些特殊情况下，Revit将向用户显示有关第三方更新程序的警告。这些消息将使用GetUpdaterName（）方法的值来引用更新程序。</p>
-<h3 id="未安装Updater"><a href="#未安装Updater" class="headerlink" title="未安装Updater"></a>未安装Updater</h3><p>如果文档由非可选Updater修改，然后在未安装该Updater时加载，则会显示类似于以下内容的任务对话框：</p>
-<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-301A03BC-C348-483D-980C-30B05831F84B-low.png"></p>
-<p>图135：缺少第三方Updater警告</p>
-<h3 id="更新程序执行无效操作"><a href="#更新程序执行无效操作" class="headerlink" title="更新程序执行无效操作"></a>更新程序执行无效操作</h3><p>如果更新程序出现错误（如未处理的异常），则会显示类似于以下内容的消息，为用户提供禁用更新程序的选项：</p>
-<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-D68E0684-0F8A-47D5-9803-61523979E454-low.png"></p>
-<p>图136：更新程序执行了无效操作</p>
-<p>如果用户选择“取消”，则整个事务将回滚。在本章前面的墙更新程序示例中，新添加的墙被删除。如果用户选择DisableUpdater，则不再调用更新程序，但事务不会回滚。</p>
-<h3 id="无限循环"><a href="#无限循环" class="headerlink" title="无限循环"></a>无限循环</h3><p>如果Updater陷入无限循环，Revit将通知用户并在Revit任务期间禁用更新程序。</p>
-<h3 id="两个Updater尝试编辑同一元素"><a href="#两个Updater尝试编辑同一元素" class="headerlink" title="两个Updater尝试编辑同一元素"></a>两个Updater尝试编辑同一元素</h3><p>如果Updater尝试编辑由同一事务中的另一Updater更新的元素的相同参数，或者如果Updater尝试以与另一Updater所做的更改冲突的方式编辑元素的几何图形，则Updater被取消，显示错误消息，并且用户可以选择禁用更新器。</p>
-<h3 id="本地不存在Updater修改的中心文档"><a href="#本地不存在Updater修改的中心文档" class="headerlink" title="本地不存在Updater修改的中心文档"></a>本地不存在Updater修改的中心文档</h3><p>如果用户重新加载最新版本或使用未在本地安装的Updater修改的中心文件保存到中心，则会显示一个任务对话框，为用户提供继续或取消同步的选项。此警告表示，以后将中心模型与第三方Updater一起使用时，继续操作可能会导致中心模型出现问题。</p>
-<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-</div>
+    if theme.post_pagination
+      include includes/pagination.pug
+    if theme.related_post && theme.related_post.enable
+      != related_posts(page,site.posts)
 
-            <footer id="footer">
-    <div id="footer-wrap">
-        <div>
-            &copy;
-            2022 - 2024 funtim
-            <span id="footer-icon">
-                <i class="fa-solid fa-font-awesome fa-fw"></i>
-            </span>
-            &commat;XH
-        </div>
-        <div>
-            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
-            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
-        </div>
-        
-    </div>
-</footer>
-
-        </div>
-        
-        <transition name="fade">
-            <div id="preview" ref="preview" v-show="previewShow">
-                <img id="preview-content" ref="previewContent" />
-            </div>
-        </transition>
-        
-    </div>
-    <script src="/js/main.js"></script>
-    
-    
-
-
-
-
-    
-</body>
-</html>
+    if page.comments !== false && theme.comments.use
+      - var commentsJsLoad = true
+      !=partial('includes/third-party/comments/index', {}, {cache: true})
+      

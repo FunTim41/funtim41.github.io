@@ -1,328 +1,36 @@
+extends includes/layout.pug
 
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8" />
-    <title> | funtim</title>
-    <meta name="author" content="XH" />
-    <meta name="description" content="ddd" />
-    <meta name="keywords" content="" />
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-    />
-    <link rel="icon" href="/images/avatar.jpg" />
-    <link rel="preconnect" href="https://s4.zstatic.net" />
-<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
-<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-<link rel="preconnect" href="https://fonts.googleapis.cn" />
-<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
-<link
-    rel="stylesheet"
-    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
-/>
-<script> const mixins = {}; </script>
+block content
+  #post
+    if top_img === false
+      include includes/header/post-info.pug
 
-<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
-
-
-<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
-<link
-    rel="stylesheet"
-    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
-/>
-<script src="/js/lib/highlight.js"></script>
-
-
-
-<script src="/js/lib/preview.js"></script>
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/main.css" />
-
-<meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-    <div id="layout">
-        <transition name="fade">
-            <div id="loading" v-show="loading">
-                <div id="loading-circle">
-                    <h2>LOADING</h2>
-                    <p>加载过慢请开启缓存 浏览器默认开启</p>
-                    <img src="/images/loading.gif" />
-                </div>
-            </div>
-        </transition>
-        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
-    <nav id="desktop-menu">
-        <a class="title" href="/">
-            <span>FUNTIM</span>
-        </a>
+    article#article-container.container.post-content
+      if theme.noticeOutdate.enable && page.noticeOutdate !== false 
+        include includes/post/outdate-notice.pug
+      else
+        !=page.content
+    include includes/post/post-copyright.pug
+    .tag_share
+      if (page.tags.length > 0 && theme.post_meta.post.tags)
+        .post-meta__tag-list
+          each item, index in page.tags.data
+            a(href=url_for(item.path)).post-meta__tags #[=item.name]
+      include includes/third-party/share/index.pug
         
-        <a href="/">
-            <i class="fa-solid fa-house fa-fw"></i>
-            <span>&ensp;Home</span>
-        </a>
-        
-        <a href="/about">
-            <i class="fa-solid fa-id-card fa-fw"></i>
-            <span>&ensp;About</span>
-        </a>
-        
-        <a href="/archives">
-            <i class="fa-solid fa-box-archive fa-fw"></i>
-            <span>&ensp;Archives</span>
-        </a>
-        
-        <a href="/categories">
-            <i class="fa-solid fa-bookmark fa-fw"></i>
-            <span>&ensp;Categories</span>
-        </a>
-        
-        <a href="/tags">
-            <i class="fa-solid fa-tags fa-fw"></i>
-            <span>&ensp;Tags</span>
-        </a>
-        
-    </nav>
-    <nav id="mobile-menu">
-        <div class="title" @click="showMenuItems = !showMenuItems">
-            <i class="fa-solid fa-bars fa-fw"></i>
-            <span>&emsp;FUNTIM</span>
-        </div>
-        <transition name="slide">
-            <div class="items" v-show="showMenuItems">
-                
-                <a href="/">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-house fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
-                    </div>
-                </a>
-                
-                <a href="/about">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-id-card fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
-                    </div>
-                </a>
-                
-                <a href="/archives">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-box-archive fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
-                    </div>
-                </a>
-                
-                <a href="/categories">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
-                    </div>
-                </a>
-                
-                <a href="/tags">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-tags fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
-                    </div>
-                </a>
-                
-            </div>
-        </transition>
-    </nav>
-</div>
-<transition name="fade">
-    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
-</transition>
+    if theme.reward.enable && theme.reward.QR_code
+      !=partial('includes/post/reward', {}, {cache: true})
 
-        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div class="article">
-    <div>
-        <h1></h1>
-    </div>
-    <div class="info">
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/12/28
-        </span>
-        
-        
-    </div>
-    
-    <div class="content" v-pre>
-        <h1 id="族文档"><a href="#族文档" class="headerlink" title="族文档"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Revit_Geometric_Elements_Family_Documents_html">族文档</a></h1><p>本节讨论族以及如何：</p>
-<ul>
-<li>创建和修改族文档</li>
-<li>访问族类型和参数</li>
-</ul>
-<p>本节中的页面</p>
-<ul>
-<li>关于族文档</li>
-<li>在族中创建图元</li>
-<li>族元素的可见性</li>
-<li>管理族类型和参数</li>
-</ul>
-<h2 id="关于族文档"><a href="#关于族文档" class="headerlink" title="关于族文档"></a>关于族文档</h2><h3 id="族"><a href="#族" class="headerlink" title="族"></a>族</h3><p>族对象表示整个Revit族。族文档是表示族的文档(rfa)而不是Revit项目。</p>
-<p>使用Revit API的族创建功能，可以创建和编辑族及其类型。当您有来自外部系统的现有数据并希望将其转换为Revit族库时，此功能特别有用。</p>
-<p>对系统族编辑的API访问不可用。</p>
-<h3 id="类别"><a href="#类别" class="headerlink" title="类别"></a>类别</h3><p>如前一节所述，Family.FamilyCategory属性指示族的类别，如柱、家具、结构框架或窗。</p>
-<p>以下代码可用于确定打开的Revit族文档中族的类别。</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> categoryName = familyDoc.OwnerFamily.FamilyCategory.Name;</span><br></pre></td></tr></table></figure>
+    //- ad
+    if theme.ad && theme.ad.post
+      .ads-wrap!=theme.ad.post
 
-<p>还可以设置FamilyCategory，以允许更改正在编辑的族的类别。</p>
-<p> <strong>参数设置</strong> 可以从族文档的OwnerFamily属性访问族参数，如下例所示。</p>
-<p>代码区域13-2：打开的Revit族文档的类别</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// get the owner family of the family document.</span></span><br><span class="line">Family family = familyDoc.OwnerFamily; </span><br><span class="line">Parameter param = family.get_Parameter(BuiltInParameter.FAMILY_WORK_PLANE_BASED);</span><br><span class="line"><span class="comment">// this param is a Yes/No parameter in UI, but an integer value in API</span></span><br><span class="line"><span class="comment">// 1 for true and 0 for false</span></span><br><span class="line"><span class="built_in">int</span> isTrue = param.AsInteger(); </span><br><span class="line"><span class="comment">// param.Set(1); // set value to true.</span></span><br></pre></td></tr></table></figure>
+    if theme.post_pagination
+      include includes/pagination.pug
+    if theme.related_post && theme.related_post.enable
+      != related_posts(page,site.posts)
 
-<h3 id="创建族文档"><a href="#创建族文档" class="headerlink" title="创建族文档"></a>创建族文档</h3><p>如果文档是族文档（由IsFamilyDocument属性确定），则可以通过Document类修改Revit族文档并访问族类型和参数。若要在处理Project文档时编辑现有族，请使用Document类中提供的EditFamily（）函数，然后在编辑完成后使用LoadFamily（）将族重新加载回所有者文档。要创建新的族文档，请使用Application.NewFamilyDocument（）：</p>
-<p>代码区域13-3：创建新的族文档</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create a new family document using Generic Model.rft template</span></span><br><span class="line"><span class="built_in">string</span> templateFileName = <span class="string">@&quot;C:\Documents and Settings\All Users\Application Data\Autodesk\RST 2011\Imperial Templates\Generic Model.rft&quot;</span>;</span><br><span class="line"></span><br><span class="line">Document familyDocument = application.NewFamilyDocument(templateFileName);</span><br><span class="line"><span class="keyword">if</span> (<span class="literal">null</span> == familyDocument)</span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Cannot open family document&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="嵌套族符号"><a href="#嵌套族符号" class="headerlink" title="嵌套族符号"></a>嵌套族符号</h3><p>可以过滤FamilySymbols的族文档，以将所有FamilySymbols加载到族中。在此代码示例中，列出了给定FamilyInstance的族中的所有嵌套FamilySymbol。</p>
-<p>代码区域13-4：在族中获取嵌套的族符号</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GetLoadedSymbols</span>(<span class="params">Autodesk.Revit.DB.Document document, FamilyInstance familyInstance</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> != familyInstance.Symbol)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="comment">// Get family associated with this</span></span><br><span class="line">                Family family = familyInstance.Symbol.Family;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Get Family document for family</span></span><br><span class="line">                Document familyDoc = document.EditFamily(family);</span><br><span class="line">                <span class="keyword">if</span> (<span class="literal">null</span> != familyDoc &amp;&amp; familyDoc.IsFamilyDocument == <span class="literal">true</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        String loadedFamilies = <span class="string">&quot;FamilySymbols in &quot;</span> + family.Name + <span class="string">&quot;:\n&quot;</span>;</span><br><span class="line">                        FilteredElementCollector collector = <span class="keyword">new</span> FilteredElementCollector(document);</span><br><span class="line">                        ICollection collection = </span><br><span class="line">                                collector.OfClass(<span class="keyword">typeof</span>(FamilySymbol)).ToElements();</span><br><span class="line">                        <span class="keyword">foreach</span> (Element e <span class="keyword">in</span> collection)</span><br><span class="line">                        &#123;</span><br><span class="line">                                FamilySymbol fs = e <span class="keyword">as</span> FamilySymbol;</span><br><span class="line">                                loadedFamilies += <span class="string">&quot;\t&quot;</span> + fs.Name + <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,loadedFamilies);</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="在族中创建元素"><a href="#在族中创建元素" class="headerlink" title="在族中创建元素"></a>在族中创建元素</h2><p>FamilyItemFactory类提供了在族文档中创建图元的功能。可以通过Document.FamilyCreate属性访问它。FamilyItemFactory派生自ItemFactoryBase类，该类是一个实用的用于在Revit项目文档和族文档中创建元素。</p>
-<p> 本节中的页面</p>
-<ul>
-<li>创建表单元素</li>
-<li>创建注释</li>
-</ul>
-<h3 id="创建形状元素"><a href="#创建形状元素" class="headerlink" title="创建形状元素"></a>创建形状元素</h3><p>FamilyItemFactory类提供了在族中创建形状图元的功能，例如拉伸、旋转、放样和融合。有关这些3D草图表格的更多信息，请参见3D草图部分。</p>
-<p>下面的示例演示如何创建新的Extrusion元素。它将创建一个简单的矩形截面轮廓，然后将新创建的“拉伸”移动到新位置。</p>
-<p>代码区域：创建新拉伸</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Extrusion <span class="title">CreateExtrusion</span>(<span class="params">Autodesk.Revit.DB.Document document, SketchPlane sketchPlane</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Extrusion rectExtrusion = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// make sure we have a family document</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">true</span> == document.IsFamilyDocument)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// define the profile for the extrusion</span></span><br><span class="line">        CurveArrArray curveArrArray = <span class="keyword">new</span> CurveArrArray();</span><br><span class="line">        CurveArray curveArray1 = <span class="keyword">new</span> CurveArray();</span><br><span class="line">        CurveArray curveArray2 = <span class="keyword">new</span> CurveArray();</span><br><span class="line">        CurveArray curveArray3 = <span class="keyword">new</span> CurveArray();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// create a rectangular profile</span></span><br><span class="line">        XYZ p0 = XYZ.Zero;</span><br><span class="line">        XYZ p1 = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        XYZ p2 = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">        XYZ p3 = <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">        Line line1 = Line.CreateBound(p0, p1);</span><br><span class="line">        Line line2 = Line.CreateBound(p1, p2);</span><br><span class="line">        Line line3 = Line.CreateBound(p2, p3);</span><br><span class="line">        Line line4 = Line.CreateBound(p3, p0);</span><br><span class="line">        curveArray1.Append(line1);</span><br><span class="line">        curveArray1.Append(line2);</span><br><span class="line">        curveArray1.Append(line3);</span><br><span class="line">        curveArray1.Append(line4);</span><br><span class="line"></span><br><span class="line">        curveArrArray.Append(curveArray1);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// create solid rectangular extrusion</span></span><br><span class="line">        rectExtrusion = document.FamilyCreate.NewExtrusion(<span class="literal">true</span>, curveArrArray, sketchPlane, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> != rectExtrusion)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// move extrusion to proper place</span></span><br><span class="line">            XYZ transPoint1 = <span class="keyword">new</span> XYZ(<span class="number">-16</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">            ElementTransformUtils.MoveElement(document, rectExtrusion.Id, transPoint1);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Create new Extrusion failed.&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Please open a Family document before invoking this command.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> rectExtrusion;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下示例显示了如何从族文档中的实心卵形轮廓创建新放样。</p>
-<p>代码区域：创建新放样</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Sweep <span class="title">CreateSweep</span>(<span class="params">Autodesk.Revit.DB.Document document, SketchPlane sketchPlane</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Sweep sweep = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// make sure we have a family document</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">true</span> == document.IsFamilyDocument)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Define a profile for the sweep</span></span><br><span class="line">        CurveArrArray arrarr = <span class="keyword">new</span> CurveArrArray();</span><br><span class="line">        CurveArray arr = <span class="keyword">new</span> CurveArray();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create an ovoid profile</span></span><br><span class="line">        XYZ pnt1 = <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        XYZ pnt2 = <span class="keyword">new</span> XYZ(<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        XYZ pnt3 = <span class="keyword">new</span> XYZ(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        arr.Append(Arc.Create(pnt2, <span class="number">1.0</span>d, <span class="number">0.0</span>d, <span class="number">180.0</span>d, XYZ.BasisX, XYZ.BasisY));</span><br><span class="line">        arr.Append(Arc.Create(pnt1, pnt3, pnt2));</span><br><span class="line">        arrarr.Append(arr);</span><br><span class="line">        SweepProfile profile = document.Application.Create.NewCurveLoopsProfile(arrarr);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create a path for the sweep</span></span><br><span class="line">        XYZ pnt4 = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        XYZ pnt5 = <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">        Curve curve = Line.CreateBound(pnt4, pnt5);</span><br><span class="line"></span><br><span class="line">        CurveArray curves = <span class="keyword">new</span> CurveArray();</span><br><span class="line">        curves.Append(curve);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// create a solid ovoid sweep</span></span><br><span class="line">        sweep = document.FamilyCreate.NewSweep(<span class="literal">true</span>, curves, sketchPlane, profile, <span class="number">0</span>, ProfilePlaneLocation.Start);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> != sweep)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// move to proper place</span></span><br><span class="line">            XYZ transPoint1 = <span class="keyword">new</span> XYZ(<span class="number">11</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">            ElementTransformUtils.MoveElement(document, sweep.Id, transPoint1);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Failed to create a new Sweep.&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Please open a Family document before invoking this command.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> sweep;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-169B9078-7508-4982-B10D-333FF97CA345-low.png"></p>
-<p>图50：由上一个示例创建的卵形扫描</p>
-<p> FreeFormElement类允许创建从输入实体轮廓创建的非参数化几何体。FreeFormElement可以与其他可组合元素一起参与连接和空切割。元素的平面可以在面法线方向上以交互方式和编程方式偏移。</p>
-<p>将子类别转换为形状 在族中创建新形状后，可能需要修改形状的子类别。例如，您可能有一个门族，并且希望创建多个门的子类别，并将不同的子类别指定给族中的不同门类型。 下面的示例演示如何创建新的子类别，为其指定材质，然后将该子类别指定给窗体。</p>
-<p>代码区域：指定子类别</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">AssignSubCategory</span>(<span class="params">Document document, GenericForm extrusion</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// create a new subcategory</span></span><br><span class="line">    Category cat = document.OwnerFamily.FamilyCategory;</span><br><span class="line">    Category subCat = document.Settings.Categories.NewSubcategory(cat, <span class="string">&quot;NewSubCat&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// create a new material and assign it to the subcategory</span></span><br><span class="line">    ElementId materialId = Material.Create(document, <span class="string">&quot;Wood Material&quot;</span>);</span><br><span class="line">    subCat.Material = document.GetElement(materialId) <span class="keyword">as</span> Material;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// assign the subcategory to the element</span></span><br><span class="line">    extrusion.Subcategory = subCat;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="创建注释"><a href="#创建注释" class="headerlink" title="创建注释"></a>创建注释</h3><p>还可以在族中创建新注释（例如尺寸标注和ModelText和TextNote对象）以及曲线注释元素（例如SymbolicCurve、ModelCurve和DetailCurve）。有关注释元素的详细信息，请参见注释元素。</p>
-<p>此外，还可以添加新路线，并参照确定路线方向的视图和两个几何图形参照。</p>
-<p>以下示例演示如何创建新的弧长标注。</p>
-<p>代码区域：创建标注</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Dimension <span class="title">CreateArcDimension</span>(<span class="params">Document document, SketchPlane sketchPlane</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Autodesk.Revit.Creation.Application appCreate = document.Application.Create;</span><br><span class="line">    Line gLine1 = Line.CreateBound(<span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">2</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">2</span>, <span class="number">2</span>, <span class="number">0</span>));</span><br><span class="line">    Line gLine2 = Line.CreateBound(<span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">2</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">2</span>, <span class="number">4</span>, <span class="number">0</span>));</span><br><span class="line">    Arc arctoDim = Arc.Create(<span class="keyword">new</span> XYZ(<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">-1</span>, <span class="number">2</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">3</span>, <span class="number">0</span>));</span><br><span class="line">    Arc arcofDim = Arc.Create(<span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">3</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">0.8</span>, <span class="number">2.8</span>, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    Autodesk.Revit.Creation.FamilyItemFactory creationFamily = document.FamilyCreate;</span><br><span class="line">    ModelCurve modelCurve1 = creationFamily.NewModelCurve(gLine1, sketchPlane);</span><br><span class="line">    ModelCurve modelCurve2 = creationFamily.NewModelCurve(gLine2, sketchPlane);</span><br><span class="line">    ModelCurve modelCurve3 = creationFamily.NewModelCurve(arctoDim, sketchPlane);</span><br><span class="line">    <span class="comment">//get their reference</span></span><br><span class="line">    Reference ref1 = modelCurve1.GeometryCurve.Reference;</span><br><span class="line">    Reference ref2 = modelCurve2.GeometryCurve.Reference;</span><br><span class="line">    Reference arcRef = modelCurve3.GeometryCurve.Reference;</span><br><span class="line"></span><br><span class="line">    Dimension newArcDim = creationFamily.NewArcLengthDimension(document.ActiveView, arcofDim, arcRef, ref1, ref2);</span><br><span class="line">    <span class="keyword">if</span> (newArcDim == <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Failed to create new arc length dimension.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> newArcDim;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-813DEE5B-AD67-4892-934A-EF192F72A5BB-low.png"></p>
-<p>图51：产生的弧长尺寸</p>
-<p>某些类型的尺寸标注可以使用FamilyParameter进行标记。如果尝试获取或设置Label属性，则无法标记的尺寸标注将引发Autodesk.Revit. Revit.InvalidOperationException。在下面的示例中，在两条线之间创建了一个新的线性尺寸标注，并将其标记为“width”。</p>
-<p>代码区域：标注尺寸</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Dimension <span class="title">CreateLinearDimension</span>(<span class="params">Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// first create two lines</span></span><br><span class="line">    XYZ pt1 = <span class="keyword">new</span> XYZ(<span class="number">5</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">    XYZ pt2 = <span class="keyword">new</span> XYZ(<span class="number">5</span>, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">    Line line = Line.CreateBound(pt1, pt2);</span><br><span class="line">    Plane plane = Plane.CreateByNormalAndOrigin(pt1.CrossProduct(pt2), pt2);</span><br><span class="line">    SketchPlane skplane = SketchPlane.Create (document, plane);</span><br><span class="line">    ModelCurve modelcurve1 = document.FamilyCreate.NewModelCurve(line, skplane);</span><br><span class="line"></span><br><span class="line">    pt1 = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">    pt2 = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">    line = Line.CreateBound(pt1, pt2);</span><br><span class="line">    plane = Plane.CreateByNormalAndOrigin(pt1.CrossProduct(pt2), pt2);</span><br><span class="line">    skplane = SketchPlane.Create (document, plane);</span><br><span class="line">    ModelCurve modelcurve2 = document.FamilyCreate.NewModelCurve(line, skplane);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// now create a linear dimension between them</span></span><br><span class="line">    ReferenceArray ra = <span class="keyword">new</span> ReferenceArray();</span><br><span class="line">    ra.Append(modelcurve1.GeometryCurve.Reference);</span><br><span class="line">    ra.Append(modelcurve2.GeometryCurve.Reference);</span><br><span class="line"></span><br><span class="line">    pt1 = <span class="keyword">new</span> XYZ(<span class="number">5</span>, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">    pt2 = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">    line = Line.CreateBound(pt1, pt2);</span><br><span class="line"></span><br><span class="line">    Dimension dim = document.FamilyCreate.NewLinearDimension(document.ActiveView, line, ra);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// create a label for the dimension called &quot;width&quot;</span></span><br><span class="line">    FamilyParameter param = document.FamilyManager.AddParameter(<span class="string">&quot;width&quot;</span>, </span><br><span class="line">        BuiltInParameterGroup.PG_CONSTRAINTS, </span><br><span class="line">        ParameterType.Length, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">    dim.FamilyLabel = param;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dim;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-802D577E-3791-4286-A288-0B7858C6459C-low.png"></p>
-<p>图52：标记的线性尺寸</p>
-<h2 id="族元素的可见性"><a href="#族元素的可见性" class="headerlink" title="族元素的可见性"></a>族元素的可见性</h2><p>FamilyElementVisibility类可用于控制族图元在项目文档中的可见性。例如，如果有门族，则可能只希望门开启方向在放置门的项目文档的平面视图中可见，而在三维视图中不可见。通过设置门开启方向的可见性，您可以控制其可见性。FamilyElementVisibility适用于以下具有SetVisibility（）函数的族图元类：</p>
-<ul>
-<li>GenericForm</li>
-<li>SymbolicCurve</li>
-<li>ModelText </li>
-<li>CurveByPoints</li>
-<li>ModelCurve </li>
-<li>ReferencePoint </li>
-<li>ImportInstance</li>
-</ul>
-<p>在下面的示例中，生成的族文档将显示文本“Hello World”，其下有一条线。当族载入到Revit项目文档中并放置实例时，在平面视图中，只有该线可见。在3D视图中，将同时显示线条和文本，除非将“详细程度”设置为“粗”，在这种情况下，线条将消失。</p>
-<p>代码区域13-10：设置族图元可见性</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CreateAndSetVisibility</span>(<span class="params">Autodesk.Revit.DB.Document familyDocument, SketchPlane sketchPlane</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// create a new ModelCurve in the family document</span></span><br><span class="line">    XYZ p0 = <span class="keyword">new</span> XYZ(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    XYZ p1 = <span class="keyword">new</span> XYZ(<span class="number">5</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    Line line1 = Line.CreateBound(p0, p1);</span><br><span class="line"></span><br><span class="line">    ModelCurve modelCurve1 = familyDocument.FamilyCreate.NewModelCurve(line1, sketchPlane);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// create a new ModelText along ModelCurve line</span></span><br><span class="line">    ModelText text = familyDocument.FamilyCreate.NewModelText(<span class="string">&quot;Hello World&quot;</span>, <span class="literal">null</span>, sketchPlane, p0, HorizontalAlign.Center, <span class="number">0.1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set visibility for text</span></span><br><span class="line">    FamilyElementVisibility textVisibility = <span class="keyword">new</span> FamilyElementVisibility(FamilyElementVisibilityType.Model);</span><br><span class="line">    textVisibility.IsShownInTopBottom = <span class="literal">false</span>;</span><br><span class="line">    text.SetVisibility(textVisibility);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set visibility for line</span></span><br><span class="line">    FamilyElementVisibility curveVisibility = <span class="keyword">new</span> FamilyElementVisibility(FamilyElementVisibilityType.Model);</span><br><span class="line">    curveVisibility.IsShownInCoarse = <span class="literal">false</span>;</span><br><span class="line">    modelCurve1.SetVisibility(curveVisibility);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="管理族类型和参数"><a href="#管理族类型和参数" class="headerlink" title="管理族类型和参数"></a>管理族类型和参数</h2><p>族文档提供对FamilyManager属性的访问。FamilyManager类提供对族类型和参数的访问。使用此类，可以添加和删除类型、添加和删除族参数和共享参数、设置不同族类型中的参数值以及定义公式来驱动参数值。</p>
-<p><strong>在族中获取种类</strong></p>
-<p>FamilyManager可用于遍历族中的种类，如下例所示。</p>
-<p>代码区域13-11：获取族中的种类</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GetFamilyTypesInFamily</span>(<span class="params">Document familyDoc</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (familyDoc.IsFamilyDocument)</span><br><span class="line">    &#123;</span><br><span class="line">        FamilyManager familyManager = familyDoc.FamilyManager;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// get types in family</span></span><br><span class="line">        <span class="built_in">string</span> types = <span class="string">&quot;Family Types: &quot;</span>;</span><br><span class="line">        FamilyTypeSet familyTypes = familyManager.Types;</span><br><span class="line">        FamilyTypeSetIterator familyTypesItor = familyTypes.ForwardIterator();</span><br><span class="line">        familyTypesItor.Reset();</span><br><span class="line">        <span class="keyword">while</span> (familyTypesItor.MoveNext())</span><br><span class="line">        &#123;</span><br><span class="line">            FamilyType familyType = familyTypesItor.Current <span class="keyword">as</span> FamilyType;</span><br><span class="line">            types += <span class="string">&quot;\n&quot;</span> + familyType.Name;</span><br><span class="line">        &#125;</span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,types);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-60AB2EDC-BC4E-4E08-8922-38ECF4B7F991-low.png"></p>
-<p>图53：混凝土矩形柱族中的族种类</p>
-<p><strong>编辑族种类</strong></p>
-<p>FamilyManager提供了遍历族中现有种类以及添加和修改种类及其参数的功能。</p>
-<p>下面的示例演示如何添加新种类（familysymbol），设置其参数，然后将新种类分配给FamilyInstance。种类编辑是通过使用Set（）函数在当前种类上完成的。当前种类可从CurrentType属性获得。CurrentType属性可用于在编辑之前设置当前种类，或使用NewType（）函数创建新种类并将其设置为当前种类以进行编辑。</p>
-<p>请注意，一旦创建并修改了新种类，就会使用Document.LoadFamily（）将族重新载入到Revit项目中，以使新种类可用。</p>
-<p>代码区域13-12：编辑族类型</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">EditFamilyTypes</span>(<span class="params">Document document, FamilyInstance familyInstance</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// example works best when familyInstance is a rectangular concrete element</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((<span class="literal">null</span> == document) || (<span class="literal">null</span> == familyInstance.Symbol))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span>;   <span class="comment">// invalid arguments</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get family associated with this</span></span><br><span class="line">    Family family = familyInstance.Symbol.Family;</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> == family)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span>;    <span class="comment">// could not get the family</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get Family document for family</span></span><br><span class="line">    Document familyDoc = document.EditFamily(family);</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> == familyDoc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span>;    <span class="comment">// could not open a family for edit</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    FamilyManager familyManager = familyDoc.FamilyManager;</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> == familyManager)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span>;  <span class="comment">// cuould not get a family manager</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start transaction for the family document</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction newFamilyTypeTransaction = <span class="keyword">new</span> Transaction(familyDoc, <span class="string">&quot;Add Type to Family&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">int</span> changesMade = <span class="number">0</span>;</span><br><span class="line">        newFamilyTypeTransaction.Start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// add a new type and edit its parameters</span></span><br><span class="line">        FamilyType newFamilyType = familyManager.NewType(<span class="string">&quot;2X2&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (newFamilyType != <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// look for &#x27;b&#x27; and &#x27;h&#x27; parameters and set them to 2 feet</span></span><br><span class="line">            FamilyParameter familyParam = familyManager.get_Parameter(<span class="string">&quot;宽度&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (<span class="literal">null</span> != familyParam)</span><br><span class="line">            &#123;</span><br><span class="line">                familyManager.Set(familyParam, <span class="number">2.0</span>);</span><br><span class="line">                changesMade += <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            familyParam = familyManager.get_Parameter(<span class="string">&quot;高度&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (<span class="literal">null</span> != familyParam)</span><br><span class="line">            &#123;</span><br><span class="line">                familyManager.Set(familyParam, <span class="number">2.0</span>);</span><br><span class="line">                changesMade += <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="number">2</span> == changesMade)   <span class="comment">// set both paramaters?</span></span><br><span class="line">        &#123;</span><br><span class="line">            newFamilyTypeTransaction.Commit();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>   <span class="comment">// could not make the change -&gt; should roll back </span></span><br><span class="line">        &#123;</span><br><span class="line">            newFamilyTypeTransaction.RollBack();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// if could not make the change or could not commit it, we return</span></span><br><span class="line">        <span class="keyword">if</span> (newFamilyTypeTransaction.GetStatus() != TransactionStatus.Committed)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// now update the Revit project with Family which has a new type</span></span><br><span class="line">    LoadOpts loadOptions = <span class="keyword">new</span> LoadOpts();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This overload is necessary for reloading an edited family</span></span><br><span class="line">    <span class="comment">// back into the source document from which it was extracted</span></span><br><span class="line">    family = familyDoc.LoadFamily(document, loadOptions);</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> != family)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// find the new type and assign it to FamilyInstance</span></span><br><span class="line">        ISet familySymbolIds = family.GetFamilySymbolIds();</span><br><span class="line">        <span class="keyword">foreach</span> (ElementId id <span class="keyword">in</span> familySymbolIds)</span><br><span class="line">        &#123;</span><br><span class="line">            FamilySymbol familySymbol = family.Document.GetElement(id) <span class="keyword">as</span> FamilySymbol;</span><br><span class="line">            <span class="keyword">if</span> ((<span class="literal">null</span> != familySymbol) &amp;&amp; familySymbol.Name == <span class="string">&quot;2X2&quot;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">using</span> (Transaction changeSymbol = <span class="keyword">new</span> Transaction(document, <span class="string">&quot;Change Symbol Assignment&quot;</span>))</span><br><span class="line">                &#123;</span><br><span class="line">                    changeSymbol.Start();</span><br><span class="line">                    familyInstance.Symbol = familySymbol;</span><br><span class="line">                    changeSymbol.Commit();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">LoadOpts</span> : <span class="title">IFamilyLoadOptions</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">OnFamilyFound</span>(<span class="params"><span class="built_in">bool</span> familyInUse, <span class="keyword">out</span> <span class="built_in">bool</span> overwriteParameterValues</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        overwriteParameterValues = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">OnSharedFamilyFound</span>(<span class="params">Family sharedFamily, <span class="built_in">bool</span> familyInUse, <span class="keyword">out</span> FamilySource source, <span class="keyword">out</span> <span class="built_in">bool</span> overwriteParameterValues</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        source = FamilySource.Family;</span><br><span class="line">        overwriteParameterValues = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>FamilyManager类提供对所有族参数的访问。这包括族内置参数、类别内置参数和与族类型关联的共享参数。有两种方法可以获取族参数：</p>
-<ul>
-<li>Parameters property - 获取族中的所有参数</li>
-<li>GetParameters（）-按族中所有参数在Revit UI中出现的顺序获取这些参数使用GetParameters（）方法时，Revit UI顺序首先按组确定，然后按各个参数的顺序确定。</li>
-</ul>
-<p>可以从给定族的API（不支持重新排序参数的钢筋形状族除外）重新排序（在其组内）族参数。这允许参数以最符合逻辑的顺序呈现给用户。排序仅影响同一参数组中的可见参数。属于不同组的参数将保持分离，并且组的顺序不会受到影响。</p>
-<p>对参数重新排序的最简单方法是使用FamilyManager.SortParameters（）方法，该方法接受一个指示所需排序顺序的参数。下面的示例按升序对参数进行排序。</p>
-<p>代码区域：对族参数排序</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">DisplayParametersInAscendingOrder</span>(<span class="params">Document familyDoc</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    FamilyManager familyManager = familyDoc.FamilyManager;</span><br><span class="line">    familyManager.SortParameters(ParametersOrder.Ascending);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意：排序是一次性操作。当添加新参数时，它们不会自动排序。若要对参数的排序方式进行更多控制，请使用FamilyManager.ReorderParameters（）方法，该方法以新顺序接受族参数列表。此列表必须包含GetParameters（）方法返回的所有参数，包括任何不可见的参数，否则将引发异常。</p>
-<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-</div>
-
-            <footer id="footer">
-    <div id="footer-wrap">
-        <div>
-            &copy;
-            2022 - 2024 funtim
-            <span id="footer-icon">
-                <i class="fa-solid fa-font-awesome fa-fw"></i>
-            </span>
-            &commat;XH
-        </div>
-        <div>
-            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
-            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
-        </div>
-        
-    </div>
-</footer>
-
-        </div>
-        
-        <transition name="fade">
-            <div id="preview" ref="preview" v-show="previewShow">
-                <img id="preview-content" ref="previewContent" />
-            </div>
-        </transition>
-        
-    </div>
-    <script src="/js/main.js"></script>
-    
-    
-
-
-
-
-    
-</body>
-</html>
+    if page.comments !== false && theme.comments.use
+      - var commentsJsLoad = true
+      !=partial('includes/third-party/comments/index', {}, {cache: true})
+      
