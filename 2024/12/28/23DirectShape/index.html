@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title> | Hexo</title>
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HEXO</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HEXO</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1></h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/12/28
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="DirectShape"><a href="#DirectShape" class="headerlink" title="DirectShape"></a>DirectShape</h1><p>此图元类型可以在项目或族文档中存储通过导入操作或计算获得的任意几何图形。</p>
+<p>DirectShape元素和相关类支持在Revit文档中存储外部创建的几何形状的功能。几何体可以包括闭合实体或网格。DirectShape主要用于从其他数据格式（如IFC或STEP）导入形状，在这些格式中，没有足够的信息来创建“真实的”Revit图元。</p>
+<p>可以为DirectShape对象指定顶级模型类别，例如墙类别。子类别不能指定给DirectShape元素。IsValidCategoryId（）方法可以测试类别ID，以确保它是批准与DirectShape和Category一起使用的顶级内置类别。如果类别类型为Model，则会指示CategoryType枚举值。类别将影响该对象在Revit中的显示方式，并将为该对象授予可用参数的集合和某些有限的行为。</p>
+<p><strong>DirectShape创建</strong></p>
+<p>静态DirectElement（）方法将创建一个新的实例级DirectShape。它需要将DirectShape添加到其中的文档以及适当的内置类别的ID。DirectShape提供ApplicationId和ApplicationDataId字符串参数，这些参数为创建的形状的源提供上下文。</p>
+<p>创建DirectShape后，可以使用重载的SetShape（）方法之一来设置该形状。该形状可以直接从ShapeBuilder对象或从GeometryObject列表中设置。如果您无论如何都要使用ShapeBuilder对象为DirectShape构造几何图形，则使用ShapeBuilder输入可能会有轻微的性能优势，因为Revit将绕过对输入几何图形的重复验证。还可以使用不同版本的DirectShape（）方法将其他几何体对象附加到DirectShape。请注意，BulldShape（）不会将传入的几何体与任何已经存在的几何体合并或连接，几何体将独立存储。</p>
+<p>DirectMap接受以下几何体类型作为输入：</p>
+<ul>
+<li>实体（可以是封闭或开放的外壳）</li>
+<li>网格</li>
+<li>曲线</li>
+<li>点</li>
+</ul>
+<p>此外，还可以指定要在DirectShape的视图特定表示中使用的几何体。该几何图形与DirectShapeTargetViewType的输入一起沿着输入。设置视图专有的形状表达时，它将仅用于该类型的视图中。目前，唯一受支持的视图专有表达用于平面视图。</p>
+<p>面的示例演示如何从使用GeometryCreationUtilities类创建的球体创建简单的DirectShape。请注意在创建几何体时使用了参考框架。在使用Frame对象创建几何图形之前，最好先调用静态方法Frame.CanDefineRevitGeometry（），该方法测试提供的Frame对象是否可用于定义Revit曲线或曲面。为了满足要求，框架必须正交，并且其原点应位于Revit设计限制范围内。(When创建几何体时，使用静态XYZ也很有用。IsWithinLengthLimits（），以确保该点在Revit设计限制范围内。）</p>
+<p>代码区域：创建DirectShape</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Create a DirectShape Sphere</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CreateSphereDirectShape</span>(<span class="params">Document doc</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    List&lt;Curve&gt; profile = <span class="keyword">new</span> List&lt;Curve&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// first create sphere with 2&#x27; radius</span></span><br><span class="line">    XYZ center = XYZ.Zero;</span><br><span class="line">    <span class="built_in">double</span> radius = <span class="number">2.0</span>;    </span><br><span class="line">    XYZ profile00 = center;</span><br><span class="line">    XYZ profilePlus = center + <span class="keyword">new</span> XYZ(<span class="number">0</span>, radius, <span class="number">0</span>);</span><br><span class="line">    XYZ profileMinus = center - <span class="keyword">new</span> XYZ(<span class="number">0</span>, radius, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    profile.Add(Line.CreateBound(profilePlus, profileMinus));</span><br><span class="line">    profile.Add(Arc.Create(profileMinus, profilePlus, center + <span class="keyword">new</span> XYZ(radius, <span class="number">0</span>, <span class="number">0</span>)));</span><br><span class="line"></span><br><span class="line">    CurveLoop curveLoop = CurveLoop.Create(profile);</span><br><span class="line">    SolidOptions options = <span class="keyword">new</span> SolidOptions(ElementId.InvalidElementId, ElementId.InvalidElementId);</span><br><span class="line"></span><br><span class="line">    Frame frame = <span class="keyword">new</span> Frame(center, XYZ.BasisX, -XYZ.BasisZ, XYZ.BasisY);</span><br><span class="line">    <span class="keyword">if</span> (Frame.CanDefineRevitGeometry(frame) == <span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        Solid sphere = GeometryCreationUtilities.CreateRevolvedGeometry(frame, <span class="keyword">new</span> CurveLoop[] &#123; curveLoop &#125;, <span class="number">0</span>, <span class="number">2</span> * Math.PI, options);</span><br><span class="line">        <span class="keyword">using</span> (Transaction t = <span class="keyword">new</span> Transaction(doc, <span class="string">&quot;Create sphere direct shape&quot;</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            t.Start();</span><br><span class="line">            <span class="comment">// create direct shape and assign the sphere shape</span></span><br><span class="line">            DirectShape ds = DirectShape.CreateElement(doc, <span class="keyword">new</span> ElementId(BuiltInCategory.OST_GenericModel));</span><br><span class="line"></span><br><span class="line">            ds.ApplicationId = <span class="string">&quot;Application id&quot;</span>;</span><br><span class="line">            ds.ApplicationDataId = <span class="string">&quot;Geometry object id&quot;</span>;</span><br><span class="line">            ds.SetShape(<span class="keyword">new</span> GeometryObject[] &#123; sphere &#125;);</span><br><span class="line">            t.Commit();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>DirectShape的几何体也可以使用ShapeBuilder类的子类或从TessellatedShapeBuilder创建。</p>
+<p><strong>ShapeBuilder</strong></p>
+<p>ViewShapeBuilder和WireframeBuilder可用于创建几何体以存储在DirectShape类中。ViewShapeBuilder类生成并验证视图特定的形状表示。它仅限于平面视图的基于曲线的表达。WireframeBuilder构造由点和曲线组成的3D形状表示。这两种类型的ShapeBuilder都可以通过使用带ShapeBuilder参数的DirectShape.SetShape（）或DirectShape.SetShadShape（）重载应用于DirectShape元素。</p>
+<p><strong>TessellatedShapeBuilder</strong></p>
+<p>TessellatedShapeBuilder可用于创建实体、壳或多边形网格，这些网格由一组连接的平面小平面包围，通过逐个添加TessellatedFace对象创建。只有在面集处于“open”状态时，才能将面添加到构建中。使用OpenConnectedFaceSet（）方法打开面集。添加所有TessellatedFaces后，调用CloseConnectedFaceSet（）关闭面集。构建器允许多个面集的可能性-在这种情况下，第一个面集应该代表物体的外部“表面”，所有后续面集代表内部空隙。尽管输入数据中存在不一致或遗漏，构建器仍会尝试创建在Revit中有效的几何图形。</p>
+<p>定义所有面并关闭面集后，调用Build（）方法从存储的面集构建指定的几何对象。可以在调用Build（）之前设置TessellatedShapeBuilder的Target、Fallback和GraphicsStyleId属性，否则将使用默认选项。Build（）的结果存储在TessellatedShapeBuilder中，可以通过调用GetBuildResult（）进行检索。TessellatedShapeBuilderResult.GetGeometricalObjects（）方法将返回一个GeometryObjects列表，该列表可与相应的DirectShape.SetShape（）或DirectShape. SethdShape（）重载一起使用，如下面的示例所示。</p>
+<p>代码区域：使用TessellatedShapeBuilder创建DirectShape</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Create a pyramid-shaped DirectShape using given material for the faces</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CreateTessellatedShape</span>(<span class="params">Document doc, ElementId materialId</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    List&lt;XYZ&gt; loopVertices = <span class="keyword">new</span> List&lt;XYZ&gt;(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">    TessellatedShapeBuilder builder = <span class="keyword">new</span> TessellatedShapeBuilder();</span><br><span class="line"></span><br><span class="line">    builder.OpenConnectedFaceSet(<span class="literal">true</span>);</span><br><span class="line">    <span class="comment">// create a pyramid with a square base 4&#x27; x 4&#x27; and 5&#x27; high</span></span><br><span class="line">    <span class="built_in">double</span> length = <span class="number">4.0</span>;</span><br><span class="line">    <span class="built_in">double</span> height = <span class="number">5.0</span>;</span><br><span class="line"></span><br><span class="line">    XYZ basePt1 = XYZ.Zero;</span><br><span class="line">    XYZ basePt2 = <span class="keyword">new</span> XYZ(length, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    XYZ basePt3 = <span class="keyword">new</span> XYZ(length, length, <span class="number">0</span>);</span><br><span class="line">    XYZ basePt4 = <span class="keyword">new</span> XYZ(<span class="number">0</span>, length, <span class="number">0</span>);</span><br><span class="line">    XYZ apex = <span class="keyword">new</span> XYZ(length / <span class="number">2</span>, length / <span class="number">2</span>, height);</span><br><span class="line"></span><br><span class="line">    loopVertices.Add(basePt1);</span><br><span class="line">    loopVertices.Add(basePt2);</span><br><span class="line">    loopVertices.Add(basePt3);</span><br><span class="line">    loopVertices.Add(basePt4);</span><br><span class="line">    builder.AddFace(<span class="keyword">new</span> TessellatedFace(loopVertices, materialId));</span><br><span class="line"></span><br><span class="line">    loopVertices.Clear();</span><br><span class="line">    loopVertices.Add(basePt1);</span><br><span class="line">    loopVertices.Add(apex);</span><br><span class="line">    loopVertices.Add(basePt2);</span><br><span class="line">    builder.AddFace(<span class="keyword">new</span> TessellatedFace(loopVertices, materialId));</span><br><span class="line"></span><br><span class="line">    loopVertices.Clear();</span><br><span class="line">    loopVertices.Add(basePt2);</span><br><span class="line">    loopVertices.Add(apex);</span><br><span class="line">    loopVertices.Add(basePt3);</span><br><span class="line">    builder.AddFace(<span class="keyword">new</span> TessellatedFace(loopVertices, materialId));</span><br><span class="line"></span><br><span class="line">    loopVertices.Clear();</span><br><span class="line">    loopVertices.Add(basePt3);</span><br><span class="line">    loopVertices.Add(apex);</span><br><span class="line">    loopVertices.Add(basePt4);</span><br><span class="line">    builder.AddFace(<span class="keyword">new</span> TessellatedFace(loopVertices, materialId));</span><br><span class="line"></span><br><span class="line">    loopVertices.Clear();</span><br><span class="line">    loopVertices.Add(basePt4);</span><br><span class="line">    loopVertices.Add(apex);</span><br><span class="line">    loopVertices.Add(basePt1);</span><br><span class="line">    builder.AddFace(<span class="keyword">new</span> TessellatedFace(loopVertices, materialId));</span><br><span class="line"></span><br><span class="line">    builder.CloseConnectedFaceSet();</span><br><span class="line">    builder.Target = TessellatedShapeBuilderTarget.Solid;</span><br><span class="line">    builder.Fallback = TessellatedShapeBuilderFallback.Abort;</span><br><span class="line">    builder.Build();</span><br><span class="line"></span><br><span class="line">    TessellatedShapeBuilderResult result = builder.GetBuildResult();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">using</span> (Transaction t = <span class="keyword">new</span> Transaction(doc, <span class="string">&quot;Create tessellated direct shape&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        t.Start();</span><br><span class="line">                </span><br><span class="line">        DirectShape ds = DirectShape.CreateElement(doc, <span class="keyword">new</span> ElementId(BuiltInCategory.OST_GenericModel));</span><br><span class="line">        ds.ApplicationId = <span class="string">&quot;Application id&quot;</span>;</span><br><span class="line">        ds.ApplicationDataId = <span class="string">&quot;Geometry object id&quot;</span>;</span><br><span class="line"></span><br><span class="line">        ds.SetShape(result.GetGeometricalObjects());</span><br><span class="line">        t.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面的图片是运行上面的示例并指定混凝土材质ID的结果。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/CHS/Revit-API/images/GUID-94C65476-5A32-4C89-8561-4AD97C41774D.png" alt="img"></p>
+<p><strong>BRepBuilder</strong></p>
+<p>BRepBuilder类提供了构造Revit边界表达几何图形（实体、开放壳等）的功能。作为表面、边和边的边界环的输入的结果。如果边界表示的构建成功，则可以在接受几何图形的任何其他Revit工具中直接使用生成的几何图形对象，或者可以直接传递BRepBuilder，以通过DirectShape类的SetShape（）和RoundShape（）方法填充DirectShape。下面是一个使用SetShape（）方法将圆柱体形状分配给新DirectShape对象的示例。</p>
+<p>代码区域：使用BRepBuilder创建DirectShape</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">CreateDirectShapeFromCylinder</span>(<span class="params">Document doc</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Naming convention for faces and edges: we assume that x is to the left and pointing down, y is horizontal and pointing to the right, z is up</span></span><br><span class="line">    BRepBuilder brepBuilder = <span class="keyword">new</span> BRepBuilder(BRepType.Solid);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// The surfaces of the four faces.</span></span><br><span class="line">    Frame basis = <span class="keyword">new</span> Frame(<span class="keyword">new</span> XYZ(<span class="number">50</span>, <span class="number">-100</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">-1</span>, <span class="number">0</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>));</span><br><span class="line">    CylindricalSurface cylSurf = CylindricalSurface.Create(basis, <span class="number">50</span>);</span><br><span class="line">    Plane top = Plane.CreateByNormalAndOrigin(<span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>), <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>));  <span class="comment">// normal points outside the cylinder</span></span><br><span class="line">    Plane bottom = Plane.CreateByNormalAndOrigin(<span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>), <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)); <span class="comment">// normal points inside the cylinder</span></span><br><span class="line">                                                                                              </span><br><span class="line">    <span class="comment">// Add the four faces</span></span><br><span class="line">    BRepBuilderGeometryId frontCylFaceId = brepBuilder.AddFace(BRepBuilderSurfaceGeometry.Create(cylSurf, <span class="literal">null</span>), <span class="literal">false</span>);</span><br><span class="line">    BRepBuilderGeometryId backCylFaceId = brepBuilder.AddFace(BRepBuilderSurfaceGeometry.Create(cylSurf, <span class="literal">null</span>), <span class="literal">false</span>);</span><br><span class="line">    BRepBuilderGeometryId topFaceId = brepBuilder.AddFace(BRepBuilderSurfaceGeometry.Create(top, <span class="literal">null</span>), <span class="literal">false</span>);</span><br><span class="line">    BRepBuilderGeometryId bottomFaceId = brepBuilder.AddFace(BRepBuilderSurfaceGeometry.Create(bottom, <span class="literal">null</span>), <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Geometry for the four semi-circular edges and two vertical linear edges</span></span><br><span class="line">    BRepBuilderEdgeGeometry frontEdgeBottom = BRepBuilderEdgeGeometry.Create(Arc.Create(<span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">-100</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">100</span>, <span class="number">-100</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">50</span>, <span class="number">-50</span>, <span class="number">0</span>)));</span><br><span class="line">    BRepBuilderEdgeGeometry backEdgeBottom = BRepBuilderEdgeGeometry.Create(Arc.Create(<span class="keyword">new</span> XYZ(<span class="number">100</span>, <span class="number">-100</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">-100</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">50</span>, <span class="number">-150</span>, <span class="number">0</span>)));</span><br><span class="line"></span><br><span class="line">    BRepBuilderEdgeGeometry frontEdgeTop = BRepBuilderEdgeGeometry.Create(Arc.Create(<span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">-100</span>, <span class="number">100</span>), <span class="keyword">new</span> XYZ(<span class="number">100</span>, <span class="number">-100</span>, <span class="number">100</span>), <span class="keyword">new</span> XYZ(<span class="number">50</span>, <span class="number">-50</span>, <span class="number">100</span>)));</span><br><span class="line">    BRepBuilderEdgeGeometry backEdgeTop = BRepBuilderEdgeGeometry.Create(Arc.Create(<span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">-100</span>, <span class="number">100</span>), <span class="keyword">new</span> XYZ(<span class="number">100</span>, <span class="number">-100</span>, <span class="number">100</span>), <span class="keyword">new</span> XYZ(<span class="number">50</span>, <span class="number">-150</span>, <span class="number">100</span>)));</span><br><span class="line"></span><br><span class="line">    BRepBuilderEdgeGeometry linearEdgeFront = BRepBuilderEdgeGeometry.Create(<span class="keyword">new</span> XYZ(<span class="number">100</span>, <span class="number">-100</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">100</span>, <span class="number">-100</span>, <span class="number">100</span>));</span><br><span class="line">    BRepBuilderEdgeGeometry linearEdgeBack = BRepBuilderEdgeGeometry.Create(<span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">-100</span>, <span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">-100</span>, <span class="number">100</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Add the six edges</span></span><br><span class="line">    BRepBuilderGeometryId frontEdgeBottomId = brepBuilder.AddEdge(frontEdgeBottom);</span><br><span class="line">    BRepBuilderGeometryId frontEdgeTopId = brepBuilder.AddEdge(frontEdgeTop);</span><br><span class="line">    BRepBuilderGeometryId linearEdgeFrontId = brepBuilder.AddEdge(linearEdgeFront);</span><br><span class="line">    BRepBuilderGeometryId linearEdgeBackId = brepBuilder.AddEdge(linearEdgeBack);</span><br><span class="line">    BRepBuilderGeometryId backEdgeBottomId = brepBuilder.AddEdge(backEdgeBottom);</span><br><span class="line">    BRepBuilderGeometryId backEdgeTopId = brepBuilder.AddEdge(backEdgeTop);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Loops of the four faces</span></span><br><span class="line">    BRepBuilderGeometryId loopId_Top = brepBuilder.AddLoop(topFaceId);</span><br><span class="line">    BRepBuilderGeometryId loopId_Bottom = brepBuilder.AddLoop(bottomFaceId);</span><br><span class="line">    BRepBuilderGeometryId loopId_Front = brepBuilder.AddLoop(frontCylFaceId);</span><br><span class="line">    BRepBuilderGeometryId loopId_Back = brepBuilder.AddLoop(backCylFaceId);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Add coedges for the loop of the front face</span></span><br><span class="line">    brepBuilder.AddCoEdge(loopId_Front, linearEdgeBackId, <span class="literal">false</span>);</span><br><span class="line">    brepBuilder.AddCoEdge(loopId_Front, frontEdgeTopId, <span class="literal">false</span>);</span><br><span class="line">    brepBuilder.AddCoEdge(loopId_Front, linearEdgeFrontId, <span class="literal">true</span>);</span><br><span class="line">    brepBuilder.AddCoEdge(loopId_Front, frontEdgeBottomId, <span class="literal">true</span>);</span><br><span class="line">    brepBuilder.FinishLoop(loopId_Front);</span><br><span class="line">    brepBuilder.FinishFace(frontCylFaceId);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Add coedges for the loop of the back face</span></span><br><span class="line">    brepBuilder.AddCoEdge(loopId_Back, linearEdgeBackId, <span class="literal">true</span>);</span><br><span class="line">    brepBuilder.AddCoEdge(loopId_Back, backEdgeBottomId, <span class="literal">true</span>);</span><br><span class="line">    brepBuilder.AddCoEdge(loopId_Back, linearEdgeFrontId, <span class="literal">false</span>);</span><br><span class="line">    brepBuilder.AddCoEdge(loopId_Back, backEdgeTopId, <span class="literal">true</span>);</span><br><span class="line">    brepBuilder.FinishLoop(loopId_Back);</span><br><span class="line">    brepBuilder.FinishFace(backCylFaceId);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Add coedges for the loop of the top face</span></span><br><span class="line">    brepBuilder.AddCoEdge(loopId_Top, backEdgeTopId, <span class="literal">false</span>);</span><br><span class="line">    brepBuilder.AddCoEdge(loopId_Top, frontEdgeTopId, <span class="literal">true</span>);</span><br><span class="line">    brepBuilder.FinishLoop(loopId_Top);</span><br><span class="line">    brepBuilder.FinishFace(topFaceId);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Add coedges for the loop of the bottom face</span></span><br><span class="line">    brepBuilder.AddCoEdge(loopId_Bottom, frontEdgeBottomId, <span class="literal">false</span>);</span><br><span class="line">    brepBuilder.AddCoEdge(loopId_Bottom, backEdgeBottomId, <span class="literal">false</span>);</span><br><span class="line">    brepBuilder.FinishLoop(loopId_Bottom);</span><br><span class="line">    brepBuilder.FinishFace(bottomFaceId);</span><br><span class="line"></span><br><span class="line">    brepBuilder.Finish();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">using</span> (Transaction tr = <span class="keyword">new</span> Transaction(doc, <span class="string">&quot;Create a DirectShape&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        tr.Start();</span><br><span class="line">        DirectShape ds = DirectShape.CreateElement(doc, <span class="keyword">new</span> ElementId(BuiltInCategory.OST_GenericModel));</span><br><span class="line">        ds.SetShape(brepBuilder);</span><br><span class="line">        tr.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>ShapeImporter</strong> </p>
+<p>ShapeImporter工具类支持将以外部格式（如SAT和Rhino）存储的几何体转换为可用于设置DirectShape形状的GeometryObjects集合。使用ShapeImporter.Convert（）生成几何体对象（如果可能，还生成关联文档中的相应材料和图形样式）。</p>
+<p>代码区域：从SAT文件创建DirectShape</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ReadSATFile</span>(<span class="params">Document revitDoc</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Allow the user to select a SAT file.</span></span><br><span class="line">    OpenFileDialog ofd = <span class="keyword">new</span> OpenFileDialog();</span><br><span class="line">    ofd.Filter = <span class="string">&quot;SAT Files (*.sat)|*.sat&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (DialogResult.OK == ofd.ShowDialog())</span><br><span class="line">    &#123;</span><br><span class="line">        ShapeImporter shapeImporter = <span class="keyword">new</span> ShapeImporter();</span><br><span class="line">        shapeImporter.InputFormat = ShapeImporterSourceFormat.SAT; </span><br><span class="line">        IList&lt;GeometryObject&gt; shapes = shapeImporter.Convert(revitDoc, ofd.FileName);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (shapes.Count != <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">using</span> (Transaction tr = <span class="keyword">new</span> Transaction(revitDoc, <span class="string">&quot;Create a DirectShape&quot;</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                tr.Start();</span><br><span class="line"></span><br><span class="line">                DirectShape dsImportedSat = DirectShape.CreateElement(revitDoc, <span class="keyword">new</span> ElementId(BuiltInCategory.OST_Walls));</span><br><span class="line">                dsImportedSat.SetShape(shapes);</span><br><span class="line"></span><br><span class="line">                tr.Commit();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Options</strong> </p>
+<p>DirectShapeOptions类用于控制DirectShape对象的行为。使用DirectShape.SetOptions（）设置DirectShape对象使用的选项。GetOptions（）方法将返回DirectShape对象当前使用的DirectShapeOptions。</p>
+<p>默认情况下，DirectShape元素支持元素参照，包括尺寸标注、路线和面主体以及捕捉。可以使用DirectShapeOptions.ReferencingOption属性更改此默认行为。如果将其设置为NotReferenceable，则几何图形不能用于标注、捕捉、对齐或面主体。用户仍然可以选择该元素进行不引用单个几何对象的操作。</p>
+<p>如果DirectShape元素属于房间边界计算的适当类别，并且关联的“房间边界”参数设置为true，则DirectShape元素还支持参与房间边界计算的功能。属性DirectShapeOptions.RoomBoundingOption标识DirectShape是否支持“房间边界”参数的选项以允许参与房间边界计算。默认值为NotApplied，但对于适用的DirectController，此值将自动更改为SetByParameter。</p>
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 Hexo
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;John Doe
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

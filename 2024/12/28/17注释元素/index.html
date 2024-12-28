@@ -1,0 +1,524 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title> | Hexo</title>
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HEXO</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HEXO</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1></h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/12/28
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="注释元素"><a href="#注释元素" class="headerlink" title="注释元素"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Revit_Geometric_Elements_Annotation_Elements_html">注释元素</a></h1><p>本节介绍Revit注释元素，例如尺寸标注、文字注释、注释记号、标记和符号。</p>
+<p>请注意：</p>
+<ul>
+<li>尺寸标注是视图专有的图元，用于显示项目中的尺寸和距离。</li>
+<li>为详图创建详图曲线。它们仅在绘制它们的视图中可见。它们通常绘制在模型视图上。</li>
+<li>标签是用于标识图形中图元的注释。与标签关联的特性可以显示在明细表中。</li>
+<li>AnnotationSymbol在加载到项目中时具有多个引线选项。</li>
+</ul>
+<p>有关Revit Element分类的详细信息，请参见元素要点。</p>
+<h2 id="尺寸标注和约束"><a href="#尺寸标注和约束" class="headerlink" title="尺寸标注和约束"></a>尺寸标注和约束</h2><p>永久性尺寸标注和尺寸标注相关约束。</p>
+<p>Dimension类表示永久性尺寸标注和与尺寸标注相关的约束元素。在UI中编辑元素时创建的临时尺寸标注不可访问。高程点和高程点坐标由SpotDimension类表示。</p>
+<p>下面的代码示例在结尾处说明了如何区分永久性尺寸标注和约束元素。</p>
+<p>代码区域16-1：区分永久性尺寸标注和约束</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GetInfo_Dimension</span>(<span class="params">Dimension dimension</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">string</span> message = <span class="string">&quot;Dimension : &quot;</span>;</span><br><span class="line">    <span class="comment">// Get Dimension name</span></span><br><span class="line">    message += <span class="string">&quot;\nDimension name is : &quot;</span> + dimension.Name;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get Dimension Curve</span></span><br><span class="line">    Autodesk.Revit.DB.Curve curve = dimension.Curve;</span><br><span class="line">    <span class="keyword">if</span> (curve != <span class="literal">null</span> &amp;&amp; curve.IsBound)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Get curve start point</span></span><br><span class="line">        message += <span class="string">&quot;\nCurve start point:(&quot;</span> + curve.GetEndPoint(<span class="number">0</span>).X + <span class="string">&quot;, &quot;</span></span><br><span class="line">                + curve.GetEndPoint(<span class="number">0</span>).Y + <span class="string">&quot;, &quot;</span> + curve.GetEndPoint(<span class="number">0</span>).Z + <span class="string">&quot;)&quot;</span>;</span><br><span class="line">        <span class="comment">// Get curve end point</span></span><br><span class="line">        message += <span class="string">&quot;; Curve end point:(&quot;</span> + curve.GetEndPoint(<span class="number">1</span>).X + <span class="string">&quot;, &quot;</span></span><br><span class="line">                + curve.GetEndPoint(<span class="number">1</span>).Y + <span class="string">&quot;, &quot;</span> + curve.GetEndPoint(<span class="number">1</span>).Z + <span class="string">&quot;)&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get Dimension type name</span></span><br><span class="line">    message += <span class="string">&quot;\nDimension type name is : &quot;</span> + dimension.DimensionType.Name;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get Dimension view name</span></span><br><span class="line">    message += <span class="string">&quot;\nDimension view name is : &quot;</span> + dimension.View.Name;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get Dimension reference count</span></span><br><span class="line">    message += <span class="string">&quot;\nDimension references count is &quot;</span> + dimension.References.Size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((<span class="built_in">int</span>)BuiltInCategory.OST_Dimensions == dimension.Category.Id.IntegerValue)</span><br><span class="line">    &#123;</span><br><span class="line">        message += <span class="string">&quot;\nDimension is a permanent dimension.&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((<span class="built_in">int</span>)BuiltInCategory.OST_Constraints == dimension.Category.Id.IntegerValue)</span><br><span class="line">    &#123;</span><br><span class="line">        message += <span class="string">&quot;\nDimension is a constraint element.&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,message);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="尺寸标注"><a href="#尺寸标注" class="headerlink" title="尺寸标注"></a>尺寸标注</h3><p>有五种永久尺寸标注：</p>
+<ul>
+<li>Linear dimension 线性尺寸标注</li>
+<li>Radial dimension 半径尺寸标注</li>
+<li>Diameter Dimension 直径尺寸标注</li>
+<li>Angular dimension 角度尺寸标注</li>
+<li>Arc length dimension 弧长尺寸标注</li>
+</ul>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/Dims.png"></p>
+<p>图66：永久尺寸标注</p>
+<p>所有永久性尺寸标注的BuiltInCategory为OST_Dimensions。没有一种使用API区分四个维度的简单方法。</p>
+<p>除半径尺寸标注和直径尺寸标注外，每个尺寸标注都有一条尺寸线。尺寸线可从始终未绑定的Dimension.Curve属性中获得。换句话说，尺寸线没有起点或终点。基于上一张图片：</p>
+<ul>
+<li>将为线性标注返回Line对象。</li>
+<li>将为半径标注或角度标注返回弧对象。</li>
+<li>径向尺寸标注返回空。</li>
+<li>直径尺寸标注返回空。</li>
+</ul>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-4C8DCD73-DFD8-4185-A1EA-2C890D176FBF-low.png"></p>
+<p>图67：尺寸参考</p>
+<p>如上图所示，通过选择几何参照来创建尺寸。几何参照在API中表示为Reference类。以下尺寸参照可从“参照”（References）属性中获得。有关参考的更多信息，请参见几何部分中的几何辅助程序类。</p>
+<ul>
+<li>半径和直径尺寸标注-返回曲线的一个参考对象</li>
+<li>角度和弧长尺寸标注-返回两个参照对象。</li>
+<li>线性尺寸标注-返回两个或多个参照对象。在下图中，线性标注有五个Reference对象。</li>
+</ul>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-A976B817-2D4B-471B-BF79-27E9262A8A85-low.png"></p>
+<p>图68：线性尺寸参考</p>
+<p>与其他注释元素一样，尺寸标注也是视图专有的。它们仅显示在添加它们的视图中。Dimension.View属性返回特定的视图。</p>
+<h3 id="约束元素"><a href="#约束元素" class="headerlink" title="约束元素"></a>约束元素</h3><p>具有类别约束的标注对象（BuitInCategory.OST_Constraints）表示两种与标注相关的约束：</p>
+<ul>
+<li>Linear and radial dimension constraints<br>线性和半径尺寸标注约束</li>
+<li>Equality constraints 等式约束</li>
+</ul>
+<p>在下图中，两种锁定约束分别对应于线性标注和半径标注。在应用程序中，它们显示为带有绿色虚线的挂锁。(绿色虚线可从“尺Dimension.Curve”属性中获得。）线性标注约束和半径标注约束都从Dimension.References属性返回两个Reference对象。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-370D4754-3BC7-4A6C-8531-41B7A5B424D9-low.png"></p>
+<p>图69：线性和半径尺寸约束</p>
+<p>约束图元不是视图专有的，可以显示在不同的视图中。因此，View属性总是返回null。在下图中，上一图中的约束元素在3D视图中也可见。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-8365F25E-7304-413D-BABE-1C495BD8ADAD-low.png"></p>
+<p>图70：3D视图中的线性和半径尺寸约束</p>
+<p>虽然等分约束基于尺寸标注，但它们也由Dimension类表示。在API中，没有使用类别或类型区分线性标注约束和等式约束的直接方法。相等约束返回三个或更多引用，而线性尺寸约束返回两个或更多引用。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-FB6F70CD-8913-4C3A-A036-2108550BA25C-low.png"></p>
+<p>图71：等分约束</p>
+<p>注意：并非所有约束元素都由Dimension类表示，但都属于约束（OST_Constraints）类别，如对齐约束。</p>
+<h3 id="高程点标注"><a href="#高程点标注" class="headerlink" title="高程点标注"></a>高程点标注</h3><p>高程点坐标和高程点由SpotDimension类表示，并按类别区分。与永久性尺寸标注一样，高程点尺寸标注也是视图专有的。下表列出了每个高程点标注的类型和类别：</p>
+<p>表35：点尺寸类型和类别</p>
+<table>
+<thead>
+<tr>
+<th><strong>Type 类型</strong></th>
+<th><strong>Category 类别</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Spot Coordinates 高程点坐标</td>
+<td>OST_SpotCoordinates</td>
+</tr>
+<tr>
+<td>Spot Elevations 高程点</td>
+<td>OST_SpotElevations</td>
+</tr>
+</tbody></table>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-BDB09C60-D4AC-4F6A-8100-6BA2FA165228-low.png"></p>
+<p>图72：SpotCoordinates和SpotElevations</p>
+<p>可以将SpotDimension Location向下转换为LocationPoint，以便可以从LocationPoint.Point属性中获得点尺寸所指向的点坐标。SpotDimensions没有尺寸曲线，因此其Curve属性始终返回null。SpotDimension References属性返回一个Reference，表示高程点标注引用的点或边。* 若要控制文本和标记显示样式，请修改SpotDimension和SpotExpressionType参数。</p>
+<p>对比下表对比了API中不同类型的维度和约束：</p>
+<p>表36：Dimension类别对比</p>
+<table>
+<thead>
+<tr>
+<th>Dimension or Constraint</th>
+<th>Dimension or Constraint</th>
+<th>API Class</th>
+<th>BuiltInCategory</th>
+<th>Curve</th>
+<th>Geometry Helper Classes</th>
+<th>View</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Permanent Dimension</td>
+<td>linear dimension</td>
+<td>Dimension</td>
+<td>OST_Dimensions</td>
+<td>A Line</td>
+<td>&#x3D;2</td>
+<td>Specific view</td>
+<td>null</td>
+</tr>
+<tr>
+<td>Permanent Dimension</td>
+<td>radial dimension</td>
+<td>Dimension</td>
+<td>OST_Dimensions</td>
+<td>Null</td>
+<td>1</td>
+<td>Specific view</td>
+<td>null</td>
+</tr>
+<tr>
+<td>Permanent Dimension</td>
+<td>diameter dimension</td>
+<td>Dimension</td>
+<td>OST_Dimensions</td>
+<td>Null</td>
+<td>1</td>
+<td>Specific view</td>
+<td>null</td>
+</tr>
+<tr>
+<td>Permanent Dimension</td>
+<td>angular dimension</td>
+<td>Dimension</td>
+<td>OST_Dimensions</td>
+<td>An Arc</td>
+<td>2</td>
+<td>Specific view</td>
+<td>null</td>
+</tr>
+<tr>
+<td>Permanent Dimension</td>
+<td>arc length dimension</td>
+<td>Dimension</td>
+<td>OST_Dimensions</td>
+<td>An Arc</td>
+<td>2</td>
+<td>Specific view</td>
+<td>null</td>
+</tr>
+<tr>
+<td>Dimension Constraint</td>
+<td>linear dimension constraint</td>
+<td>Dimension</td>
+<td>OST_Constraints</td>
+<td>An Arc</td>
+<td>2</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>Dimension Constraint</td>
+<td>angular dimension</td>
+<td>Dimension</td>
+<td>OST_Constraints</td>
+<td>An Arc</td>
+<td>2</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>Equality Constraint</td>
+<td>Equality Constraint</td>
+<td>Dimension</td>
+<td>OST_Constraints</td>
+<td>A Line</td>
+<td>&#x3D;3</td>
+<td></td>
+<td>null</td>
+</tr>
+</tbody></table>
+<h3 id="创建和删除"><a href="#创建和删除" class="headerlink" title="创建和删除"></a>创建和删除</h3><p>NewDimension（）方法在Creation.Document类中可用。此方法只能创建线性标注。</p>
+<p>代码区域16-2：NewDimension（）</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Dimension <span class="title">NewDimension</span> (<span class="params">View view, Line line, ReferenceArray references</span>)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Dimension <span class="title">NewDimension</span> (<span class="params">View view, Line line, ReferenceArray references, </span></span></span><br><span class="line"><span class="params"><span class="function">DimensionType dimensionType</span>)</span></span><br></pre></td></tr></table></figure>
+
+<p>使用NewDimension（）方法输入参数，可以定义可见的View、尺寸线和References（两个或多个）。但是，没有简单的方法将线性标注类型与其他类型区分开来。很少使用带有ExcisionType参数的重载NewDimension（）方法。 下面的代码演示如何使用NewDimension（）方法复制标注。</p>
+<p>代码区域16-3：使用NewDimension（）复制标注</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DuplicateDimension</span>(<span class="params">Document document, Dimension dimension</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        Line line = dimension.Curve <span class="keyword">as</span> Line;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> != line)</span><br><span class="line">        &#123;</span><br><span class="line">                Autodesk.Revit.DB.View view = dimension.View;</span><br><span class="line">                ReferenceArray references = dimension.References;</span><br><span class="line">                Dimension newDimension = document.Create.NewDimension(view, line, references);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>尽管只创建了线性标注，但您可以使用Document.Delete（）方法删除由Dimension和SpotDimension表示的所有标注和约束。 </p>
+<p>标注文本操作 Dimension和ExpressionSegment类提供了类似的属性和方法，用于查询和调整文本相对于尺寸曲线的位置。 Dimension.Origin返回尺寸曲线中点的XYZ值，而ExpressionSegment.Origin将返回组成线段的直线的中点。 通过调用IsTextPositionAdjustable（）方法确定标注或标注段的文本位置是否可调，该方法将指示是否可以设置文本和引线位置。 使用属性TextPosition和LeaderEndPosition查询或修改文本或引线（标注或标注段）的位置。 通过调用ResetTextPosition（）方法将文本重置为其在尺寸上的默认位置。</p>
+<p>注意：TextPosition和LeaderEndPosition不一定适用于所有标注（例如，标注样式为纵坐标时，使用相等约束的高程点标注、多段标注）。如果这些值不适用，它们将返回NULL，并且不允许设置值。</p>
+<p>代码区域：重新定位标注文字</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Moves all of the text in this dimension one unit in the Y direction</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">DimensionTextReposition</span>(<span class="params">Dimension dimToModify</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">bool</span> modified = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (dimToModify == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check to see if we have a non-multisegment dimension and if text position is adjustable</span></span><br><span class="line">    <span class="keyword">if</span> (dimToModify.NumberOfSegments == <span class="number">0</span> &amp;&amp; dimToModify.IsTextPositionAdjustable())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Get the current text XYZ position</span></span><br><span class="line">        XYZ currentTextPosition = dimToModify.TextPosition;</span><br><span class="line">        <span class="comment">// Calculate a new XYZ position by transforming the current text position</span></span><br><span class="line">        XYZ newTextPosition = Transform.CreateTranslation(<span class="keyword">new</span> XYZ(<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>)).OfPoint(currentTextPosition);</span><br><span class="line">        <span class="comment">// Set the new text position</span></span><br><span class="line">        dimToModify.TextPosition = newTextPosition;</span><br><span class="line"></span><br><span class="line">        modified = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (dimToModify.NumberOfSegments &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">foreach</span> (DimensionSegment currentSegment <span class="keyword">in</span> dimToModify.Segments)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (currentSegment != <span class="literal">null</span> &amp;&amp; currentSegment.IsTextPositionAdjustable())</span><br><span class="line">            &#123;</span><br><span class="line">                modified = <span class="literal">true</span>;</span><br><span class="line">                <span class="comment">// Get the current text XYZ position</span></span><br><span class="line">                XYZ currentTextPosition = currentSegment.TextPosition;</span><br><span class="line">                <span class="comment">// Calculate a new XYZ position by transforming the current text position</span></span><br><span class="line">                XYZ newTextPosition = Transform.CreateTranslation(<span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>)).OfPoint(currentTextPosition);</span><br><span class="line">                <span class="comment">// Set the new text position for the segment&#x27;s text</span></span><br><span class="line">                currentSegment.TextPosition = newTextPosition;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> modified;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="详图线"><a href="#详图线" class="headerlink" title="详图线"></a>详图线</h2><p>详图线是一种重要的详图构件，通常用于详图或绘图视图中。可以在DetailCurve类及其派生类中访问详图曲线。</p>
+<p>DetailCurve与其他注释元素一样，是视图专有的。但是，没有DetailCurve.View属性。创建详图曲线时，必须将详图曲线与模型曲线视图进行比较。</p>
+<p>代码区域16-4：NewDetailCurve（）和NewModelCurve（）</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> DetailCurve <span class="title">NewDetailCurve</span> (<span class="params">View, Curve, SketchPlane</span>)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ModelCurve <span class="title">NewModelCurve</span> (<span class="params">Curve, SketchPlane</span>)</span></span><br></pre></td></tr></table></figure>
+
+<p>通常，只有二维视图（如平面视图和立面视图）是可接受的，否则将引发异常。</p>
+<p>除了与视图相关的功能外，DetailCurve与ModelCurve非常相似。有关ModelCurve属性和用法的详细信息，请参见“草图”部分中的ModelCurve。</p>
+<h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><p>标签是用于标识图形元素的注释。API公开IndependentTag和RoomTag类，以涵盖Revit应用程序中使用的大多数标签。有关RoomTag的更多详细信息，请参阅房间。</p>
+<p>注意：IndependentTag类表示Revit中的标签图元和其他特定标记，如注释标签、梁系统标签、电子电路符号等。在Revit内部代码中，特定标记具有从IndependentTag派生的相应类。因此，特定功能不会由API公开，并且无法使用IndependentTag.xml创建。它们可按以下类别加以区分：</p>
+<p>表37：标签名称和类别</p>
+<table>
+<thead>
+<tr>
+<th><strong>Tag Name 标记名称</strong></th>
+<th><strong>BuiltInCategory</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Keynote Tag</td>
+<td>OST_KeynoteTags</td>
+</tr>
+<tr>
+<td>Beam System Tag</td>
+<td>OST_BeamSystemTags</td>
+</tr>
+<tr>
+<td>Electronic Circuit Tag</td>
+<td>OST_ElectricalCircuitTags</td>
+</tr>
+<tr>
+<td>Span Direction Tag</td>
+<td>OST_SpanDirectionSymbol</td>
+</tr>
+<tr>
+<td>Path Reinforcement Span Tag</td>
+<td>OST_PathReinSpanSymbol</td>
+</tr>
+<tr>
+<td>Rebar System Span Tag</td>
+<td>OST_IOSRebarSystemSpanSymbolCtrl</td>
+</tr>
+</tbody></table>
+<p>族库中的每个类别都有一个预先制作的标记。某些标记会随默认的Revit应用程序样板自动加载，而其他标记则会手动加载。如果主体元素是使用“按类别”选项创建的，则IndependentTag对象将根据主体元素返回不同的类别。例如，Wall和Floor IndependentTag分别是OST_WallTags和OST_FloorTags。</p>
+<p>如果标记是使用“Multi-Category ”或“Material”样式创建的，则它们的类别分别为OST_MultiCategoryTags和OST_MaterialTags。</p>
+<p>请注意IndependentTag.Create只在2D视图或锁定的3D视图中工作，否则将引发异常。下面的代码是创建IndependentTag的示例。当标高视图为活动视图时运行该命令。</p>
+<p>注意：您无法直接更改IndependentTag中显示的文本。您需要修改用于在要标记的图元的族类型中填充标记文字的参数。在下面的示例中，该参数为“Type Mark”，但可以在Revit UI的族编辑器中更改此设置。</p>
+<p>代码区域16-5：创建IndependentTag</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> IndependentTag <span class="title">CreateIndependentTag</span>(<span class="params">Autodesk.Revit.DB.Document document, Reference reference</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// make sure active view is not a 3D view</span></span><br><span class="line">    Autodesk.Revit.DB.View view = document.ActiveView;</span><br><span class="line">    <span class="keyword">if</span> (view <span class="keyword">is</span> View3D)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// define tag mode and tag orientation for new tag</span></span><br><span class="line">    TagMode tagMode = TagMode.TM_ADDBY_CATEGORY;</span><br><span class="line">    TagOrientation tagorn = TagOrientation.Horizontal;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Add the tag to the middle of the wall</span></span><br><span class="line">    Wall wall = document.GetElement(reference) <span class="keyword">as</span> Wall;</span><br><span class="line">    <span class="keyword">if</span> (wall == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    LocationCurve wallLoc = wall.Location <span class="keyword">as</span> LocationCurve;</span><br><span class="line">    XYZ wallStart = wallLoc.Curve.GetEndPoint(<span class="number">0</span>);</span><br><span class="line">    XYZ wallEnd = wallLoc.Curve.GetEndPoint(<span class="number">1</span>);</span><br><span class="line">    XYZ wallMid = wallLoc.Curve.Evaluate(<span class="number">0.5</span>, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    IndependentTag newTag = IndependentTag.Create(document, view.Id, reference, <span class="literal">true</span>, tagMode, tagorn, wallMid);</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> == newTag)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Create IndependentTag Failed.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// newTag.TagText is read-only, so we change the Type Mark type parameter to </span></span><br><span class="line">    <span class="comment">// set the tag text.  The label parameter for the tag family determines</span></span><br><span class="line">    <span class="comment">// what type parameter is used for the tag text.</span></span><br><span class="line"></span><br><span class="line">    WallType type = wall.WallType;</span><br><span class="line"></span><br><span class="line">    Parameter foundParameter = type.LookupParameter(<span class="string">&quot;Type Mark&quot;</span>);</span><br><span class="line">    <span class="built_in">bool</span> result = foundParameter.Set(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set leader mode free</span></span><br><span class="line">    <span class="comment">// otherwise leader end point move with elbow point</span></span><br><span class="line"></span><br><span class="line">    newTag.LeaderEndCondition = LeaderEndCondition.Free;</span><br><span class="line">    XYZ elbowPnt = wallMid + <span class="keyword">new</span> XYZ(<span class="number">5.0</span>, <span class="number">5.0</span>, <span class="number">0.0</span>);</span><br><span class="line">    newTag.LeaderElbow = elbowPnt;</span><br><span class="line">    XYZ headerPnt = wallMid + <span class="keyword">new</span> XYZ(<span class="number">10.0</span>, <span class="number">10.0</span>, <span class="number">0.0</span>);</span><br><span class="line">    newTag.TagHeadPosition = headerPnt;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> newTag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-6FE76534-FEA8-4573-A2D7-747AB527B335-low.png"></p>
+<p>图74：使用示例代码创建IndependentTag</p>
+<h2 id="文本"><a href="#文本" class="headerlink" title="文本"></a>文本</h2><p>可以从TextNote类访问文本和关联的引线。注意TextNote可以包含纯文本或格式化文本。重载的TextNote.Create（）方法提供了用于创建展开和换行文本注释元素的选项。文本内容区域的宽度可以在创建时指定，但受基于文本及其类型的属性的最小和最大宽度的限制。从TextElement继承的重载方法GetMinimumAllowedWidth（）和GetMaximumAllowedWidth（）返回特定TextNote或给定文档和文本类型ID的约束。</p>
+<p>下面的示例在用户指定的点处使用给定的宽度和TextNoteOptions创建一个新的TextNote。</p>
+<p>代码区域：创建文本注释</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> TextNote <span class="title">AddNewTextNote</span>(<span class="params">UIDocument uiDoc</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Document doc = uiDoc.Document;</span><br><span class="line">    XYZ textLoc = uiDoc.Selection.PickPoint(<span class="string">&quot;Pick a point for sample text.&quot;</span>);</span><br><span class="line">    ElementId defaultTextTypeId = doc.GetDefaultElementTypeId(ElementTypeGroup.TextNoteType);</span><br><span class="line">    <span class="built_in">double</span> noteWidth = <span class="number">.2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// make sure note width works for the text type</span></span><br><span class="line">    <span class="built_in">double</span> minWidth = TextNote.GetMinimumAllowedWidth(doc, defaultTextTypeId);</span><br><span class="line">    <span class="built_in">double</span> maxWidth = TextNote.GetMaximumAllowedWidth(doc, defaultTextTypeId);</span><br><span class="line">    <span class="keyword">if</span> (noteWidth &lt; minWidth)</span><br><span class="line">    &#123;</span><br><span class="line">        noteWidth = minWidth;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (noteWidth &gt; maxWidth)</span><br><span class="line">    &#123;</span><br><span class="line">        noteWidth = maxWidth;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    TextNoteOptions opts = <span class="keyword">new</span> TextNoteOptions(defaultTextTypeId);</span><br><span class="line">    opts.HorizontalAlignment = HorizontalTextAlignment.Left;</span><br><span class="line">    opts.Rotation = Math.PI / <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    TextNote textNote = TextNote.Create(doc, doc.ActiveView.Id, textLoc, noteWidth, <span class="string">&quot;New sample text&quot;</span>, opts);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> textNote;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>无论TextNote具有纯文本还是格式化文本，始终可以从TextNote.Text属性检索未格式化的文本。</p>
+<p>格式化文本 当第一次创建时，TextNote将具有纯文本。使用TextNote. GetNotedText（）方法获取TextNote的NotedText对象。类可以用于对文本应用各种格式，如粗体、下划线、上标或全部大写。在使用修改后的TextText调用SetSetNotedText（）之前，TextNote不会更新。 可以使用TextRange全部或部分地格式化已删除文本中的文本。TextRange基于TextedText对象中的文本指定起始索引和长度。当格式化方法（如SetItalicStatus（）或SetAllCapsStatus（））的重载使用TextRange时，将只修改该范围内的字符。TextRange可以使用其构造函数显式定义，也可以使用FormattedText.Find（）方法检索以获取给定搜索字符串的范围。Find（）方法指定搜索的开始索引，以及是否匹配搜索字符串的大小写或是否进行全词搜索。如果在搜索字符串中找不到文本，或者如果给定的起始索引超出了整个文本的长度，则将返回一个空的TextRange。在使用返回的范围设置文本格式之前，请确保该范围不为空，以避免异常。 下面的示例演示如何设置TextNote中的文本格式并将其设置回TextNote。它使用Find（）方法对文本中的特定单词加粗体和下划线。</p>
+<p>代码区域：设置TextNote中的文本格式</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">FormatText</span>(<span class="params">TextNote textNote</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// TextNote created with &quot;New sample text&quot;</span></span><br><span class="line">    FormattedText formatText = textNote.GetFormattedText();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// italicize &quot;New&quot;</span></span><br><span class="line">    TextRange range = <span class="keyword">new</span> TextRange(<span class="number">0</span>, <span class="number">3</span>);</span><br><span class="line">    formatText.SetItalicStatus(range, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// make &quot;sample&quot; bold</span></span><br><span class="line">    range = formatText.Find(<span class="string">&quot;sample&quot;</span>, <span class="number">0</span>, <span class="literal">false</span>, <span class="literal">true</span>);</span><br><span class="line">    <span class="keyword">if</span> (range.Length &gt; <span class="number">0</span>)</span><br><span class="line">        formatText.SetBoldStatus(range, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// make &quot;text&quot; underlined</span></span><br><span class="line">    range = formatText.Find(<span class="string">&quot;text&quot;</span>, <span class="number">0</span>, <span class="literal">false</span>, <span class="literal">true</span>);</span><br><span class="line">    <span class="keyword">if</span> (range.Length &gt; <span class="number">0</span>)</span><br><span class="line">        formatText.SetUnderlineStatus(range, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// make all text uppercase</span></span><br><span class="line">    formatText.SetAllCapsStatus(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    textNote.SetFormattedText(formatText);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以将新文本添加到已添加文本对象中的现有文本中。如果使用了具有TextRange参数的重载，SetPlainText（）方法将替换某些现有文本，否则将替换整个文本。若要插入文本而不替换现有文本，请使用Length为0的TextRange。新文本将插入到TextRange.Start属性指定的索引处。请注意，插入文本时，它可能会选择相邻文本的格式，类似于将未格式化的文本粘贴到Word文档中将导致文本具有插入点的当前格式。如果格式设置已经应用于整个multitedText，如上面示例中的SetAllCapsStatus（true）调用，则该格式设置将应用于插入的任何新文本。 在下面的示例中，通过首先查找当前文本的结尾并将其设置为要添加的范围的开始，新文本将被追加到现有文本的结尾。它还演示了如何创建一个列表（可以是项目符号，编号或字母）。请注意，它还为新文本的范围调用GetAllCapsStatus（），并在状态不是“大写状态.无”（其他选项是“全部”和“混合”）时关闭大写。</p>
+<p>代码区域：插入新文本</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">AppendText</span>(<span class="params">TextNote textNote</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    FormattedText formatText = textNote.GetFormattedText();</span><br><span class="line"></span><br><span class="line">    TextRange range = formatText.AsTextRange();</span><br><span class="line"></span><br><span class="line">    range.Start = range.End - <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// set Length to 0 to insert</span></span><br><span class="line">    range.Length = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">string</span> someNewText = <span class="string">&quot;\rThis is a new paragraph\vThis is a new line without a paragraph break\r&quot;</span>;</span><br><span class="line">    formatText.SetPlainText(range, someNewText);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get range for entire text</span></span><br><span class="line">    range = formatText.AsTextRange();</span><br><span class="line">    range.Start = range.End - <span class="number">1</span>;</span><br><span class="line">    range.Length = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">string</span> someListText = <span class="string">&quot;\rBulleted List item 1\rItem 2\vSecond line for Item 2\rThird bullet point&quot;</span>;</span><br><span class="line">    formatText.SetPlainText(range, someListText);</span><br><span class="line">    range.Start++;</span><br><span class="line">    range.Length = someListText.Length;</span><br><span class="line">    formatText.SetListType(range, ListType.Bullet);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (formatText.GetAllCapsStatus(range) != FormatStatus.None)</span><br><span class="line">    &#123;</span><br><span class="line">        formatText.SetAllCapsStatus(range, <span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    textNote.SetFormattedText(formatText);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码显示了如何使用\r创建换行符，使用\v创建不打断段落的垂直制表符。在项目符号列表的文本中，“\v”用于创建两行项目符号。仅在使用“\r”时才插入新项目符号。 </p>
+<p>文本编辑器 TextEditorOptions类可用于控制Revit中文本编辑器的外观和功能。这些设置保存在Revit.ini文件中，不与文档绑定。</p>
+<p>代码区域：设置文本编辑器选项</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetEditorOptions</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    TextEditorOptions editorOptions = TextEditorOptions.GetTextEditorOptions();</span><br><span class="line">    editorOptions.ShowBorder = <span class="literal">false</span>;</span><br><span class="line">    editorOptions.ShowOpaqueBackground = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="引线"><a href="#引线" class="headerlink" title="引线"></a>引线</h3><p>Revit支持两种引线：直线引线和圆弧引线。可以使用AddLeader（）方法将引线添加到TextNote，并使用TextNoteLeaderType枚举类型指定引线类型：</p>
+<p>表39：引线类型</p>
+<table>
+<thead>
+<tr>
+<th><strong>Function 功能</strong></th>
+<th><strong>Member Name 成员名称</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-0A443B27-ACDB-401E-8486-62165414529F-low.png" alt="img"> -添加右弧引线</td>
+<td>TNLT_ARC_R</td>
+</tr>
+<tr>
+<td><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-EE3246C4-B4F8-443D-9958-66CE5E62BB12-low.png" alt="img"> -添加左弧引线</td>
+<td>TNLT_ARC_L</td>
+</tr>
+<tr>
+<td><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-0D7DA193-EC77-4E99-A864-CA1E69BB3A62-low.png" alt="img"> -添加右引线。</td>
+<td>TNLT_STRAIGHT_R</td>
+</tr>
+<tr>
+<td><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-60BA1957-992C-468D-8459-7A26E418BF57-low.png" alt="img"> -添加左引线。</td>
+<td>TNLT_STRAIGHT_L</td>
+</tr>
+</tbody></table>
+<p>注意：直线引线和圆弧引线不能同时添加到文本类型。</p>
+<p>TextNote.LeaderCount属性返回引线数，GetLeaders（）方法返回当前附加到文本组件的所有引线。LeaderLeftAttachment和LeaderRightAttachment指示引线在TextNote的相应侧上的附着位置。LeaderAttachment的选项有TopLine、MidPoint和BottomLine。使用RemoveLeaders（）方法从TextNote中删除所有引线。</p>
+<h2 id="注释符号"><a href="#注释符号" class="headerlink" title="注释符号"></a>注释符号</h2><p>注释符号是应用于族的符号，用于在项目中唯一标识该族。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-75864163-28D5-496D-9077-98DFECA07E75-low.png"></p>
+<p>图76：带有两条引线的注释符号</p>
+<h3 id="创建和删除-1"><a href="#创建和删除-1" class="headerlink" title="创建和删除"></a>创建和删除</h3><p>可以使用Creation.Document.NewFamilyInstance（）方法的以下重载创建注释符号：</p>
+<p>代码区域16-6：创建新注释符号</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> FamilyInstance NewFamilyInstance <span class="title">Method</span> (<span class="params">XYZ origin, FamilySymbol symbol, View specView</span>)</span></span><br></pre></td></tr></table></figure>
+
+<p>可以使用Document.Delete（）方法删除注释符号。 </p>
+<p>添加和删除Leader 使用addLeader（）和removeLeader（）方法添加和删除引线。</p>
+<p>代码区域16-7：使用addLeader（）和removeLeader（）</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">AddAndRemoveLeaders</span>(<span class="params">AnnotationSymbol symbol</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// check if there are any leaders currently attached, and remove them</span></span><br><span class="line">    IList leaders = symbol.GetLeaders();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (leaders != <span class="literal">null</span> &amp;&amp; leaders.Count &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> i = leaders.Count; i &gt; <span class="number">0</span>; i--)</span><br><span class="line">        &#123;</span><br><span class="line">            symbol.removeLeader();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// add one new leader instead</span></span><br><span class="line">    symbol.addLeader();&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 Hexo
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;John Doe
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

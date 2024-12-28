@@ -1,0 +1,553 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title> | Hexo</title>
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HEXO</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HEXO</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1></h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/12/28
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="墙、楼板、天花板、屋顶和洞口"><a href="#墙、楼板、天花板、屋顶和洞口" class="headerlink" title="墙、楼板、天花板、屋顶和洞口"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Revit_Geometric_Elements_Walls_Floors_Ceilings_Roofs_and_Openings_html">墙、楼板、天花板、屋顶和洞口</a></h1><p>元素和表示内置位置构造的相应ElementType。</p>
+<p>以下部分介绍与内置位置构造（如墙、楼板、天花板、屋顶和洞口）相关的类及其相应的属性。</p>
+<p>本节中的页面</p>
+<ul>
+<li>墙</li>
+<li>楼板、天花板和基础</li>
+<li>屋顶</li>
+<li>幕墙</li>
+<li>其他元素</li>
+<li>复合结构</li>
+<li>洞口</li>
+<li>热属性</li>
+</ul>
+<h2 id="墙"><a href="#墙" class="headerlink" title="墙"></a>墙</h2><p>WallType.Kind枚举表示四种墙：</p>
+<ul>
+<li>Stacked 叠层墙</li>
+<li>Curtain 幕墙</li>
+<li>Basic 基本</li>
+<li>Unknown 未知</li>
+</ul>
+<p>Wall和WallType类与基本墙类型一起使用，同时为叠层墙和幕墙提供有限的功能。有时您需要检查墙以确定墙类型。例如，不能使用API从叠层墙获取子墙。WallKind是只读的，由系统系列设置。</p>
+<p>Wall.Flipped属性和Wall.flip（）方法可以访问和控制墙的方向。在下面的示例中，将在调用flip（）方法之前和之后比较Wall。</p>
+<ul>
+<li>之前的Orientation属性为（0.0，1.0，0.0）。</li>
+<li>翻转调用后的Orientation属性为（0.0，-1.0，0.0）。</li>
+<li>“墙定位线（WALL_KEY_REF_PARAM）”参数为3，表示下表中的“饰面：内部”。</li>
+<li>以该线为参照，墙将被移动，但“位置”不会更改。</li>
+</ul>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-4BFD801E-18BC-4021-8371-C29AF13CF7EE-low.png"></p>
+<p><strong>图33：原始墙</strong></p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-85CF3DAD-C029-41C5-ACC6-1FEC8CA304E4-low.png"></p>
+<p><strong>图34：翻转后的墙</strong></p>
+<p><strong>表24：墙位置线</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>Location Line Value 定位线值</strong></th>
+<th><strong>Description 描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>墙中心线</td>
+</tr>
+<tr>
+<td>1</td>
+<td>核心层中心线</td>
+</tr>
+<tr>
+<td>2</td>
+<td>表面：外部</td>
+</tr>
+<tr>
+<td>3</td>
+<td>表面：内部</td>
+</tr>
+<tr>
+<td>4</td>
+<td>核心面：外部</td>
+</tr>
+<tr>
+<td>5</td>
+<td>核心面：内部</td>
+</tr>
+</tbody></table>
+<p>Wall类中有五个静态覆盖方法可用于创建Wall：</p>
+<p>表25：Create（）重载</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name 名称</strong></th>
+<th><strong>Description 描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Create(Document, Curve, WallType, Level, Double, Double, Boolean, Boolean)</td>
+<td>使用指定的墙类型、高度和偏移在项目中创建新的矩形轮廓墙。</td>
+</tr>
+<tr>
+<td>Create(Document, IList Curve , Boolean)</td>
+<td>使用默认墙样式在项目中创建非矩形轮廓墙。</td>
+</tr>
+<tr>
+<td>Create(Document, Curve, ElementId, Boolean)</td>
+<td>使用默认墙样式在项目中由ElementId指定的标高上创建新的矩形轮廓墙。</td>
+</tr>
+<tr>
+<td>Create(Document, IList Curve , ElementId, ElementId, Boolean)</td>
+<td>使用指定的墙类型在项目中创建非矩形轮廓墙。</td>
+</tr>
+<tr>
+<td>Create(Document, IList Curve , ElementId, ElementId, Boolean, XYZ)</td>
+<td>使用指定的墙类型和法向量在项目中创建非矩形轮廓墙。</td>
+</tr>
+</tbody></table>
+<p>WallType墙功能（WALL_ATTR_EXTERIOR）参数会影响创建的墙实例“房间边界和结构用途”参数。WALL_ATTR_EXTERIOR值是一个整数：</p>
+<p><strong>表26：墙功能</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>Wall Function 墙功能</strong></th>
+<th><strong>Interior 内部</strong></th>
+<th><strong>Exterior 外部</strong></th>
+<th><strong>Foundation 基础墙</strong></th>
+<th><strong>Retaining 挡土墙</strong></th>
+<th><strong>Soffit 檐底板</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Value 值</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+</tr>
+</tbody></table>
+<p>以下规则适用于由API创建的墙：</p>
+<ul>
+<li>如果输入结构参数为true或Wall Function（WALL_ATTR_EXTERIOR）参数为Foundation，则Wall StructuralUsage参数为Bearing;否则为NonBearing。</li>
+<li>如果墙功能（WALL_ATTR_EXTERIOR）参数为“Retaining”，则创建的墙房间边界（WALL_ATTR_ROOM_BOUNDING）参数为false。</li>
+</ul>
+<p>有关与结构相关的函数（如AnalyticalModel属性）的详细信息，请参见结构工程。</p>
+<h2 id="楼板、天花板和基础"><a href="#楼板、天花板和基础" class="headerlink" title="楼板、天花板和基础"></a>楼板、天花板和基础</h2><p>与楼板、天花板和基础关联的类。</p>
+<p>楼板、天花板和基础相关的API项目包括：</p>
+<p>表28：API中的地板、天花板和基础</p>
+<table>
+<thead>
+<tr>
+<th><strong>Object 对象</strong></th>
+<th><strong>Element Type 元素类型</strong></th>
+<th><strong>ElementType Type ElementType类型</strong></th>
+<th><strong>Element Creation 元素创建</strong></th>
+<th><strong>Other 其他</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Floor</td>
+<td>Floor</td>
+<td>FloorType</td>
+<td>NewFloor()&#x2F;NewSlab()</td>
+<td>FloorType.IsFoundationSlab &#x3D; false</td>
+</tr>
+<tr>
+<td>Slab</td>
+<td>Floor</td>
+<td>FloorType</td>
+<td>NewSlab()</td>
+<td>FloorType.IsFoundationSlab &#x3D; false</td>
+</tr>
+<tr>
+<td>Ceiling</td>
+<td>Ceiling</td>
+<td>CeilingType</td>
+<td>No</td>
+<td>Category &#x3D; OST_Ceilings</td>
+</tr>
+<tr>
+<td>Wall Foundation</td>
+<td>WallFoundation</td>
+<td>WallFoundationType</td>
+<td>No</td>
+<td>Category &#x3D; OST_StructuralFoundation</td>
+</tr>
+<tr>
+<td>Isolated Foundation</td>
+<td>FamilyInstance</td>
+<td>FamilySymbol</td>
+<td>NewFamilyInstance()</td>
+<td>Category &#x3D; OST_StructuralFoundation</td>
+</tr>
+<tr>
+<td>Foundation Slab</td>
+<td>Floor</td>
+<td>FloorType</td>
+<td>NewFloor()</td>
+<td>Category &#x3D; OST_StructuralFoundation FloorType.IsFoundationSlab &#x3D; true</td>
+</tr>
+</tbody></table>
+<p>注意：Floor和Ceiling派生自CeilingAndFloor类。以下规则适用于Floor：</p>
+<ul>
+<li>从基础设计栏创建的元素具有相同的类别OST_StructuralFoundation，但对应于不同的类。</li>
+<li>FloorType IsFoundationSlab属性将FloorType类别设置为OST_StructuralFoundation或不设置。</li>
+</ul>
+<p>检索FloorType以使用NewFloor创建楼板或基础底板时，请使用以下方法：</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-26C2760B-04F0-4690-AF22-6EB1A0CDD933-low.png"></p>
+<p>图35：创建基础和楼板</p>
+<p>当前，API不提供对Floor类中的地板坡度箭头的访问。但是，在使用Revit的结构功能时，可以使用NewSlab（）创建斜板：</p>
+<p>代码区域11-1：NewSlab（）</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Floor <span class="title">NewSlab</span>(<span class="params">CurveArray profile, Level level, Line slopedArrow, <span class="built_in">double</span> slope,<span class="built_in">bool</span> isStructural</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>使用slopedArrow参数创建坡度箭头。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-5589AB8C-03FB-4FE6-BB20-065A37058854-low.png"></p>
+<p>图36：NewSlab中的slopedArrow参数</p>
+<p>NewSlab（）中斜率参数的单位是rise&#x2F;run。</p>
+<p>Floor.FloorType属性是使用Floor.GetTypeId（）方法的替代方法。有关与结构相关的成员（如GetSpanDirectionSymbolIds（）方法和SpanDirectionAngle属性）的详细信息，请参见结构工程部分。</p>
+<p>在Revit中编辑独立基础时，可以执行以下操作：</p>
+<ul>
+<li>您可以选取宿主，例如楼板。但是，FamilyInstance对象Host属性始终返回null。</li>
+<li>删除宿主楼板时，基础不会随之删除。</li>
+<li>Foundation 宿主可通过Host（MANANCE_FREE_HOST_PARAM）参数访问。</li>
+<li>使用另一个相关的“偏移”（Offset_FREE_HOST_OFFSET_PARAM）参数控制宿主元素的基础偏移。</li>
+</ul>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-6FECE5EE-DCFE-42E5-B3F8-868B44E774D5-low.png"></p>
+<p>图37：为FoundationSlab（FamilyInstance）选择宿主</p>
+<p>条形基础由API中的WallFoundation类表示。API提供对WallFoundation和WallFoundationType的有限访问，但使用GetAnalyticalModel（）方法时除外（请参阅“结构工程”部分中的分析模型）。例如，附着的墙不能用于Revit的建筑功能。使用Revit的结构功能，可以使用AnalyticalModel类中的GetAnalyticalModelSupports（）方法显示Wall类和WallFoundation类之间的关系。有关详细信息，请参见“结构工程”部分中的分析模型。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-03EA5485-1F1B-429D-8917-02B86A50E627-low.png"></p>
+<h3 id="修改板"><a href="#修改板" class="headerlink" title="修改板"></a>修改板</h3><p>您可以使用SlabShapeEditor类修改基于板的元素的形式。此类允许您：</p>
+<ul>
+<li>操作选定的基于板的元素上的一个或多个点或边</li>
+<li>在元素上添加点以更改元素的几何图形</li>
+<li>添加线性边并将板的现有面拆分为更小的子面域</li>
+<li>删除形状修改器并将图元几何图形重置回未修改的形状。</li>
+</ul>
+<p>下面是将选定的已修改地板恢复为其原始形状的示例：</p>
+<p>代码区域11-2：恢复板的形状</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ResetSlabShapes</span>(<span class="params">Autodesk.Revit.DB.Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        UIDocument uidoc = <span class="keyword">new</span> UIDocument(document);</span><br><span class="line">        Selection choices = uidoc.Selection;</span><br><span class="line">        ElementSet collection = choices.Elements;</span><br><span class="line">        <span class="keyword">foreach</span> (Autodesk.Revit.DB.Element elem <span class="keyword">in</span> collection)</span><br><span class="line">        &#123;</span><br><span class="line">                Floor floor = elem <span class="keyword">as</span> Floor;</span><br><span class="line">                <span class="keyword">if</span> (floor != <span class="literal">null</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        SlabShapeEditor slabShapeEditor = floor.SlabShapeEditor;</span><br><span class="line">                        slabShapeEditor.ResetSlabShape();</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有关使用SlabShapeEditor和相关类的详细示例，请参见Revit SDK中包含的SlabShapeEditing示例应用程序。</p>
+<h2 id="屋顶"><a href="#屋顶" class="headerlink" title="屋顶"></a>屋顶</h2><p>Revit API中屋顶的表示。</p>
+<p>Revit Platform API中的屋顶均派生自RoofBase对象。有两个类：</p>
+<ul>
+<li>FootPrintRoof -表示由建筑物迹线区构成的屋顶</li>
+<li>ExtrusionRoof -表示由拉伸轮廓制成的屋顶</li>
+</ul>
+<p>两者都有一个RoofType属性，用于获取或设置屋顶的类型。此示例说明如何基于某些选定的墙创建迹线屋顶：</p>
+<p>代码区域11-3：创建迹线屋顶</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before invoking this sample, select some walls to add a roof over.</span></span><br><span class="line"><span class="comment">// Make sure there is a level named &quot;Roof&quot; in the document.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// find the Roof level</span></span><br><span class="line">FilteredElementCollector collector = <span class="keyword">new</span> FilteredElementCollector(document);</span><br><span class="line">collector.OfClass(<span class="keyword">typeof</span>(Level));</span><br><span class="line"><span class="keyword">var</span> elements = <span class="keyword">from</span> element <span class="keyword">in</span> collector <span class="keyword">where</span> element.Name == <span class="string">&quot;Roof&quot;</span> <span class="keyword">select</span> element;</span><br><span class="line">Level level = elements.Cast().ElementAt(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">collector = <span class="keyword">new</span> FilteredElementCollector(document);</span><br><span class="line">collector.OfClass(<span class="keyword">typeof</span>(RoofType));</span><br><span class="line">RoofType roofType = collector.FirstElement() <span class="keyword">as</span> RoofType; </span><br><span class="line"></span><br><span class="line"><span class="comment">// Get the handle of the application</span></span><br><span class="line">Autodesk.Revit.ApplicationServices.Application application = document.Application;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Define the footprint for the roof based on user selection</span></span><br><span class="line">CurveArray footprint = application.Create.NewCurveArray();</span><br><span class="line">UIDocument uidoc = <span class="keyword">new</span> UIDocument(document);</span><br><span class="line">ICollection selectedIds = uidoc.Selection.GetElementIds();</span><br><span class="line"><span class="keyword">if</span> (selectedIds.Count != <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">foreach</span> (ElementId id <span class="keyword">in</span> selectedIds)</span><br><span class="line">    &#123;</span><br><span class="line">        Element element = document.GetElement(id);</span><br><span class="line">        Wall wall = element <span class="keyword">as</span> Wall;</span><br><span class="line">        <span class="keyword">if</span> (wall != <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            LocationCurve wallCurve = wall.Location <span class="keyword">as</span> LocationCurve;</span><br><span class="line">            footprint.Append(wallCurve.Curve);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ModelCurve modelCurve = element <span class="keyword">as</span> ModelCurve;</span><br><span class="line">        <span class="keyword">if</span> (modelCurve != <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            footprint.Append(modelCurve.GeometryCurve);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;You should select a curve loop, or a wall loop, or loops combination \nof walls and curves to create a footprint roof.&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ModelCurveArray footPrintToModelCurveMapping = <span class="keyword">new</span> ModelCurveArray();</span><br><span class="line">FootPrintRoof footprintRoof = document.Create.NewFootPrintRoof(footprint, level, roofType, <span class="keyword">out</span> footPrintToModelCurveMapping);</span><br><span class="line">ModelCurveArrayIterator iterator = footPrintToModelCurveMapping.ForwardIterator();</span><br><span class="line">iterator.Reset();</span><br><span class="line"><span class="keyword">while</span> (iterator.MoveNext())</span><br><span class="line">&#123;</span><br><span class="line">    ModelCurve modelCurve = iterator.Current <span class="keyword">as</span> ModelCurve;</span><br><span class="line">    footprintRoof.set_DefinesSlope(modelCurve, <span class="literal">true</span>);</span><br><span class="line">    footprintRoof.set_SlopeAngle(modelCurve, <span class="number">0.5</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有关如何创建ExtrusionRoof的示例，请参见Revit API SDK附带的NewRoof示例应用程序。</p>
+<p>天沟、筋膜檐沟和封檐带图元派生自表示屋顶的HostedSweep类。可以通过API创建、删除或修改它们。若要创建这些元素，请使用Document.Create.NewFascia（）或Document.Create.NewGutter（）重写之一。有关如何创建新檐沟和封檐带的示例，请参见SDK示例中包含的NewHostedSweep应用程序。下面是一个代码片段，显示了您可以修改gutter元素的属性。</p>
+<p>代码区域11-4：修改天沟</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ModifyGutter</span>(<span class="params">Autodesk.Revit.DB.Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        UIDocument uidoc = <span class="keyword">new</span> UIDocument(document);</span><br><span class="line">        ElementSet collection = uidoc.Selection.Elements;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">foreach</span> (Autodesk.Revit.DB.Element elem <span class="keyword">in</span> collection)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">if</span> (elem <span class="keyword">is</span> Gutter)</span><br><span class="line">                &#123;</span><br><span class="line">                        Gutter gutter = elem <span class="keyword">as</span> Gutter;</span><br><span class="line">                        <span class="comment">// convert degrees to rads:</span></span><br><span class="line">                        gutter.Angle = <span class="number">45.00</span> * Math.PI / <span class="number">180</span>;</span><br><span class="line">                        TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,<span class="string">&quot;Changed gutter angle&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="幕墙"><a href="#幕墙" class="headerlink" title="幕墙"></a>幕墙</h2><p>幕墙、幕墙系统和幕墙屋顶是CurtainGrid对象的主体图元。幕墙只能有一个CurtainGrid，而幕墙系统和幕墙屋顶可以包含一个或多个CurtainGrid。有关如何创建CurtainSystem的示例，请参见Revit SDK附带的CurtainSystem示例应用程序。有关创建幕墙并使用网格线填充幕墙的示例，请参见CurtainWallGrid示例应用程序。</p>
+<h2 id="其他元素"><a href="#其他元素" class="headerlink" title="其他元素"></a>其他元素</h2><p>有些元素不是HostObject（也没有特定的类），但它们是可以承载其他对象的特殊情况。例如，ramp及其关联的元素类型在API中没有特定的类，而是在OST_Ramp类别中表示为Element和ElementType。</p>
+<h2 id="复合结构"><a href="#复合结构" class="headerlink" title="复合结构"></a>复合结构</h2><p>描述墙、楼板、屋顶或天花板的内部结构。</p>
+<p>墙、楼板、天花板和屋顶都是API类HostObject的子对象。HostObject（及其相关类型类HostObjAttributes）提供对CompoundStructure的只读访问。复合结构由有序层的集合组成，对于墙来说，从外部到内部，或者对于地板，屋顶或天花板来说，从顶部到底部。这些层的属性决定了相关墙、楼板、屋顶或天花板的整体结构的厚度、材质和功能。</p>
+<p>层可以通过GetLayers（）方法访问，并使用SetLayers（）完全替换。</p>
+<p>通常，这些层是平行的，并以固定的层宽度延伸整个主体对象。然而，对于墙，结构也可以是“垂直复合”的，其中层在距墙的顶部和底部的指定垂直距离处变化。使用CompoundStructure.IsVerticallyCompound来标识它们。对于垂直复合结构，该结构通过矩形描述垂直截面，该矩形被划分为多边形区域，多边形区域的边都是垂直或水平段。映射将这些区域中的每一个与CompoundStructure中的层的索引相关联，该层的索引确定该区域的属性。</p>
+<p>可以使用复合结构来找到不同层边界的几何位置。方法CompoundStructure.GetOffsetForLocationLine（）提供从中心定位线到任何定位线选项（芯体中心线、任一侧的饰面面或芯体侧）的偏移。</p>
+<p>有了到定位线的偏移，您可以从已知位置开始，使用CompoundStructure.GetLayerWidth（）获取每个边界层的宽度，从而获取每个层边界的位置。</p>
+<p>使用CompoundStructure的一些注意事项：</p>
+<ul>
+<li>元素的总宽度是每个CompoundStructureLayer的宽度之和。您无法直接更改元素的总宽度，但可以通过更改CompoundStructureLayer宽度来更改它。指定的可变长度层的索引（如果已分配）可以从CompoundStructure.VariableLayerIndex获得。</li>
+<li>必须将CompoundStructure设置回HostObjAttributes实例（使用HostObjAttributes.SetCompoundStructure（）方法），以便存储任何更改。</li>
+<li>对HostObjAttributes的更改会影响当前文档中的每个实例。如果需要新的层组合，则需要创建新的HostObjAttributes（使用ElementType.Duplicate（））并将新的CompoundStructure分配给它。</li>
+<li>CompoundStructureLayer DeckProfileId和DeckEmbeddingType属性仅适用于Revit结构要素中的Slab。有关详细信息，请参阅结构工程。</li>
+</ul>
+<h3 id="材质"><a href="#材质" class="headerlink" title="材质"></a>材质</h3><p>HostObjAttributes中的每个CompoundStructureLayer通常与某种类型的材质一起显示。如果CompoundStructureLayer.MaterialId返回-1，则表示该Material与Category相关。有关详细信息，请参阅材料。获取CompoundStructureLayer材质的示例代码如下：</p>
+<p>代码区域11-5：获取CompoundStructureLayer材质</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GetWallLayerMaterial</span>(<span class="params">Autodesk.Revit.DB.Document document, Wall wall</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">// get WallType of wall</span></span><br><span class="line">        WallType aWallType = wall.WallType;</span><br><span class="line">        <span class="comment">// Only Basic Wall has compoundStructure</span></span><br><span class="line">        <span class="keyword">if</span> (WallKind.Basic == aWallType.Kind)</span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Get CompoundStructure</span></span><br><span class="line">                CompoundStructure comStruct = aWallType.GetCompoundStructure();</span><br><span class="line">                Categories allCategories = document.Settings.Categories;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Get the category OST_Walls default Material; </span></span><br><span class="line">                <span class="comment">// use if that layer&#x27;s default Material is </span></span><br><span class="line">                Category wallCategory = allCategories.get_Item(BuiltInCategory.OST_Walls);</span><br><span class="line">                Autodesk.Revit.DB.Material wallMaterial = wallCategory.Material;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">foreach</span> (CompoundStructureLayer structLayer <span class="keyword">in</span> comStruct.GetLayers())</span><br><span class="line">                &#123;</span><br><span class="line">                        Autodesk.Revit.DB.Material layerMaterial = </span><br><span class="line">                                document.GetElement(structLayer.MaterialId) <span class="keyword">as</span> Material;</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// If CompoundStructureLayer&#x27;s Material is specified, use default</span></span><br><span class="line">                        <span class="comment">// Material of its Category</span></span><br><span class="line">                        <span class="keyword">if</span> (<span class="literal">null</span> == layerMaterial)</span><br><span class="line">                        &#123;</span><br><span class="line">                                <span class="keyword">switch</span> (structLayer.Function)</span><br><span class="line">                                &#123;</span><br><span class="line">                                        <span class="keyword">case</span> MaterialFunctionAssignment.Finish1:</span><br><span class="line">                                                layerMaterial =</span><br><span class="line">                                                        allCategories.get_Item(BuiltInCategory.OST_WallsFinish1).Material;</span><br><span class="line">                                                <span class="keyword">break</span>;</span><br><span class="line">                                        <span class="keyword">case</span> MaterialFunctionAssignment.Finish2:</span><br><span class="line">                                                layerMaterial =</span><br><span class="line">                                                        allCategories.get_Item(BuiltInCategory.OST_WallsFinish2).Material;</span><br><span class="line">                                                <span class="keyword">break</span>;</span><br><span class="line">                                        <span class="keyword">case</span> MaterialFunctionAssignment.Membrane:</span><br><span class="line">                                                layerMaterial =</span><br><span class="line">                                                        allCategories.get_Item(BuiltInCategory.OST_WallsMembrane).Material;</span><br><span class="line">                                                <span class="keyword">break</span>;</span><br><span class="line">                                        <span class="keyword">case</span> MaterialFunctionAssignment.Structure:</span><br><span class="line">                                                layerMaterial =</span><br><span class="line">                                                        allCategories.get_Item(BuiltInCategory.OST_WallsStructure).Material;</span><br><span class="line">                                                <span class="keyword">break</span>;</span><br><span class="line">                                        <span class="keyword">case</span> MaterialFunctionAssignment.Substrate:</span><br><span class="line">                                                layerMaterial = </span><br><span class="line">                                                        allCategories.get_Item(BuiltInCategory.OST_WallsSubstrate).Material;</span><br><span class="line">                                                <span class="keyword">break</span>;</span><br><span class="line">                                        <span class="keyword">case</span> MaterialFunctionAssignment.Insulation:</span><br><span class="line">                                                layerMaterial = </span><br><span class="line">                                                        allCategories.get_Item(BuiltInCategory.OST_WallsInsulation).Material;</span><br><span class="line">                                                <span class="keyword">break</span>;</span><br><span class="line">                                        <span class="literal">default</span>:</span><br><span class="line">                                                <span class="comment">// It is impossible to reach here</span></span><br><span class="line">                                                <span class="keyword">break</span>;</span><br><span class="line">                                &#125;</span><br><span class="line">                                <span class="keyword">if</span> (<span class="literal">null</span> == layerMaterial)</span><br><span class="line">                                &#123;</span><br><span class="line">                                        <span class="comment">// CompoundStructureLayer&#x27;s default Material is its SubCategory</span></span><br><span class="line">                                        layerMaterial = wallMaterial;</span><br><span class="line">                                &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,<span class="string">&quot;Layer Material: &quot;</span> + layerMaterial);</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有时只需要“结构”层的材料。与其在每个层中查找其函数为MaterialFunctionAssignment.Structure的层，不如使用CompoundStructure.StructuralMaterialIndex属性查找其材料定义了类型的结构属性的层的索引，以便进行分析。<br>注意：调用SetLayers（）时，StructuralMaterialIndex值将被清除，需要重置。</p>
+<h2 id="洞口"><a href="#洞口" class="headerlink" title="洞口"></a>洞口</h2><p>在Revit Platform API中，Opening对象派生自Element对象，并包含所有Element对象属性和方法。若要检索项目中的所有Openings，请使用Document.ElementIterator查找Elements.Opening对象。</p>
+<h3 id="常规属性"><a href="#常规属性" class="headerlink" title="常规属性"></a>常规属性</h3><p>本节说明如何使用洞口属性。</p>
+<ul>
+<li><p>Isolation Boundary-确定洞口是否具有矩形边界。</p>
+<ul>
+<li>如果为true，则表示Opening具有矩形边界，并且可以从Opening BoundaryRect属性获取IList集合。否则，属性返回null。</li>
+<li>如果为false，则可以从BoundaryCurves属性获取CurveArray对象。</li>
+</ul>
+</li>
+<li><p>BoundaryCurves -如果开口边界不是矩形，则此属性检索几何信息;否则返回null。该属性返回一个CurveArray对象，其中包含表示Opening对象边界的曲线。有关曲线的更多详细信息，请参阅几何体。</p>
+</li>
+<li><p>BoundaryRect -如果开口边界是矩形，则可以使用此属性获取几何信息;否则返回null。</p>
+<ul>
+<li>该属性返回一个包含XYZ坐标的IList集合。</li>
+<li>IList集合通常包含矩形边界的最小（左下）和最大（右上）坐标。</li>
+</ul>
+</li>
+<li><p>Host -host属性检索Opening host元素。主体图元是由Opening对象剪切的图元。</p>
+<p><strong>注意：</strong>如果洞口对象的类别为竖井洞口，则洞口主体为空。</p>
+</li>
+</ul>
+<p>下面的示例说明如何检索现有的Opening属性。</p>
+<p>代码区域11-6：检索现有洞口属性</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Getinfo_Opening</span>(<span class="params">Opening opening</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">string</span> message = <span class="string">&quot;Opening:&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//get the host element of this opening</span></span><br><span class="line">    message += <span class="string">&quot;\nThe id of the opening&#x27;s host element is : &quot;</span> + opening.Host.Id.IntegerValue;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//get the information whether the opening has a rect boundary</span></span><br><span class="line">    <span class="comment">//If the opening has a rect boundary, we can get the geometry information from BoundaryRect property.</span></span><br><span class="line">    <span class="comment">//Otherwise we should get the geometry information from BoundaryCurves property</span></span><br><span class="line">    <span class="keyword">if</span> (opening.IsRectBoundary)</span><br><span class="line">    &#123;</span><br><span class="line">        message += <span class="string">&quot;\nThe opening has a rectangular boundary.&quot;</span>;</span><br><span class="line">        <span class="comment">//array contains two XYZ objects: the max and min coords of boundary</span></span><br><span class="line">        IList boundaryRect = opening.BoundaryRect;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//get the coordinate value of the min coordinate point</span></span><br><span class="line">        XYZ point = opening.BoundaryRect[<span class="number">0</span>];</span><br><span class="line">        message += <span class="string">&quot;\nMin coordinate point:(&quot;</span> + point.X + <span class="string">&quot;, &quot;</span></span><br><span class="line">                                + point.Y + <span class="string">&quot;, &quot;</span> + point.Z + <span class="string">&quot;)&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//get the coordinate value of the Max coordinate point</span></span><br><span class="line">        point = opening.BoundaryRect[<span class="number">1</span>];</span><br><span class="line">        message += <span class="string">&quot;\nMax coordinate point: (&quot;</span> + point.X + <span class="string">&quot;, &quot;</span></span><br><span class="line">                                + point.Y + <span class="string">&quot;, &quot;</span> + point.Z + <span class="string">&quot;)&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        message += <span class="string">&quot;\nThe opening doesn&#x27;t have a rectangular boundary.&quot;</span>;</span><br><span class="line">        <span class="comment">// Get curve number</span></span><br><span class="line">        <span class="built_in">int</span> curves = opening.BoundaryCurves.Size;</span><br><span class="line">        message += <span class="string">&quot;\nNumber of curves is : &quot;</span> + curves;</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; curves; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            Autodesk.Revit.DB.Curve curve = opening.BoundaryCurves.get_Item(i);</span><br><span class="line">            <span class="comment">// Get curve start point</span></span><br><span class="line">            message += <span class="string">&quot;\nCurve start point: &quot;</span> + XYZToString(curve.GetEndPoint(<span class="number">0</span>));</span><br><span class="line">            <span class="comment">// Get curve end point</span></span><br><span class="line">            message += <span class="string">&quot;; Curve end point: &quot;</span> + XYZToString(curve.GetEndPoint(<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,message);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// output the point&#x27;s three coordinates</span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">XYZToString</span>(<span class="params">XYZ point</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;(&quot;</span> + point.X + <span class="string">&quot;, &quot;</span> + point.Y + <span class="string">&quot;, &quot;</span> + point.Z + <span class="string">&quot;)&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建洞口"><a href="#创建洞口" class="headerlink" title="创建洞口"></a>创建洞口</h3><p>在Revit Platform API中，使用Document.NewOpening（）方法在项目中创建洞口。有四种方法重载可用于在不同的宿主元素中创建洞口：</p>
+<p>代码区域11-7：NewOpening（）</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Create a new Opening in a beam, brace and column. </span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Opening <span class="title">NewOpening</span>(<span class="params">Element famInstElement, CurveArray profile, eRefFace iFace</span>)</span>; </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Create a new Opening in a roof, floor and ceiling. </span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Opening <span class="title">NewOpening</span>(<span class="params">Element hostElement, CurveArray profile, <span class="built_in">bool</span> bPerpendicularFace</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Create a new Opening Element. </span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Opening <span class="title">NewOpening</span>(<span class="params">Level bottomLevel, Level topLevel, CurveArray  profile</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Create an opening in a straight wall or arc wall. </span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Opening <span class="title">NewOpening</span>(<span class="params">Wall, XYZ pntStart, XYZ pntEnd</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在梁、支撑或柱中创建洞口-用于在族实例中创建洞口。iFace参数指示放置洞口的面。</li>
+<li>创建屋顶、楼板或天花板洞口-用于在屋顶、楼板或天花板中创建洞口。</li>
+<li>bPerceptiularFace参数指示洞口是垂直于面还是垂直于面。</li>
+<li>如果该参数为true，则洞口垂直于主体图元面。请参见下图：</li>
+</ul>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-EED350DF-2DD4-4562-998D-C020C739D6F8-low.png"></p>
+<p>图40：垂直于主体元素切割的开口</p>
+<ul>
+<li>创建新洞口图元-用于在项目中创建竖井洞口。但是，请确保topLevel高于bottomLevel;否则将引发异常。</li>
+<li>在直墙或弧形墙中创建洞口-用于在墙中创建矩形洞口。pntStart和pntEnd的坐标应该是可以塑造矩形的角坐标。例如，矩形的左下角和右上角。否则会引发异常。</li>
+</ul>
+<p>注意：使用“洞口”命令只能创建矩形墙洞口。要在墙上创建一些孔，请编辑墙轮廓而不是“洞口”命令。</p>
+<h2 id="热属性"><a href="#热属性" class="headerlink" title="热属性"></a>热属性</h2><p>某些部件类型（如墙、楼板、天花板、屋顶和建筑地坪）具有计算和可设置的热属性，这些热属性由ThermalProperties类表示。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/ThermalProperties-76171.jpg"></p>
+<p>hermalProperties类具有上面显示的值的属性。吸收率和粗糙度是可修改的，而传热系数、热阻和热质量是只读的。这些计算值的单位如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th><strong>Property 属性</strong></th>
+<th><strong>Unit 单位</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HeatTransferCoefficient 导热系数</td>
+<td>watts per meter-squared kelvin (W&#x2F;(m^2<em>K)</em></td>
+</tr>
+<tr>
+<td>ThermalResistance 热阻</td>
+<td>meter-squared kelvin per watt ((m^2K)&#x2F;Watt)</td>
+</tr>
+<tr>
+<td>ThermalMass 热质量</td>
+<td>kilogram feet-squared per second squared kelvin (kg ft^2&#x2F;(s^2 K))</td>
+</tr>
+</tbody></table>
+<p>可以使用以下类型的ThermalProperties属性检索热属性：</p>
+<ul>
+<li>WallType </li>
+<li>FloorType</li>
+<li>CeilingType </li>
+<li>RoofType </li>
+<li>BuildingPadType</li>
+</ul>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 Hexo
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;John Doe
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title> | Hexo</title>
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HEXO</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HEXO</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1></h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/12/28
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Advanced_Topics_Commands_html">命令</a></h1><p>Revit API 提供对现有 Revit 命令的访问，这些命令位于选项卡、应用程序菜单或右键单击菜单中。使用 API 处理 Revit 命令的主要方法是替换现有命令实现或发布命令。</p>
+<h3 id="替代-Revit-命令"><a href="#替代-Revit-命令" class="headerlink" title="替代 Revit 命令"></a>替代 Revit 命令</h3><p>AddInCommandBinding 类可用于替代 Revit 中的现有命令。它有三个与替换现有命令实现相关的事件。</p>
+<ul>
+<li><strong>BeforeExecuted</strong> - 此只读事件在关联命令执行之前发生。应用程序可以对此事件做出反应，但不能更改文档或影响命令的调用。</li>
+<li><strong>CanExecute</strong> - 当关联的命令启动检查以确定是否可以在命令目标上执行命令时出现。</li>
+<li><strong>Executed</strong> - 当执行关联的命令时，将发生此事件，并且应在此处执行任何覆盖实现。</li>
+</ul>
+<p>要创建 commandbinding，请调用 UIApplication.CreateAddInCommandBinding（） 或 UIControlledApplication.CreateAddInCommandBinding（）。这两种方法都需要 RevitCommandId ID 来标识要替换的命令处理程序。RevitCommandId 有两种用于获取命令 ID 的静态方法：</p>
+<ul>
+<li><strong>LookupCommandId</strong> - 使用给定的 ID 字符串检索 Revit 命令 ID。要查找命令 ID 字符串，请打开 Revit 的会话，调用所需的命令，关闭 Revit，然后查看该会话的日志。选择时记录的 “Jrn.Command” 条目将具有 LookupCommandId（） 所需的字符串，并且看起来类似于 “ID_EDIT_DESIGNOPTIONS”。</li>
+<li><strong>LookupPostableCommandId</strong> - 使用 PostableCommand 枚举检索 Revit 命令 ID。这仅适用于可提交的命令（将在下一节中讨论）。</li>
+</ul>
+<p>以下示例摘自 Revit 2014 SDK 的 DisableCommand 示例，演示了如何创建 AddInCommandBinding 并替代实现以禁用该命令，并向用户发送消息。</p>
+<p>代码区域：替代命令</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> </span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> Implements the Revit add-in interface IExternalApplication</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> </span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Application</span> : <span class="title">IExternalApplication</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="meta">#<span class="keyword">region</span> IExternalApplication Members</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> Implements the OnStartup event</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Result <span class="title">OnStartup</span>(<span class="params">UIControlledApplication application</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Lookup the desired command by name</span></span><br><span class="line">        s_commandId = RevitCommandId.LookupCommandId(s_commandToDisable);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Confirm that the command can be overridden</span></span><br><span class="line">        <span class="keyword">if</span> (!s_commandId.CanHaveBinding)</span><br><span class="line">        &#123;</span><br><span class="line">            ShowDialog(<span class="string">&quot;Error&quot;</span>, <span class="string">&quot;The target command &quot;</span> + s_commandToDisable +</span><br><span class="line">                        <span class="string">&quot; selected for disabling cannot be overridden&quot;</span>);</span><br><span class="line">   <span class="keyword">return</span> Result.Failed;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create a binding to override the command.</span></span><br><span class="line">        <span class="comment">// Note that you could also implement .CanExecute to override the accessibiliy of the command.</span></span><br><span class="line">        <span class="comment">// Doing so would allow the command to be grayed out permanently or selectively, however,</span></span><br><span class="line">        <span class="comment">// no feedback would be available to the user about why the command is grayed out.</span></span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            AddInCommandBinding commandBinding = application.CreateAddInCommandBinding(s_commandId);</span><br><span class="line">            commandBinding.Executed += DisableEvent;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// Most likely, this is because someone else has bound this command already.</span></span><br><span class="line">        <span class="keyword">catch</span> (Exception)</span><br><span class="line">        &#123;</span><br><span class="line">            ShowDialog(<span class="string">&quot;Error&quot;</span>, <span class="string">&quot;This add-in is unable to disable the target command &quot;</span> + s_commandToDisable +</span><br><span class="line">                        <span class="string">&quot;; most likely another add-in has overridden this command.&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Result.Succeeded;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> Implements the OnShutdown event</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Result <span class="title">OnShutdown</span>(<span class="params">UIControlledApplication application</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Remove the command binding on shutdown</span></span><br><span class="line">        <span class="keyword">if</span> (s_commandId.HasBinding)</span><br><span class="line">            application.RemoveAddInCommandBinding(s_commandId);</span><br><span class="line">        <span class="keyword">return</span> Result.Succeeded;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">#<span class="keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> A command execution method which disables any command it is applied to (with a user-visible message).</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> Event sender.</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> Arguments.</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">DisableEvent</span>(<span class="params"><span class="built_in">object</span> sender, ExecutedEventArgs <span class="keyword">args</span></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        ShowDialog(<span class="string">&quot;Disabled&quot;</span>, <span class="string">&quot;Use of this command has been disabled.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> Show a task dialog with a message and title.</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> The title.</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> The message.</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ShowDialog</span>(<span class="params"><span class="built_in">string</span> title, <span class="built_in">string</span> message</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Show the user a message.</span></span><br><span class="line">        TaskDialog td = <span class="keyword">new</span> TaskDialog(title)</span><br><span class="line">        &#123;</span><br><span class="line">            MainInstruction = message,</span><br><span class="line">            TitleAutoPrefix = <span class="literal">false</span></span><br><span class="line">        &#125;;</span><br><span class="line">        td.Show();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> The string name of the command to disable.  To lookup a command id string, open a session of Revit,</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> invoke the desired command, close Revit, then look to the journal from that session.  The command</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> id string will be toward the end of the journal, look for the &quot;Jrn.Command&quot; entry that was recorded</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> when it was selected.</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="keyword">static</span> String s_commandToDisable = <span class="string">&quot;ID_EDIT_DESIGNOPTIONS&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> The command id, stored statically to allow for removal of the command binding.</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> </span></span><br><span class="line">    <span class="keyword">static</span> RevitCommandId s_commandId;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="发布命令"><a href="#发布命令" class="headerlink" title="发布命令"></a>发布命令</h3><p>方法 UIApplication.PostCommand（） 将命令发布到 Revit 消息队列，以便在控件从当前 API 应用程序返回时调用该命令。只有某些命令可以以这种方式发布。它们包括 Autodesk.Revit.UI.PostableCommand 枚举类型中的所有命令，以及由任何附加模块创建的外部命令。</p>
+<p>注意：使用 PostCommand（） 时，即使是可发布的命令也可能无法执行。发生这种情况的一个原因是，如果已经发布了另一个命令。在给定时间，只能将一个命令发布到 Revit，因此，如果发布第二个命令，PostCommand（） 将引发异常。已发布的命令可能无法执行的另一个原因是要执行的命令当时无法访问。它是否可访问仅在 Revit 从 API 上下文返回时确定，因此，由于此原因而执行失败时，不会直接报告给发布命令的应用程序。UIApplication 的 API 应用程序。CanPostCommand（） 可用于识别是否可以发布给定的命令，这意味着它是 PostableCommand 的成员还是外部命令。它不标识该命令当前是否可访问。</p>
+<p>PostCommand（） 和 CanPostCommand（） 都需要 RevitCommandId，可以按照上面的“替代 Revit 命令”部分所述获取该 ID。</p>
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 Hexo
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;John Doe
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

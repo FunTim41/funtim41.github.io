@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title> | Hexo</title>
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HEXO</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HEXO</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1></h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/12/28
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="选择"><a href="#选择" class="headerlink" title="选择"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Basic_Interaction_with_Revit_Elements_Selection_html">选择</a></h1><p>您可以使用UIDo.Selection.GetElementIds()方法从当前活动文档中获取所选对象，该方法返回所选元素的ElementIds集合。此方法返回的集合可以直接与FilteredElementCollector一起使用，以筛选选定的元素。</p>
+<p>Selection对象还可以用于使用SetElementIds()方法以编程方式更改当前选择。</p>
+<p>Pages in this section 本节中的页面</p>
+<ul>
+<li>Changing the Selection 更改选择</li>
+<li>User Selection 用户选择</li>
+<li>Filtered User Selection 筛选的用户选择</li>
+</ul>
+<h2 id="更改选择"><a href="#更改选择" class="headerlink" title="更改选择"></a>更改选择</h2><p>要修改选定的图元，请执行以下操作：</p>
+<ol>
+<li>创建新的ElementId列表。</li>
+<li>把ElementIds放进去。</li>
+<li>使用新列表调用SetElementIds()。</li>
+</ol>
+<p>下面的示例说明了如何通过获取当前选择并仅过滤出墙以设置为新选择来更改选定的元素。</p>
+<p><strong>代码区域7-1：更改所选元素</strong></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ChangeSelection</span>(<span class="params">UIDocument uidoc</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get selected elements from current document.</span></span><br><span class="line">    ICollection selectedIds = uidoc.Selection.GetElementIds();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Display current number of selected elements</span></span><br><span class="line">    TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>, <span class="string">&quot;Number of selected elements: &quot;</span> + selectedIds.Count.ToString());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Go through the selected items and filter out walls only.</span></span><br><span class="line">    ICollection selectedWallIds = <span class="keyword">new</span> List();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">foreach</span> (ElementId id <span class="keyword">in</span> selectedIds)</span><br><span class="line">    &#123;</span><br><span class="line">        Element elements = uidoc.Document.GetElement(id);</span><br><span class="line">        <span class="keyword">if</span> (elements <span class="keyword">is</span> Wall)</span><br><span class="line">        &#123;</span><br><span class="line">            selectedWallIds.Add(id);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Set the created element set as current select element set.</span></span><br><span class="line">    uidoc.Selection.SetElementIds(selectedWallIds);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Give the user some information.</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> != selectedWallIds.Count)</span><br><span class="line">    &#123;</span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>, selectedWallIds.Count.ToString() + <span class="string">&quot; Walls are selected!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,<span class="string">&quot;No Walls have been selected!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="用户选择"><a href="#用户选择" class="headerlink" title="用户选择"></a>用户选择</h2><p>Selection类也有一些方法，允许用户选择新对象，甚至是屏幕上的一个点。这允许用户使用光标选择一个或多个元素（或其他对象，如边或面），然后将控制权返回给应用程序。这些函数不会自动将新选区添加到活动选区集合中。</p>
+<ul>
+<li>PickObject()方法提示用户在Revit模型中选择对象。</li>
+<li>PickObjects()方法提示用户在Revit模型中选择多个对象。</li>
+<li>PickElementsByRectangle()方法提示用户使用矩形选择多个元素。</li>
+<li>PickPoint()方法提示用户在活动草图平面中拾取点。</li>
+<li>PickBox()方法调用一个通用的双击编辑器，让用户在屏幕上指定一个矩形区域。</li>
+</ul>
+<p>调用PickObject()或PickObject时指定要选择的对象类型。可以指定的对象类型有：元素、PointOnElement、边或面。</p>
+<p>当应用程序提示用户拾取对象或元素时，StatusbarTip属性在状态栏中显示一条消息。每个Pick函数都有一个重载，该重载具有一个String参数，可以在其中提供自定义状态消息。</p>
+<p>代码区域7-2：使用PickObject()和PickElementsByRectangle()添加选定元素</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">UIDocument uidoc = <span class="keyword">new</span> UIDocument(document);</span><br><span class="line">Selection choices = uidoc.Selection;</span><br><span class="line"><span class="comment">// Pick one object from Revit.</span></span><br><span class="line">Reference hasPickOne = choices.PickObject(ObjectType.Element);</span><br><span class="line"><span class="keyword">if</span> (hasPickOne != <span class="literal">null</span>)</span><br><span class="line">&#123;</span><br><span class="line">    TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>, <span class="string">&quot;One element selected.&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Use the rectangle picking tool to identify model elements to select.</span></span><br><span class="line">IList pickedElements = uidoc.Selection.PickElementsByRectangle(<span class="string">&quot;Select by rectangle&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (pickedElements.Count &gt; <span class="number">0</span>)</span><br><span class="line">&#123; </span><br><span class="line">    <span class="comment">// Collect Ids of all picked elements</span></span><br><span class="line">    IList idsToSelect = <span class="keyword">new</span> List(pickedElements.Count);</span><br><span class="line">    <span class="keyword">foreach</span> (Element element <span class="keyword">in</span> pickedElements)</span><br><span class="line">    &#123;</span><br><span class="line">        idsToSelect.Add(element.Id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Update the current selection</span></span><br><span class="line">    uidoc.Selection.SetElementIds(idsToSelect);</span><br><span class="line">    TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>, <span class="built_in">string</span>.Format(<span class="string">&quot;&#123;0&#125; elements added to Selection.&quot;</span>, idsToSelect.Count));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>PickPoint()方法有2个重载，其中ObjectSnapTypes参数用于指定用于选择的捕捉类型的类型。可以指定多个，如下一个示例所示。</p>
+<p>代码区域7-3：捕捉点</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">PickPoint</span>(<span class="params">UIDocument uidoc</span>)</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">        ObjectSnapTypes snapTypes = ObjectSnapTypes.Endpoints | ObjectSnapTypes.Intersections;</span><br><span class="line">        XYZ point = uidoc.Selection.PickPoint(snapTypes, <span class="string">&quot;Select an end point or intersection&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">string</span> strCoords = <span class="string">&quot;Selected point is &quot;</span> + point.ToString();</span><br><span class="line"></span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>, strCoords);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>PickBox()方法接受一个PickBoxStyle枚举器。这些选项包括“交叉”、“包围”和“方向”，前者是选择完全或部分位于框内的对象时使用的样式，后者是选择完全被框包围的对象时使用的样式，前者是框的样式取决于框的绘制方向。如果从右向左绘制，则使用“交叉”样式;如果以相反方向绘制，则使用“包围”样式。 PickBox()返回一个PickedBox，其中包含选定的Min和Max点。以下示例演示了在点云选择中使用PickBox()。</p>
+<p>代码区域：PickBox</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">PromptForPointCloudSelection</span>(<span class="params">UIDocument uiDoc, PointCloudInstance pcInstance</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Autodesk.Revit.ApplicationServices.Application app = uiDoc.Application.Application;</span><br><span class="line">    Selection currentSel = uiDoc.Selection;</span><br><span class="line"></span><br><span class="line">    PickedBox pickedBox = currentSel.PickBox(PickBoxStyle.Enclosing, <span class="string">&quot;Select region of cloud for highlighting&quot;</span>);</span><br><span class="line"></span><br><span class="line">    XYZ min = pickedBox.Min;</span><br><span class="line">    XYZ max = pickedBox.Max;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Transform points into filter</span></span><br><span class="line">    View view = uiDoc.ActiveView;</span><br><span class="line">    XYZ right = view.RightDirection;</span><br><span class="line">    XYZ up = view.UpDirection;</span><br><span class="line"></span><br><span class="line">    List planes = <span class="keyword">new</span> List();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// X boundaries</span></span><br><span class="line">    <span class="built_in">bool</span> directionCorrect = IsPointAbovePlane(right, min, max);</span><br><span class="line">    planes.Add(Plane.CreateByNormalAndOrigin(right, directionCorrect ? min : max));</span><br><span class="line">    planes.Add(Plane.CreateByNormalAndOrigin(-right, directionCorrect ? max : min));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Y boundaries</span></span><br><span class="line">    directionCorrect = IsPointAbovePlane(up, min, max);</span><br><span class="line">    planes.Add(Plane.CreateByNormalAndOrigin(up, directionCorrect ? min : max));</span><br><span class="line">    planes.Add(Plane.CreateByNormalAndOrigin(-up, directionCorrect ? max : min));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create filter</span></span><br><span class="line">    PointCloudFilter filter = PointCloudFilterFactory.CreateMultiPlaneFilter(planes);</span><br><span class="line">    Transaction t = <span class="keyword">new</span> Transaction(uiDoc.Document, <span class="string">&quot;Highlight&quot;</span>);</span><br><span class="line">    t.Start();</span><br><span class="line">    pcInstance.SetSelectionFilter(filter);</span><br><span class="line">    pcInstance.FilterAction = SelectionFilterAction.Highlight;</span><br><span class="line">    t.Commit();</span><br><span class="line">    uiDoc.RefreshActiveView();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="筛选的用户选择"><a href="#筛选的用户选择" class="headerlink" title="筛选的用户选择"></a>筛选的用户选择</h2><p>PickObject()、PickObjects()和PickElementsByRectangle()都具有将ISelectionFilter作为参数的重载。ISelectionFilter是一个接口，可用于在选择操作期间过滤对象。它有两个可以覆盖的方法：AllowElement()用于指定是否允许选择元素，以及AllowReference()用于指定是否允许选择对一段几何图形的引用。</p>
+<p>下面的示例阐释如何使用ISelectionFilter接口将用户的选择限制为“体量”类别中的元素。它不允许选择对几何图元的任何参照。</p>
+<p>使用ISelectionFilter限制元素选择</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IList <span class="title">GetManyRefByRectangle</span>(<span class="params">UIDocument doc</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        ReferenceArray ra = <span class="keyword">new</span> ReferenceArray();</span><br><span class="line">        ISelectionFilter selFilter = <span class="keyword">new</span> MassSelectionFilter();</span><br><span class="line">        IList eList = doc.Selection.PickElementsByRectangle(selFilter, </span><br><span class="line">                <span class="string">&quot;Select multiple faces&quot;</span>) <span class="keyword">as</span> IList;</span><br><span class="line">        <span class="keyword">return</span> eList;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MassSelectionFilter</span> : <span class="title">ISelectionFilter</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">AllowElement</span>(<span class="params">Element element</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">        <span class="keyword">if</span> (element.Category.Name == <span class="string">&quot;Mass&quot;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">AllowReference</span>(<span class="params">Reference refer, XYZ point</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下一个示例演示如何使用ISelectionFilter仅允许选择平面。</p>
+<p>代码区域7-5：使用ISelectionFilter限制几何选择</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SelectPlanarFaces</span>(<span class="params">Autodesk.Revit.DB.Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        UIDocument uidoc = <span class="keyword">new</span> UIDocument(document);</span><br><span class="line">        ISelectionFilter selFilter = <span class="keyword">new</span> PlanarFacesSelectionFilter(document);</span><br><span class="line">        IList faces = uidoc.Selection.PickObjects(ObjectType.Face, </span><br><span class="line">                selFilter, <span class="string">&quot;Select multiple planar faces&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PlanarFacesSelectionFilter</span> : <span class="title">ISelectionFilter</span></span><br><span class="line">&#123;</span><br><span class="line">        Document doc = <span class="literal">null</span>;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">PlanarFacesSelectionFilter</span>(<span class="params">Document document</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                doc = document;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">AllowElement</span>(<span class="params">Element element</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">AllowReference</span>(<span class="params">Reference refer, XYZ point</span>)</span></span><br><span class="line">        &#123;                <span class="keyword">if</span> (doc.GetElement(refer).GetGeometryObjectFromReference(refer) <span class="keyword">is</span> PlanarFace)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="comment">// Only return true for planar faces. Non-planar faces will not be selectable </span></span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">true</span>; </span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有关从选定元素中检索元素的更多信息，请参见“入门”部分中的演练：检索选定元素。</p>
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 Hexo
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;John Doe
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

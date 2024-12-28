@@ -1,0 +1,343 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title> | Hexo</title>
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HEXO</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HEXO</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1></h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/12/28
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Basic_Interaction_with_Revit_Elements_Transactions_html">事务</a></h1><p>事务是类似于上下文的对象，可封装对Revit模型所做的任何更改。只有在存在打开的活动事务处理时，才能对文档进行任何更改。尝试在事务之外更改文档将引发异常。在提交活动事务之前，更改不会成为模型的一部分。因此，事务中的所有更改都可以显式或隐式回滚（通过析构函数）。在任何给定时间，每个文档只能打开一个事务。一个事务可以由一个或多个操作组成。</p>
+<p>Revit API中有三个与事务相关的主要类：</p>
+<ul>
+<li>Transaction 事务</li>
+<li>SubTransaction 子事务</li>
+<li>TransactionGroup 事务组</li>
+</ul>
+<p>本节将更深入地讨论这些类中的每一个类。对文档进行更改时只需要Transaction类。其他类可用于更好地组织更改。</p>
+<p>***注意:***如果事务是从外部线程或外部非模态对话框启动的，则会引发异常。事务只能从支持的API工作流启动，例如外部命令、事件、更新程序或回调的一部分。</p>
+<p><strong>本节中的页面</strong></p>
+<ul>
+<li>Transaction Classes 事务类</li>
+<li>Transactions in Events 事件中的事务</li>
+<li>Failure Handling Options 故障处理选项</li>
+<li>Getting Element Geometry and AnalyticalModel<br>获取元素几何图形和分析模型</li>
+<li>Temporary transactions 临时事务</li>
+</ul>
+<h2 id="Transaction-Classes-事务类"><a href="#Transaction-Classes-事务类" class="headerlink" title="Transaction Classes 事务类"></a>Transaction Classes 事务类</h2><p>三个事务对象共享通用方法：</p>
+<p>表51：通用事务对象方法</p>
+<table>
+<thead>
+<tr>
+<th><strong>Method 方法</strong></th>
+<th><strong>Description 描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Start</td>
+<td>将启动上下文</td>
+</tr>
+<tr>
+<td>Commit</td>
+<td>结束上下文并将所有更改提交到文档</td>
+</tr>
+<tr>
+<td>Rollback</td>
+<td>结束上下文并放弃对文档的所有更改</td>
+</tr>
+<tr>
+<td>GetStatus</td>
+<td>返回事务对象的当前状态</td>
+</tr>
+</tbody></table>
+<p>除了返回当前状态的GetStatus（）方法外，Start、Commit和RollBack方法还返回TransactionStatus，指示该方法是否成功。可用的TransactionStatus值包括：</p>
+<p>表52：TransactionStatus值</p>
+<table>
+<thead>
+<tr>
+<th><strong>Status 状态</strong></th>
+<th><strong>Description 描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Uninitialized</td>
+<td>对象实例化后的初始值;上下文尚未启动</td>
+</tr>
+<tr>
+<td>Started</td>
+<td>事务对象已成功启动（调用了Start）</td>
+</tr>
+<tr>
+<td>RolledBack</td>
+<td>事务对象已成功回滚（调用了Rollback）</td>
+</tr>
+<tr>
+<td>Committed</td>
+<td>已成功提交事务对象（调用了Commit）</td>
+</tr>
+<tr>
+<td>Pending</td>
+<td>试图提交或回滚事务对象，但由于失败，该过程尚未完成，正在等待最终用户的响应（在非模态对话框中）。一旦故障处理完成，状态将自动更新（为Committed或RolledBack状态）。</td>
+</tr>
+</tbody></table>
+<h3 id="Transaction-事务"><a href="#Transaction-事务" class="headerlink" title="Transaction 事务"></a>Transaction 事务</h3><p>事务是对Revit模型进行任何更改所需的上下文。一次只能打开一个事务;不允许嵌套。每个事务都必须有一个名称，一旦事务成功提交，该名称将列在Revit的“撤消”菜单中。</p>
+<p>代码区域23-1：使用事务</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CreatingSketch</span>(<span class="params">UIApplication uiApplication</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Autodesk.Revit.DB.Document document = uiApplication.ActiveUIDocument.Document;</span><br><span class="line">    Autodesk.Revit.ApplicationServices.Application application = uiApplication.Application;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create a few geometry lines. These lines are transaction (not in the model),</span></span><br><span class="line">    <span class="comment">// therefore they do not need to be created inside a document transaction.</span></span><br><span class="line">    XYZ Point1 = XYZ.Zero;</span><br><span class="line">    XYZ Point2 = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    XYZ Point3 = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">    XYZ Point4 = <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    Line geomLine1 = Line.CreateBound(Point1, Point2);</span><br><span class="line">    Line geomLine2 = Line.CreateBound(Point4, Point3);</span><br><span class="line">    Line geomLine3 = Line.CreateBound(Point1, Point4);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This geometry plane is also transaction and does not need a transaction</span></span><br><span class="line">    XYZ origin = XYZ.Zero;</span><br><span class="line">    XYZ normal = <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    Plane geomPlane = Plane.CreateByNormalAndOrigin(normal, origin);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// In order to a sketch plane with model curves in it, we need</span></span><br><span class="line">    <span class="comment">// to start a transaction because such operations modify the model.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// All and any transaction should be enclosed in a &#x27;using&#x27;</span></span><br><span class="line">    <span class="comment">// block or guarded within a try-catch-finally blocks</span></span><br><span class="line">    <span class="comment">// to guarantee that a transaction does not out-live its scope.</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction transaction = <span class="keyword">new</span> Transaction(document))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (transaction.Start(<span class="string">&quot;Create model curves&quot;</span>) == TransactionStatus.Started)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// Create a sketch plane in current document</span></span><br><span class="line">            SketchPlane sketch = SketchPlane.Create(document,geomPlane);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Create a ModelLine elements using the geometry lines and sketch plane</span></span><br><span class="line">            ModelLine line1 = document.Create.NewModelCurve(geomLine1, sketch) <span class="keyword">as</span> ModelLine;</span><br><span class="line">            ModelLine line2 = document.Create.NewModelCurve(geomLine2, sketch) <span class="keyword">as</span> ModelLine;</span><br><span class="line">            ModelLine line3 = document.Create.NewModelCurve(geomLine3, sketch) <span class="keyword">as</span> ModelLine;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Ask the end user whether the changes are to be committed or not</span></span><br><span class="line">            TaskDialog taskDialog = <span class="keyword">new</span> TaskDialog(<span class="string">&quot;Revit&quot;</span>);</span><br><span class="line">            taskDialog.MainContent = <span class="string">&quot;Click either [OK] to Commit, or [Cancel] to Roll back the transaction.&quot;</span>;</span><br><span class="line">            TaskDialogCommonButtons buttons = TaskDialogCommonButtons.Ok | TaskDialogCommonButtons.Cancel;</span><br><span class="line">            taskDialog.CommonButtons = buttons;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (TaskDialogResult.Ok == taskDialog.Show())</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// For many various reasons, a transaction may not be committed</span></span><br><span class="line">                <span class="comment">// if the changes made during the transaction do not result a valid model.</span></span><br><span class="line">                <span class="comment">// If committing a transaction fails or is canceled by the end user,</span></span><br><span class="line">                <span class="comment">// the resulting status would be RolledBack instead of Committed.</span></span><br><span class="line">                <span class="keyword">if</span> (TransactionStatus.Committed != transaction.Commit())</span><br><span class="line">                &#123;</span><br><span class="line">                    TaskDialog.Show(<span class="string">&quot;Failure&quot;</span>, <span class="string">&quot;Transaction could not be committed&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                transaction.RollBack();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="SubTransaction-子事务"><a href="#SubTransaction-子事务" class="headerlink" title="SubTransaction 子事务"></a>SubTransaction 子事务</h3><p>SubTransaction可以用来封装一组模型修改操作。子事务是可选的。修改模型时不需要它们。它们是一种方便的工具，允许将较大的任务逻辑拆分为较小的任务。子事务只能在已经打开的事务中创建，并且必须在事务关闭（提交或回滚）之前关闭（提交或回滚）。与事务不同，子事务可以嵌套，但任何嵌套的子事务都必须在封闭子事务之前关闭。子事务没有名称，因为它们不显示在Revit的“撤消”菜单上。</p>
+<h3 id="TransactionGroup事务组"><a href="#TransactionGroup事务组" class="headerlink" title="TransactionGroup事务组"></a>TransactionGroup事务组</h3><p>TransactionGroup允许将几个独立的事务分组在一起，这使组的所有者有机会一次处理多个事务。当一个事务组要被关闭时，它可以被回滚，这意味着属于该组的所有以前提交的事务都将被回滚。如果不回滚，则可以提交或同化组。在前一种情况下，所有提交的事务（在组内）将保持原样。在后一种情况下，组内的事务将被合并到一个单独的事务中，该事务将使用组的名称。</p>
+<p>事务组只能在没有打开的事务时启动，并且必须在关闭所有封闭的事务（回滚或提交）后关闭。事务组可以嵌套，但必须在封闭组关闭之前关闭任何嵌套组。事务组是可选的。修改模型时不需要这些参数。</p>
+<p>下面的示例演示如何使用Assimilate（）方法使用TransactionGroup来合并两个单独的Transactions。下面的代码将导致单个Undo项添加到Undo菜单，名称为“Level and Grid”。</p>
+<p>代码区域23-2：将多个事务合并到一个TransactionGroup中</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CompoundOperation</span>(<span class="params">Autodesk.Revit.DB.Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// All and any transaction group should be enclosed in a &#x27;using&#x27; block or guarded within</span></span><br><span class="line">    <span class="comment">// a try-catch-finally blocks to guarantee that the group does not out-live its scope.</span></span><br><span class="line">    <span class="keyword">using</span> (TransactionGroup transGroup = <span class="keyword">new</span> TransactionGroup(document, <span class="string">&quot;Level and Grid&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (transGroup.Start() == TransactionStatus.Started)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// We are going to call two methods, each having its own local transaction.</span></span><br><span class="line">            <span class="comment">// For our compound operation to be considered successful, both the individual</span></span><br><span class="line">            <span class="comment">// transactions must succeed. If either one fails, we will roll our group back,</span></span><br><span class="line">            <span class="comment">// regardless of what transactions might have already been committed.</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (CreateLevel(document, <span class="number">25.0</span>) &amp;&amp; CreateGrid(document, <span class="keyword">new</span> XYZ(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>), <span class="keyword">new</span> XYZ(<span class="number">10</span>,<span class="number">0</span>,<span class="number">0</span>)))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// The process of assimilating will merge the two (or any number of) committed</span></span><br><span class="line">                <span class="comment">// transaction together and will assign the grid&#x27;s name to the one resulting transaction,</span></span><br><span class="line">                <span class="comment">// which will become the only item from this compound operation appearing in the undo menu.</span></span><br><span class="line">                transGroup.Assimilate();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// Since we could not successfully finish at least one of the individual</span></span><br><span class="line">                <span class="comment">// operation, we are going to roll the entire group back, which will</span></span><br><span class="line">                <span class="comment">// undo any transaction already committed while this group was open.</span></span><br><span class="line">                transGroup.RollBack();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">CreateLevel</span>(<span class="params">Autodesk.Revit.DB.Document document, <span class="built_in">double</span> elevation</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// All and any transaction should be enclosed in a &#x27;using&#x27;</span></span><br><span class="line">    <span class="comment">// block or guarded within a try-catch-finally blocks</span></span><br><span class="line">    <span class="comment">// to guarantee that a transaction does not out-live its scope.</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction transaction = <span class="keyword">new</span> Transaction(document, <span class="string">&quot;Creating Level&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Must start a transaction to be able to modify a document</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>( TransactionStatus.Started == transaction.Start())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="literal">null</span> != Level.Create(document, elevation))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// For many various reasons, a transaction may not be committed</span></span><br><span class="line">                <span class="comment">// if the changes made during the transaction do not result a valid model.</span></span><br><span class="line">                <span class="comment">// If committing a transaction fails or is canceled by the end user,</span></span><br><span class="line">                <span class="comment">// the resulting status would be RolledBack instead of Committed.</span></span><br><span class="line">                <span class="keyword">return</span> (TransactionStatus.Committed == transaction.Commit());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// For we were unable to create the level, we will roll the transaction back</span></span><br><span class="line">            <span class="comment">// (although on this simplified case we know there weren&#x27;t any other changes)</span></span><br><span class="line"></span><br><span class="line">            transaction.RollBack();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">CreateGrid</span>(<span class="params">Autodesk.Revit.DB.Document document, XYZ p1, XYZ p2</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// All and any transaction should be enclosed in a &#x27;using&#x27;</span></span><br><span class="line">    <span class="comment">// block or guarded within a try-catch-finally blocks</span></span><br><span class="line">    <span class="comment">// to guarantee that a transaction does not out-live its scope.</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction transaction = <span class="keyword">new</span> Transaction(document, <span class="string">&quot;Creating Grid&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Must start a transaction to be able to modify a document</span></span><br><span class="line">        <span class="keyword">if</span> (TransactionStatus.Started == transaction.Start())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// We create a line and use it as an argument to create a grid</span></span><br><span class="line">            Line gridLine = Line.CreateBound(p1, p2);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> ((<span class="literal">null</span> != gridLine) &amp;&amp; (<span class="literal">null</span> != Grid.Create(document, gridLine)))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (TransactionStatus.Committed == transaction.Commit())</span><br><span class="line">                &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// For we were unable to create the grid, we will roll the transaction back</span></span><br><span class="line">            <span class="comment">// (although on this simplified case we know there weren&#x27;t any other changes)</span></span><br><span class="line"></span><br><span class="line">            transaction.RollBack();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="事件中的事务"><a href="#事件中的事务" class="headerlink" title="事件中的事务"></a>事件中的事务</h2><h3 id="在事件期间修改文档"><a href="#在事件期间修改文档" class="headerlink" title="在事件期间修改文档"></a>在事件期间修改文档</h3><p>事件不会自动打开事务。因此，文档不会在事件期间被修改，除非事件的某个处理程序通过在事务内部进行更改来修改文档。如果事件处理程序打开一个事务，则要求它也关闭它（提交它或回滚它），否则所有更改都将被丢弃。</p>
+<p>请注意，在某些事件（例如DocumentClosing事件）期间，不允许修改活动文档。如果事件处理程序试图在此类事件期间进行修改，则将引发异常。事件文档指示事件是否为只读。</p>
+<h3 id="DocumentChanged事件"><a href="#DocumentChanged事件" class="headerlink" title="DocumentChanged事件"></a>DocumentChanged事件</h3><p>DocumentChanged事件在每个事务提交、撤消或重做后引发。这是一个只读事件，旨在使外部数据与Revit数据库的状态保持同步。若要更新Revit数据库以响应图元中的更改，请使用动态模型更新框架。</p>
+<h2 id="失败处理选项"><a href="#失败处理选项" class="headerlink" title="失败处理选项"></a>失败处理选项</h2><p>失败处理选项是在事务结束时如何处理失败（如果有）的选项。在使用Transaction.SetFailureHandlingOptions（）方法调用Transaction.Commit（）或Transaction.RollBack（）之前，可以随时设置失败处理选项。但是，在提交或回滚事务后，这些选项将返回到各自的默认设置。</p>
+<p>SetFailureHandlingOptions（）方法接受FailureHandlingOptions对象作为参数。无法创建此对象，必须使用GetFailureHandlingOptions（）方法从事务中获取它。通过调用相应的Set方法（如SetClearAfterRollback（））来设置选项。以下各节将更详细地讨论故障处理选项。</p>
+<h3 id="ClearAfterRollback"><a href="#ClearAfterRollback" class="headerlink" title="ClearAfterRollback"></a>ClearAfterRollback</h3><p>此选项控制是否应在回滚事务后清除所有警告。默认值为False。</p>
+<h3 id="DelayedMiniWarnings-DelayedMinimax"><a href="#DelayedMiniWarnings-DelayedMinimax" class="headerlink" title="DelayedMiniWarnings DelayedMinimax"></a>DelayedMiniWarnings DelayedMinimax</h3><p>此选项控制是否在当前正在结束的事务结束时显示小警告（如果有），或者是否应将其推迟到下一个事务结束时显示。当不希望在每个步骤结束时显示中间警告，而希望等到整个链完成时，通常在事务链中使用此方法。</p>
+<p>多个事务可能会延迟验证。第一个未将此选项设置为True的事务将显示其自己的所有警告（如果有）以及可能从以前的事务累积的所有警告。默认值为False。</p>
+<p>注意：此选项在模态模式下被忽略（请参阅下面的ForcedModalHandling）。</p>
+<h3 id="ForcedModalHandling"><a href="#ForcedModalHandling" class="headerlink" title="ForcedModalHandling"></a>ForcedModalHandling</h3><p>此选项控制最终的故障是以模态方式还是以非模态方式处理。预设值为True。请注意，如果设置了非模态故障处理，则处理事务可能会异步完成，这意味着从Commit或RollBack调用返回时，事务将尚未完成（状态将为“Pending”）。</p>
+<h3 id="SetFailuresPreprocessor"><a href="#SetFailuresPreprocessor" class="headerlink" title="SetFailuresPreprocessor"></a>SetFailuresPreprocessor</h3><p>如果提供此接口，则在事务结束时发现失败时调用此接口。预处理器可以检查当前的故障，甚至尝试解决它们。有关详细信息，请参阅故障发布和处理。</p>
+<h3 id="SetTransactionFinalizer"><a href="#SetTransactionFinalizer" class="headerlink" title="SetTransactionFinalizer"></a>SetTransactionFinalizer</h3><p>终结器是一个接口，如果提供了该接口，则可用于在事务结束时执行自定义操作。请注意，它不会在调用Commit（）或RollBack（）方法时调用，而是仅在提交或回滚过程完成后调用。事务终结器必须实现<em>ITransactionFinalizer</em>接口，该接口需要定义两个函数：</p>
+<ul>
+<li>OnCommitted - called at the end of committing a transaction<br>OnCommitted -在提交事务结束时调用</li>
+<li>OnRolledBack - called at the end of rolling back a transaction<br>OnRolledBack -在回滚事务结束时调用</li>
+</ul>
+<p><em><strong>注意：</strong></em>由于终结器是在事务完成后调用的，因此除非启动新事务，否则无法从终结器修改文档。</p>
+<h2 id="获取元素几何图形和分析模型"><a href="#获取元素几何图形和分析模型" class="headerlink" title="获取元素几何图形和分析模型"></a>获取元素几何图形和分析模型</h2><p>创建新图元或修改图元后，需要重新生成和自动连接图元以将更改传播到整个模型中。如果不进行再生（以及相关的自动连接），则无法获得“几何”属性和“元素的分析模型”（在创建新元素的情况下），或者它们可能无效。在访问图元的“几何”或“分析模型”之前，了解再生发生的方式和时间非常重要。</p>
+<p>尽管再生和自动连接对于传播模型中所做的更改是必要的，但这可能很耗时。最好是这些事件只在必要时发生。</p>
+<p>当修改模型的事务成功提交时，或者调用Document.Regenerate（）或Document.AutoJoinElements（）方法时，自动进行重新生成和自动联接。Regenerate（）和AutoJoinElements（）只能在打开的事务中调用。应该注意的是，Regeneration（）方法可能会失败，在这种情况下，RegenerationFailedException将被抛出。如果发生这种情况，则需要通过回滚当前事务或子事务来回滚对文档的更改。</p>
+<p>有关更多信息，请参见分析模型和几何形状。</p>
+<p>下面的示例程序演示了事务如何填充这些属性：</p>
+<p>代码区域23-3：填充几何和分析模型属性的事务处理</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TransactionDuringElementCreation</span>(<span class="params">UIApplication uiApplication, Level level</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Autodesk.Revit.DB.Document document = uiApplication.ActiveUIDocument.Document;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Build a location line for the wall creation</span></span><br><span class="line">    XYZ start = <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    XYZ end = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">    Autodesk.Revit.DB.Line geomLine = Line.CreateBound(start, end);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// All and any transaction should be enclosed in a &#x27;using&#x27;</span></span><br><span class="line">    <span class="comment">// block or guarded within a try-catch-finally blocks</span></span><br><span class="line">    <span class="comment">// to guarantee that a transaction does not out-live its scope.</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction wallTransaction = <span class="keyword">new</span> Transaction(document, <span class="string">&quot;Creating wall&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">       <span class="comment">// To create a wall, a transaction must be first started</span></span><br><span class="line">       <span class="keyword">if</span> (wallTransaction.Start() == TransactionStatus.Started)</span><br><span class="line">       &#123;</span><br><span class="line">           <span class="comment">// Create a wall using the location line</span></span><br><span class="line">           Wall wall = Wall.Create(document, geomLine, level.Id, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">           <span class="comment">// the transaction must be committed before you can</span></span><br><span class="line">           <span class="comment">// get the value of Geometry and AnalyticalModel.</span></span><br><span class="line"></span><br><span class="line">           <span class="keyword">if</span> (wallTransaction.Commit() == TransactionStatus.Committed)</span><br><span class="line">           &#123;</span><br><span class="line">               Autodesk.Revit.DB.Options options = uiApplication.Application.Create.NewGeometryOptions();</span><br><span class="line">               Autodesk.Revit.DB.GeometryElement geoelem = wall.get_Geometry(options);</span><br><span class="line">               Autodesk.Revit.DB.Structure.AnalyticalModel analyticalmodel = wall.GetAnalyticalModel();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此示例的事务时间轴如下所示：</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-A7296713-19E7-4C50-A7B6-F3F7893A8EDD-low.png"></p>
+<h2 id="临时事务"><a href="#临时事务" class="headerlink" title="临时事务"></a>临时事务</h2><p>并不总是需要提交事务。事务框架还允许回滚事务。这在事务处理过程中出现错误时很有用，但也可以直接用作创建临时事务的技术。</p>
+<p>使用临时事务对于某些类型的分析可能很有用。例如，如果应用程序希望在墙或其他对象被洞口剪切之前从其提取几何属性，则应将临时事务与Document.Delete（）结合使用。当应用程序删除剪切目标元素的元素时，剪切元素的几何图形将恢复到其原始状态（在重新生成文档之后）。</p>
+<p>要使用临时事务处理，请执行以下操作：</p>
+<ol>
+<li>使用Transaction构造函数实例化Transaction，并为其分配一个名称。</li>
+<li>调用Transaction.Start（）</li>
+<li>对文档进行临时更改（元素修改、删除或创建）</li>
+<li>重新生成文档</li>
+<li>提取所需的几何图形和属性</li>
+<li>调用Transaction.RollBack（）将文档还原到以前的状态。</li>
+</ol>
+<p>这种技术也适用于子事务。</p>
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 Hexo
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;John Doe
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

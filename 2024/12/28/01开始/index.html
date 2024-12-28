@@ -1,0 +1,434 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title> | Hexo</title>
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HEXO</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HEXO</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1></h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/12/28
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Introduction_Getting_Started_html">开始</a></h1><p>Revit 平台 API 可通过与 Microsoft .NET Framework 4.5.2 或 4.6 兼容的任何语言（如 Visual C# 或 Visual Basic .NET （VB.NET））进行完全访问。Visual C# 和 VB.NET 通常用于开发 Revit 平台 API 应用程序。但是，本手册的重点是使用 Visual C# 开发应用程序。</p>
+<h2 id="欢迎使用-Revit-Platform-API"><a href="#欢迎使用-Revit-Platform-API" class="headerlink" title="欢迎使用 Revit Platform API"></a>欢迎使用 Revit Platform API</h2><p>所有基于 Autodesk Revit 的产品都是参数化建筑信息模型 （BIM） 工具。这样的工具可以看作是用于构建 3D 模型的 CAD 程序，而不是一组单独的图纸文件。Autodesk Revit 建模是通过柱、墙、门和窗等真实世界的元素完成的。用户可以创建模型的视图，包括平面图、剖面图和详图索引。所有这些视图都是直接从 3D 物理模型生成的，因此在一个视图中所做的更改将自动传播到所有其他视图。此过程几乎消除了在模型中进行更改时更新多个图纸和细节的需要。</p>
+<p>Autodesk Revit API 旨在反映与程序的图形用户界面相同的用户交互范例。因此，了解 API 的第一步是学习如何使用该程序。如果您是 Autodesk Revit 新手，我们建议您首先阅读教程，您可以通过程序的“帮助”菜单访问这些教程。您可能还会发现，参加当地 Autodesk 经销商提供的培训课程会很有帮助。这将帮助您快速掌握该程序</p>
+<h3 id="Revit-平台-API-简介"><a href="#Revit-平台-API-简介" class="headerlink" title="Revit 平台 API 简介"></a>Revit 平台 API 简介</h3><p>Revit .NET API 允许您使用任何符合 .NET 的语言（包括 Visual Basic.NET、C# 和 C++&#x2F;CLI）进行编程。Autodesk Revit 提供了一个 API，旨在允许高级用户和外部应用程序开发人员将其应用程序与 Autodesk Revit 集成。强烈建议您在尝试使用 Autodesk Revit API 之前熟悉 Autodesk Revit 及其功能。可以通过 Autodesk Developer Network （ADN） 找到培训。</p>
+<p>学习 Revit 可以帮助您：</p>
+<ul>
+<li>与 Revit UI 和命令保持一致。无缝设计您的插件应用程序。</li>
+<li>高效且有效地掌握 API 类和类成员。</li>
+<li>如果您不熟悉 Revit 或 BIM，请在 <a target="_blank" rel="noopener" href="http://www.autodesk.com/revit">www.autodesk.com/revit</a> 的 Revit 产品中心了解更多信息。</li>
+</ul>
+<h3 id="您可以使用-Revit-Platform-API-做什么？"><a href="#您可以使用-Revit-Platform-API-做什么？" class="headerlink" title="您可以使用 Revit Platform API 做什么？"></a>您可以使用 Revit Platform API 做什么？</h3><p>以下是 API 适用的一般区域：</p>
+<ul>
+<li>在 Autodesk Revit 用户界面中创建附加模块和宏以自动执行重复性任务。</li>
+<li>通过自动检查错误来执行项目设计标准。</li>
+<li>提取项目数据进行分析并生成报告。</li>
+<li>导入外部数据以创建新元素或参数值。</li>
+<li>将其他应用程序（包括分析应用程序）集成到 Autodesk Revit 产品中。</li>
+<li>自动创建 Autodesk Revit 项目文档。</li>
+</ul>
+<h3 id="开始需要什么"><a href="#开始需要什么" class="headerlink" title="开始需要什么"></a>开始需要什么</h3><ul>
+<li><p>对 Autodesk Revit 有深入的了解。</p>
+</li>
+<li><p>基于 Autodesk Revit 的产品的安装，包括软件开发工具包。</p>
+</li>
+<li><p>MS Visual Studio 2015 Express Edition（C# 或 VB.NET）。但是，建议使用 Microsoft Visual Studio 2015 Professional，因为 Express 版本不支持 DLL 调试。或者，您也可以使用 Revit 中内置的 SharpDevelop 开发环境。</p>
+</li>
+<li><p>具有一定的基于 .NET 的开发语言经验。（Autodesk Revit API 示例以 C# 和 Visual Basic.NET 提供。</p>
+</li>
+</ul>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>Autodesk Revit API 随基于 Autodesk Revit 的产品的默认安装一起自动安装。任何基于 .NET 的应用程序都将引用位于 Revit Program 目录中的 RevitAPI.dll 和 RevitAPIUI.dll。该RevitAPI.dll包含用于在数据库级别访问 Revit 的应用程序、文档、图元和参数的方法。RevitAPIUI.dll包含与 Revit 用户界面的操作和自定义相关的界面。</p>
+<p>请注意，RevitAPIIFC.dll、RevitAPIMacros.dll 和 RevitAPIUIMacros.dll 中存在其他 API 功能，这些功能也随 Revit 一起安装，但这些部件并非立即需要开始使用。</p>
+<p>Autodesk Revit API 软件开发工具包 （SDK） 从 Autodesk Revit 安装的“工具和实用程序”部分安装。</p>
+<h3 id="开发要求"><a href="#开发要求" class="headerlink" title="开发要求"></a>开发要求</h3><p>Autodesk Revit API 需要 Microsoft .NET Framework 4.5.2 或 4.6。Revit 的二进制文件是使用 .NET 4.5.2 构建的。但是，Revit 使用 .NET 4.6 中的运行时。</p>
+<p>要编辑和调试 API 应用程序，您需要一个交互式开发环境，例如 Microsoft Visual Studio 2015 Professional 或适用于 C# 或 Visual Basic.NET 的 MS Visual Studio Express Editions 之一。（建议使用 Visual Studio Professional，因为 Express 版本不支持 DLL 调试。使用 Autodesk Revit API 进行开发时，请确保您的项目引用 Autodesk Revit Program 目录中包含的两个 DLL：RevitAPI.dll 和 RevitAPIUI.dll。</p>
+<p>需要一些编程技能才能有效地使用 API。如果您是编程初学者，我们强烈建议您学习 Visual Studio 2015 Microsoft 以及 C# 或 Visual Basic.NET 等兼容语言之一。有很多好书和课程可以帮助你入门。</p>
+<h3 id="用户使用手册"><a href="#用户使用手册" class="headerlink" title="用户使用手册"></a>用户使用手册</h3><p>本文档是 Revit SDK 的一部分。它介绍了如何使用 Revit Platform API 实现 Revit 附加模块应用程序。</p>
+<p>在创建 Revit Platform API 附加模块应用程序之前，请通读手册并尝试示例代码。如果您已经对 Revit Platform API 有一定的经验，您可能只想查看“注释”和“疑难解答”部分。</p>
+<ul>
+<li><p>Revit Platform API 简介</p>
+<p>前两章介绍了 Revit Platform API，并概述了用户手册。<br>欢迎使用 Revit 平台 API - 在创建第一个附加模块之前，介绍 Revit 平台 API 的简介和必要的必备知识。<br>入门 - 使用 Visual Studio 2010 创建第一个 Hello World 加载项应用程序的分步说明，以及涵盖主要加载项功能的其他四个演练。</p>
+</li>
+<li><p>基础主题</p>
+<p>这些章节介绍了 Revit Platform API 的基本机制和功能。<br>附加模块集成 - 讨论如何将附加模块集成到 Revit UI 中，并由用户命令或特定 Revit 事件（如程序启动）调用。<br>应用程序和文档 - 应用程序和文档类分别表示 Revit 平台 API 中的 Revit 应用程序和项目文件。本章介绍基本概念以及相关章节的链接。<br>元素要点 - Revit 项目中的大部分数据位于元素集合中。本章讨论基本的 Element 机制、分类和功能。<br>筛选 - 筛选用于从文档中获取一组元素。<br>选择 - 使用文档中的选定元素集。<br>参数- 大多数元素信息都存储为参数。本章讨论参数功能。<br>集合- 实用程序集合类型，如 Array、Map、Set 集合和相关的迭代器。</p>
+</li>
+<li><p>元素主题</p>
+<p>元素是根据元素分类引入的。在阅读各个元素之前，请确保先阅读元素要点和参数章节。<br>编辑元素 - 了解如何移动、旋转、删除、镜像、分组和阵列元素。<br>墙、地板、天花板、屋顶和洞口 - 讨论元素、它们对应的 ElementType（表示内置位置构造）以及 API 中不同类型的洞口。<br>族实例 - 了解族和族实例、族和族实例特征之间的关系，以及如何加载或创建它们。<br>族创建 - 了解如何创建和修改 Revit 族文档。<br>概念设计 - 讨论如何在 Revit 概念体量文档中创建复杂的几何图形和形状。<br>基准和信息元素 - 了解如何设置网格、添加标高、使用设计选项等。<br>注释元素 - 讨论文档注释，包括添加尺寸、详图曲线、标记和注释符号。<br>草图绘制 - 草图函数包括 2D 和 3D 草图类，例如 SketchPlane、ModelCurve、GenericForm 等。<br>视图 - 了解查看模型和组件的不同方式，以及如何在 API 中操作视图。<br>材质 - 材质数据是一个元素，用于标识项目中使用的物理材质以及纹理、颜色等。</p>
+</li>
+<li><p>高级主题</p>
+<p>几何图形 - 讨论 API 中用于描述模型的图形表示的图形相关类型，包括描述和存储几何图形信息的三个类。<br>地点和位置 - 定义项目位置，包括城市、国家&#x2F;地区、纬度和经度。<br>共享参数 - 共享参数是包含参数规范的外部文本文件。本章介绍如何通过 Revit Platform API 访问共享参数。<br>事务 - 介绍 Transaction 的两种用途以及使用 Transaction 时必须考虑的限制。<br>事件 - 讨论如何利用 Revit 事件。<br>动态模型更新 - 了解如何使用更新程序修改模型以响应文档中的更改。<br>失败提交和处理 - 了解如何提交失败并与 Revit 的失败处理机制进行交互。<br>分析可视化 - 如何在 Revit 项目中显示分析结果。</p>
+</li>
+<li><p>特定学科</p>
+<p>Revit 包括用于建筑、结构工程和 MEP 工程的特定于领域的功能。某些 API 仅适用于特定功能集。<br>建筑设计- 讨论特定于 Revit 的建筑功能的 API。<br>结构工程 - 讨论特定于 Revit 的结构工程功能的 API。<br>MEP工程 - 讨论特定于 Revit 的机械、电气和卫浴功能的 API。</p>
+</li>
+<li><p>其他</p>
+<p>词汇表 - 本文档中使用的术语定义。<br>附录 - 其他信息，如常见问题、使用 Visual Basic.Net 进行编程等。</p>
+</li>
+</ul>
+<h3 id="文档约定"><a href="#文档约定" class="headerlink" title="文档约定"></a>文档约定</h3><p>本文档包含命名空间格式的类名，例如 Autodesk.Revit.DB.Element。在 C++&#x2F;CLI 中，Autodesk.Revit.Element 是 Autodesk::Revit::DB::Element。由于本手册中仅使用 C# 作为示例代码，因此默认命名空间为 Autodesk.Revit.DB。如果要在 Visual Basic 中查看代码，可以在 SDK 示例目录中找到几个 VB.NET 应用程序。</p>
+<ul>
+<li>索引属性</li>
+</ul>
+<p>  某些 Revit Platform API 类特性已“编入索引”，或在 API 帮助文件 （RevitAPI.chm） 中描述为过载。例如，Element.Geometry 属性。在本文档的文本中，这些属性称为属性，尽管您可以通过在属性名称前面加上“get_”或“set_”来访问它们，就好像它们是 C# 代码中的方法一样。例如，若要使用 Element.Geometry（Options） 属性，请使用 Element.get_Geometry（Options）。</p>
+<h3 id="此版本中的新增功能"><a href="#此版本中的新增功能" class="headerlink" title="此版本中的新增功能"></a>此版本中的新增功能</h3><p>有关更改和新功能的信息，请参见 RevitAPI.chm（包含在 Revit API SDK 中）中的“新特性”部分。</p>
+<h2 id="使用-Autodesk-Revit-API"><a href="#使用-Autodesk-Revit-API" class="headerlink" title="使用 Autodesk Revit API"></a>使用 Autodesk Revit API</h2><p>Autodesk Revit API 软件开发工具包 （SDK） 从 Autodesk Revit 安装的“工具和实用程序”部分安装。在 SDK 中，有一些示例文件可帮助您更好地了解 API 及其用法。每个示例文件都有一个示例 .addin 清单文件，其中包含您需要编辑并放入相应文件夹的信息，Autodesk Revit 将在启动时访问该文件夹。</p>
+<p>RevitAPI.chm 是 Autodesk Revit API 参考文档帮助 chm 文件，包含在 SDK 包的 \Revit 2018 SDK\ 文件夹中。</p>
+<h3 id="部署选项"><a href="#部署选项" class="headerlink" title="部署选项"></a>部署选项</h3><p>Autodesk Revit API 仅支持进程内 DLL。这意味着您的 API 应用程序将被编译为加载到 Autodesk Revit 进程中的 DLL。<br>Autodesk Revit API 仅支持单线程访问。这意味着您的 API 应用程序必须在主线程中执行所有 Autodesk Revit API 调用（由 Autodesk Revit 进程在各种 API 入口点调用），并且您的 API 应用程序无法维护其他线程中的操作，并期望它们能够随时调用 Autodesk Revit。（有关可能的例外情况，请参阅高级主题 External_Events）。</p>
+<p>可以使用 Autodesk Revit API 创建两种类型的 DLL：外部命令和外部应用程序。</p>
+<ul>
+<li><p>外部命令</p>
+<p>Autodesk Revit API 允许您向 Autodesk Revit 的用户界面添加新命令。这些命令将出现在 ‘External Tools’ 下拉菜单下的 Add-ins 选项卡中，如图 1 所示。通过 API，外部工具命令可以访问 Autodesk Revit 数据库以及当前选定的图元。<br><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/HelloWorldCommand.png"><br>图 1：添加到 Revit 的外部工具</p>
+</li>
+<li><p>外部应用程序</p>
+<p>Autodesk Revit API 还允许您添加外部应用程序。这些应用程序在 Autodesk Revit 启动和关闭期间调用。他们可以在 Add-ins 选项卡中创建新面板，如图 2 所示。他们还可以注册处理程序，以便对 Autodesk Revit 用户界面中发生的事件做出反应。<br><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/HelloWorldRibbonPanel.png"><br>图 2：Revit 中添加了新面板和控件</p>
+</li>
+<li><p>REX 插件</p>
+<p>REX （Revit Extensions） 是一个 API 框架，它允许您在 .NET 中为 Revit 构建应用程序，类似于实现 IExternalCommand 的类。REX 旨在通过内置资源为您提供更高级的开发环境，例如：<br>自动对话框创建和显。<br>用于处理单位和几何图形的库。<br>内置基于命令的架构，使菜单和工具栏开发更加容易。<br>用于访问对 Revit 应用程序对象的引用的标准机制。<br>自动部署和安装插件，便于调试。有关更多详细信息，请参见“\Revit 2018 SDK\REX SDK\”文件夹。</p>
+</li>
+</ul>
+<h3 id="插件注册"><a href="#插件注册" class="headerlink" title="插件注册"></a>插件注册</h3><p>Revit API 提供了通过 .addin 清单文件注册 API 应用程序的功能。<br>当清单文件放置在用户系统上的两个位置之一时，Revit 将自动读取这些文件：</p>
+<ul>
+<li>C：\ProgramData\Autodesk\Revit\Addins\2018\</li>
+<li>C：\Users\AppData\Roaming\Autodesk\Revit\Addins\2018\ 在启动期间，Revit 将读取和处理这些位置中名为 .addin 的所有文件。</li>
+</ul>
+<p>添加一个 ExternalCommand 的基本文件如下所示：</p>
+<p>代码区域：ExternalCommand 的基本清单文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot; standalone=&quot;no&quot;?&gt;</span><br><span class="line"></span><br><span class="line">c:\MyProgram\MyProgram.dll</span><br><span class="line">76eb700a-2c85-4888-a78d-31429ecae9ed</span><br><span class="line">Revit.Samples.SampleCommand</span><br><span class="line">Sample command</span><br><span class="line">NotVisibleInFamily</span><br><span class="line">NotVisibleInMEP</span><br><span class="line">Revit.Samples.SampleAccessibilityCheck </span><br></pre></td></tr></table></figure>
+
+<p>添加一个 ExternalApplication 的基本文件如下所示：</p>
+<p>代码区域：ExternalApplication 的基本清单文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot; standalone=&quot;no&quot;?&gt;</span><br><span class="line"></span><br><span class="line">My sample application</span><br><span class="line">c:\MyProgram\MyProgram.dll</span><br><span class="line">604B1052-F742-4951-8576-C261D1993107</span><br><span class="line">Revit.Samples.SampleApplication</span><br></pre></td></tr></table></figure>
+
+<p>单个清单文件中可以添加多个 AddIn 元素。</p>
+<p>请参阅插件注册以了解有关 .addin 文件的可用 XML 标签的更多信息。</p>
+<h3 id="外部命令"><a href="#外部命令" class="headerlink" title="外部命令"></a>外部命令</h3><p>从技术上讲，外部命令是支持 Autodesk.Revit.UI.IExternalCommand 接口的公开 .NET 对象。此外，在相应的目录中必须有一个 .addin 清单文件，每个此类对象都有一个条目，以便 Revit 能够“看到”并使用命令。</p>
+<ul>
+<li><p>IExternalCommand 接口</p>
+<p>接口的声明 （VB.NET） 如下：<br>代码区域：VB.NET IExternalCommand 接口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Function Execute(ByVal commandData As Autodesk.Revit.UI.ExternalCommandData,</span><br><span class="line">ByRef message As String,</span><br><span class="line">ByVal elements As Autodesk.Revit.DB.ElementSet)</span><br><span class="line">As Result</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>Parameters 参数</p>
+<p>commandData ：此参数中传递的对象包含对正在执行命令的重要信息。此数据包括 Autodesk Revit Application 对象以及当前活动的视图。<br>message ：可以设置消息字符串，以便在命令终止时向用户提供特定消息。此消息的显示方式取决于函数的返回值。有关更多详细信息，请参阅备注部分。<br>elemtnts：最初，这是一个可以包含 Autodesk Revit 元素的空集。当命令终止时，可能会根据返回值显示此集中的元素。有关更多详细信息，请参阅备注部分。</p>
+</li>
+<li><p>Return value 返回值</p>
+<p>result：返回值可以是以下值之一：<br>Success ：如果命令按预期成功且没有任何未处理的错误情况，则返回。外部命令将在 Autodesk Revit 用户界面中显示为可撤消的操作。<br>Cancelled ：此值指定用户请求取消命令。在执行外部命令期间对 Autodesk Revit 对象所做的任何更改都将被撤消。可能会发布一条消息，请参阅 备注 部分。<br>Failure ：失败表示外部命令以某种方式失败，无法恢复。在执行外部命令期间对 Autodesk Revit 对象所做的任何更改都将被撤消。将发布一条消息，请参阅 备注 部分。</p>
+</li>
+<li><p>Remarks 备注</p>
+<p>如果命令被取消或失败，则使用 message 和 elements 参数。<br>Cancelled:外部命令已取消，并且消息参数由外部命令设置，则在将执行返回给 Autodesk Revit 时，将显示该消息。如果未设置 message 参数，则不会显示任何消息，并且命令将静默退出。<br>Failed: 如果外部命令失败，则将显示 message 参数的内容。如果元素集包含 Autodesk Revit 元素，则在显示错误消息时，这些元素将高亮显示，从而使开发人员能够向用户显示有问题的元素。</p>
+</li>
+</ul>
+</li>
+<li><p>使用 Autodesk Revit API 外部命令</p>
+<p>用户在 Autodesk Revit 中打开&#x2F;创建项目<br>用户从 Add-ins 选项卡上的 External Tools 下拉菜单中选择外部命令。<br>用户可以选择在调用外部工具程序之前选择多个 Autodesk Revit 图元。如果这样做，程序可以决定仅对所选成员执行其功能。<br>API 程序从 Autodesk Revit 获取焦点并执行所需的任务。通常，在应用程序完成其工作之前，可能需要一个对话框来获取用户输入。<br>一旦插件工具完成其功能或被用户关闭，程序将根据需要更新 Autodesk Revit 模型并从外部命令返回，从而将焦点重新放在 Autodesk Revit 上。</p>
+</li>
+<li><p>外部命令对象生存期</p>
+<p>当 Autodesk Revit 中没有其他命令或编辑模式处于活动状态时，已注册的外部命令将变为启用状态。选取后，将创建 command 对象并调用 Execute 方法。此方法返回 Autodesk Revit 后，命令对象将被销毁。由于这种销毁，数据无法在命令执行之间保留在对象中。如果您希望数据持久保存，您可以使用外部文件或数据库来实现。如果您希望数据保留在 Autodesk Revit 项目中，您可以使用共享参数机制来存储此数据。</p>
+</li>
+</ul>
+<h3 id="外部应用程序"><a href="#外部应用程序" class="headerlink" title="外部应用程序"></a>外部应用程序</h3><p>从技术上讲，外部应用程序是支持 Autodesk.Revit.IExternalApplication 接口的公开 .NET 对象。此外，在相应的目录中必须有一个 .addin 清单文件，每个此类对象都有一个条目，以便 Autodesk Revit 能够在 Autodesk Revit 启动时加载这些应用程序。</p>
+<ul>
+<li><p>IExternalApplication 接口</p>
+<p>接口的声明 （C#） 如下所示：<br>代码区域：IExternalApplication 接口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Autodesk.Revit.UI.IExternalApplication.Result OnShutdown(Autodesk.Revit.UIControlledApplication application)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Parameters 参数</p>
+<p>application：在此参数中传递的对象包含对正在调用的命令 OnStartup 和 OnShutdown 非常重要的信息。此对象提供 Autodesk Revit Application 的有限访问方法，如 VersionName、VersionNumber;以及某些事件的委托，例如 OnDocumentOpened、OnDocumentSaved</p>
+</li>
+<li><p>Return Value 返回值</p>
+<p>result：返回值可以是以下值之一：<br>Success：如果外部应用程序按预期成功且没有任何未处理的错误情况，则返回此结果。<br>Failure: ：失败表示外部应用程序以某种方式失败，无法从中恢复。<br>Cancelled：此值指定取消外部应用程序。</p>
+</li>
+</ul>
+</li>
+<li><p>外部应用程序对象生存期</p>
+<p>当 Autodesk Revit 启动时，将创建外部应用程序对象并调用 OnStartup 方法。此方法成功返回到 Autodesk Revit 后，外部应用程序对象将在整个 Autodesk Revit 会话期间保留。当 Autodesk Revit 关闭时，将调用 OnShutdown 方法。</p>
+</li>
+</ul>
+<h3 id="在-Microsoft-Visual-Studio-中调试应用程序"><a href="#在-Microsoft-Visual-Studio-中调试应用程序" class="headerlink" title="在 Microsoft Visual Studio 中调试应用程序"></a>在 Microsoft Visual Studio 中调试应用程序</h3><p>以下说明适用于 Visual Studio Professional。相关选项在 Visual Studio Express 版本中不可用。<br>调试独立应用程序 （EXE） 与需要其他程序来启动它的外部应用程序 （DLL） 之间存在一些差异。要调试使用 Autodesk Revit API 的应用程序，需要由 Autodesk Revit 激活该应用程序。要在开发人员环境中进行调试时执行此操作，您需要：</p>
+<ul>
+<li>打开或新建一个Revit项目</li>
+<li>打开 API 应用程序的 Visual Studio 项目。（例如，Samples 文件夹中的 AnalyticalSupportData_Info.csproj）</li>
+<li>在Visual Studio 的调试中选则附加到进程，选择revit.exe</li>
+</ul>
+<h3 id="单位系统"><a href="#单位系统" class="headerlink" title="单位系统"></a>单位系统</h3><p>Revit 单位系统使用以下基本单位：</p>
+<table>
+<thead>
+<tr>
+<th><strong>基本单位</strong></th>
+<th><strong>Revit中的单位</strong></th>
+<th><strong>单位制</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>长度</td>
+<td>Feet (ft) 英尺</td>
+<td>Imperial 英制</td>
+</tr>
+<tr>
+<td>角度</td>
+<td>Radian 弧度</td>
+<td>Metric 公制</td>
+</tr>
+<tr>
+<td>质量</td>
+<td>Kilogram (kg)</td>
+<td>Metric 公制</td>
+</tr>
+<tr>
+<td>时间</td>
+<td>Seconds (s)</td>
+<td>Metric 公制</td>
+</tr>
+<tr>
+<td>电流</td>
+<td>Ampere (A)</td>
+<td>Metric 公制</td>
+</tr>
+<tr>
+<td>温度</td>
+<td>Kelvin (K)</td>
+<td>Metric 公制</td>
+</tr>
+<tr>
+<td>发光强度</td>
+<td>Candela (cd)</td>
+<td>Metric 公制</td>
+</tr>
+</tbody></table>
+<h3 id="存储和访问应用程序的自定义数据"><a href="#存储和访问应用程序的自定义数据" class="headerlink" title="存储和访问应用程序的自定义数据"></a>存储和访问应用程序的自定义数据</h3><p>通常，链接到 Autodesk Revit 的程序需要的信息不被Autodesk Revit 模型数据库使用。用户可以通过多种方式输入此类附加信息。信息的输入方式和位置取决于其用途：</p>
+<ul>
+<li>如果信息是常规类型，并且用户希望在 Autodesk Revit 中查看和编辑它，则应将其存储为可见的项目或共享参数。</li>
+<li>如果信息需要在 Autodesk Revit 模型不断发展时保留在 Autodesk Revit 模型中，但不需要可见，则可以将其作为不可见的项目或共享参数或使用可扩展存储存储在 Autodesk Revit 模型中。</li>
+<li>如果信息特定于单个附加程序，并且太大而无法实际存储在 Autodesk Revit 模型中，例如可能会更改的大量建筑产品的规格，则最佳解决方案可能是创建一个并发模型数据库来存储程序特定信息。在这种情况下，使用每个元素的元素 UniqueId 属性作为数据库的键可能很有用，因为元素的 UniqueId 在模型中是稳定的。</li>
+</ul>
+<h2 id="演练"><a href="#演练" class="headerlink" title="演练"></a>演练</h2><p>如果您不熟悉 Revit Platform API，则以下主题是帮助您了解该产品的良好起点。演练提供了常见方案的分步说明，可帮助您了解产品或特定功能。以下演练将帮助您开始使用 Revit Platform API：</p>
+<ul>
+<li>演练：Hello World - 演示如何使用 Revit 平台 API 创建附加模块。</li>
+<li>演练：添加 Hello World 功能区面板 - 演示如何添加自定义功能区面板。</li>
+<li>演练：检索选定元素 - 演示如何检索选定元素。</li>
+<li>演练：检索筛选的元素 -演示如何根据筛选条件检索元素。</li>
+</ul>
+<h2 id="演练：Hello-World"><a href="#演练：Hello-World" class="headerlink" title="演练：Hello World"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Introduction_Getting_Started_Walkthrough_Hello_World_html">演练：Hello World</a></h2><p>使用 Revit 平台 API 和 C# 按照提供的说明创建 Hello World 程序。有关如何使用 VB.NET 创建加载项应用程序的信息，请参阅 Hello World for VB.NET 。</p>
+<p>Hello World 演练涵盖以下主题：</p>
+<ul>
+<li>Create a new project. 创建新项目。</li>
+<li>Add references. 添加引用。</li>
+<li>Change the class name. 更改类名。</li>
+<li>Write the code 编写代码</li>
+<li>Debug the add-in. 调试插件。</li>
+</ul>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/HelloWorldCommand.png"></p>
+<h2 id="演练：添加-Hello-World-功能区面板"><a href="#演练：添加-Hello-World-功能区面板" class="headerlink" title="演练：添加 Hello World 功能区面板"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Introduction_Getting_Started_Walkthrough_Add_Hello_World_Ribbon_Panel_html">演练：添加 Hello World 功能区面板</a></h2><p>在“演练：Hello World”部分中，您将了解如何创建附加模块应用程序并在 Revit 中调用它。您还将学习如何创建 .addin 清单文件，以将 Add-in 应用程序注册为外部工具。在 Revit 中调用附加模块应用程序的另一种方法是通过自定义功能区面板。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-8EBB8680-BCD5-4983-829F-55288BBC16B6-low.png"></p>
+<h2 id="演练：检索选定元素"><a href="#演练：检索选定元素" class="headerlink" title="演练：检索选定元素"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Introduction_Getting_Started_Walkthrough_Retrieve_Selected_Elements_html">演练：检索选定元素</a></h2><p>本节将向您介绍一个附加模块应用程序，该应用程序可从 Revit 中获取选定的图元。<br>获取所选元素后，您可以获取元素的属性或参数。更多信息，请参见参数。</p>
+<h2 id="演练：检索筛选的元素"><a href="#演练：检索筛选的元素" class="headerlink" title="演练：检索筛选的元素"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Introduction_Getting_Started_Walkthrough_Retrieve_Filtered_Elements_html">演练：检索筛选的元素</a></h2><p>您可以使用过滤器仅选择满足特定条件的元素。有关创建和使用元素过滤器的更多信息，请参阅元素检索。<br>此示例检索文档中的所有门，并返回门元素列表。</p>
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 Hexo
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;John Doe
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>

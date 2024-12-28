@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>我的第一篇博客 Hexo Hello! | Hexo</title>
+    <title> | Hexo</title>
     <meta name="author" content="John Doe" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -156,7 +156,7 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>我的第一篇博客 Hexo Hello!</h1>
+        <h1></h1>
     </div>
     <div class="info">
         <span class="date">
@@ -170,7 +170,14 @@
     </div>
     
     <div class="content" v-pre>
-        
+        <h1 id="可停靠对话框窗格"><a href="#可停靠对话框窗格" class="headerlink" title="可停靠对话框窗格"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Advanced_Topics_Dockable_Dialog_Panes_html">可停靠对话框窗格</a></h1><p>自Revit 2013以来，应用程序可以通过利用Revit API中的Idling事件（用户界面事件和外部事件）类来使用无模式对话框。需要非模态对话框的加载项也可以选择使用可停靠的非模态对话框。与标准的无模式对话框类似，可停靠对话框是注册的Windows Presentation Foundation（WPF）对话框窗格，参与Revit的窗口对接系统。注册的可停靠窗格可以停靠在主Revit窗口的顶部、左侧、右侧和底部，也可以作为选项卡添加到现有系统窗格（例如项目浏览器）。此外，可停靠窗格可以浮动，表现得很像标准的非模态对话框。</p>
+<h2 id="IDockablePaneProvider"><a href="#IDockablePaneProvider" class="headerlink" title="IDockablePaneProvider"></a>IDockablePaneProvider</h2><p>注册可停靠窗格需要IDockablePaneProvider接口的实例。在Revit用户界面初始化期间调用此界面的SetupDockableWindow（）方法，以收集有关附加模块可固定窗格窗口的信息。SetupDockableData（）有一个DockablePaneProviderData类型的参数，它是关于新可停靠窗格的信息的容器。</p>
+<p>IDockablePaneProvider接口的实现应设置DockablePaneProviderData的FrameworkElement和InitialState属性。FrameworkElement属性是包含窗格用户界面的Windows Presentation Framework对象。</p>
+<p><strong>注意：</strong>建议外接程序中的可停靠对话框是实现IDockablePaneProvider的类，并从System.Windows.Controls.Page子类化它。</p>
+<p>InitialState属性是对接窗格的初始位置和设置，由DockablePaneState类指示。窗格的停靠位置可以是上、下、左、右、浮动或选项卡式。如果位置为Tabbed，则DockablePaneState.TabBehind属性可用于指定新窗格将显示在哪个窗格后面。如果位置为Floating，则DockablePaneState.FloatingRectangle属性包含确定窗格大小和位置的矩形。</p>
+<h2 id="DockablePane-Dockable"><a href="#DockablePane-Dockable" class="headerlink" title="DockablePane Dockable"></a>DockablePane Dockable</h2><p>要在运行时访问可停靠窗格，需要通过调用UIApplication. RegisterDockableList（）方法来注册它。此方法需要新窗格的唯一标识符（DockablePaneId）、指定窗格标题的字符串以及IDockablePaneProvider接口的实现。</p>
+<p>可停靠窗格可以通过调用UIApplication. GetDockablePanId（）并传入唯一的DockablePaneId来访问。此方法返回一个DockablePanId。DockablePane.Show（）将在Revit用户界面中的最后停靠位置（如果当前不可见）显示窗格。Dockable.Hide（）将隐藏可见的可停靠窗格。但是，它对内置的Revit可固定窗格没有影响。</p>
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
     </div>
     
     

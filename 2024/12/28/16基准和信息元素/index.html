@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <title> | Hexo</title>
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>HEXO</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;HEXO</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1></h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/12/28
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="基准和信息元素"><a href="#基准和信息元素" class="headerlink" title="基准和信息元素"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Revit_Geometric_Elements_Datum_and_Information_Elements_html">基准和信息元素</a></h1><p>本章介绍Revit中的基准元素和信息元素。</p>
+<ul>
+<li>基准元素包括标高、轴网和模型线。</li>
+<li>信息元素包括阶段、设计选项和EnergyDataSettings。</li>
+</ul>
+<p>有关Revit图元分类的详细信息，请参见图元要素。</p>
+<p>注：如果您需要更多信息，请参阅相关章节：</p>
+<ul>
+<li>有关荷载基础、荷载工况、荷载组合、荷载性质和荷载用途，请参阅结构工程</li>
+<li>对于模型曲线，请参阅草图</li>
+<li>对于材质和填充图案，请参阅材质</li>
+<li>有关能量数据设置，请参阅能量数据</li>
+</ul>
+<p>本节中的页面</p>
+<ul>
+<li>Levels 标高</li>
+<li>Grids 轴网</li>
+<li>Phase 阶段</li>
+<li>Design Options 设计选项</li>
+</ul>
+<h2 id="标高"><a href="#标高" class="headerlink" title="标高"></a>标高</h2><p>标高是一个有限的水平面，用作以标高为主体的图元（如墙、屋顶、楼板和天花板）的参照。</p>
+<p>在Revit Platform API中，Level类派生自DatumPlane类，而DatumPlane类派生自Element类。继承的Name属性用于检索Revit UI中标高编号旁边的用户可见标高名称。若要检索项目中的所有标高，请将ElementClassFilter与Level类一起使用。</p>
+<h3 id="高程"><a href="#高程" class="headerlink" title="高程"></a>高程</h3><p>Level类具有以下属性：</p>
+<ul>
+<li>“高程”特性用于检索或更改高于或低于地平面的高程。</li>
+<li>ProjectElevation属性用于检索相对于项目原点的高程，而不考虑高程基准参数值。</li>
+<li>“高程基准”值是一个标高类型参数。<ul>
+<li>它的内置参数是LEVEL_RELATIVE_BASE_TYPE。</li>
+<li>它的类型是整型</li>
+<li>0对应于项目，1对应于共享。</li>
+</ul>
+</li>
+</ul>
+<p>下面的代码示例阐释如何使用Level类筛选器检索项目中的所有标高。</p>
+<p>代码区域15-1：检索所有标高</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Getinfo_Level</span>(<span class="params">Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        StringBuilder levelInformation = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="built_in">int</span> levelNumber = <span class="number">0</span>;</span><br><span class="line">        FilteredElementCollector collector = <span class="keyword">new</span> FilteredElementCollector(document);</span><br><span class="line">        ICollection collection = collector.OfClass(<span class="keyword">typeof</span>(Level)).ToElements();</span><br><span class="line">        <span class="keyword">foreach</span> (Element e <span class="keyword">in</span> collection)</span><br><span class="line">        &#123;</span><br><span class="line">                Level level = e <span class="keyword">as</span> Level;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (<span class="literal">null</span> != level)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="comment">// keep track of number of levels</span></span><br><span class="line">                        levelNumber++;</span><br><span class="line"></span><br><span class="line">                        <span class="comment">//get the name of the level</span></span><br><span class="line">                        levelInformation.Append(<span class="string">&quot;\nLevel Name: &quot;</span> + level.Name);</span><br><span class="line"></span><br><span class="line">                        <span class="comment">//get the elevation of the level</span></span><br><span class="line">                        levelInformation.Append(<span class="string">&quot;\n\tElevation: &quot;</span> + level.Elevation);</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// get the project elevation of the level</span></span><br><span class="line">                        levelInformation.Append(<span class="string">&quot;\n\tProject Elevation: &quot;</span> + level.ProjectElevation);</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//number of total levels in current document</span></span><br><span class="line">        levelInformation.Append(<span class="string">&quot;\n\n There are &quot;</span> + levelNumber + <span class="string">&quot; levels in the document!&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//show the level information in the messagebox</span></span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,levelInformation.ToString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创造标高"><a href="#创造标高" class="headerlink" title="创造标高"></a>创造标高</h3><p>使用“标高”命令，可以定义建筑内的垂直高度或楼层，还可以为每个现有楼层或其他建筑参照创建标高。必须在剖面视图或立面视图中添加标高。此外，还可以使用Revit平台API创建新标高。</p>
+<p>下面的代码示例阐释如何创建新标高。</p>
+<p>代码区域15-2：创建新标高</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Level <span class="title">CreateLevel</span>(<span class="params">Autodesk.Revit.DB.Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// The elevation to apply to the new level</span></span><br><span class="line">    <span class="built_in">double</span> elevation = <span class="number">20.0</span>; </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Begin to create a level</span></span><br><span class="line">    Level level = Level.Create(document, elevation);</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> == level)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Create a new level failed.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Change the level name</span></span><br><span class="line">    level.Name = <span class="string">&quot;New level&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> level;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：创建新标高后，Revit不会为此标高创建关联的平面视图。如果有必要，您可以自己创建。有关如何创建平面视图的详细信息，请参见平面视图。</p>
+<h2 id="轴网"><a href="#轴网" class="headerlink" title="轴网"></a>轴网</h2><p>Grid类表示Autodesk Revit中的一条轴网线。</p>
+<p>网格由Grid类表示，Grid类派生自DatumPlane类，DatumPlane类派生自Element类。它包含所有网格属性和方法。继承的Name属性用于检索网格线的内容。</p>
+<h3 id="曲线"><a href="#曲线" class="headerlink" title="曲线"></a>曲线</h3><p>Grid类Curve属性获取表示网格线几何图形的对象。</p>
+<ul>
+<li>如果IsCurved属性返回true，则Curve属性将是Arc类对象。</li>
+<li>如果IsCurved属性返回false，则Curve属性将是Line类对象。</li>
+</ul>
+<p>有关详细信息，请参考几何图形。</p>
+<p>下面的代码是一个使用Grid类的简单示例。调用命令后，结果将显示在消息框中。</p>
+<p>代码区域15-3：使用Grid类</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GetInfo_Grid</span>(<span class="params">Grid grid</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">string</span> message = <span class="string">&quot;Grid : &quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Show IsCurved property</span></span><br><span class="line">    message += <span class="string">&quot;\nIf grid is Arc : &quot;</span> + grid.IsCurved;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Show Curve information</span></span><br><span class="line">    Autodesk.Revit.DB.Curve curve = grid.Curve;</span><br><span class="line">    <span class="keyword">if</span> (grid.IsCurved)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// if the curve is an arc, give center and radius information</span></span><br><span class="line">        Autodesk.Revit.DB.Arc arc = curve <span class="keyword">as</span> Autodesk.Revit.DB.Arc;</span><br><span class="line">        message += <span class="string">&quot;\nArc&#x27;s radius: &quot;</span> + arc.Radius;</span><br><span class="line">        message += <span class="string">&quot;\nArc&#x27;s center:  (&quot;</span> + XYZToString(arc.Center);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// if the curve is a line, give length information</span></span><br><span class="line">        Autodesk.Revit.DB.Line line = curve <span class="keyword">as</span> Autodesk.Revit.DB.Line;</span><br><span class="line">        message += <span class="string">&quot;\nLine&#x27;s Length: &quot;</span> + line.Length;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Get curve start point</span></span><br><span class="line">    message += <span class="string">&quot;\nStart point: &quot;</span> + XYZToString(curve.GetEndPoint(<span class="number">0</span>));</span><br><span class="line">    <span class="comment">// Get curve end point</span></span><br><span class="line">    message += <span class="string">&quot;; End point: &quot;</span> + XYZToString(curve.GetEndPoint(<span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,message);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// output the point&#x27;s three coordinates</span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">XYZToString</span>(<span class="params">XYZ point</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;(&quot;</span> + point.X + <span class="string">&quot;, &quot;</span> + point.Y + <span class="string">&quot;, &quot;</span> + point.Z + <span class="string">&quot;)&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建轴网"><a href="#创建轴网" class="headerlink" title="创建轴网"></a>创建轴网</h3><p>Grid类中有两个重载的Create（）方法可用于在Revit Platform API中创建新的轴网。使用以下方法和不同的参数，可以创建曲线或直线格线：</p>
+<p>代码区域15-4：Grid.Create（）</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Grid <span class="title">Create</span>(<span class="params"> Document document, Arc arc </span>)</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> Grid <span class="title">Create</span>(<span class="params"> Document document, Line line </span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>注意：用于创建网格的弧或线必须位于水平面内。</p>
+<p>下面的代码示例演示如何创建带有直线或圆弧的新轴网。</p>
+<p>代码区域15-5：使用直线或圆弧创建网格</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CreateGrid</span>(<span class="params">Autodesk.Revit.DB.Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Create the geometry line which the grid locates</span></span><br><span class="line">    XYZ start = <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    XYZ end = <span class="keyword">new</span> XYZ(<span class="number">30</span>, <span class="number">30</span>, <span class="number">0</span>);</span><br><span class="line">    Line geomLine = Line.CreateBound(start, end);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create a grid using the geometry line</span></span><br><span class="line">    Grid lineGrid = Grid.Create(document, geomLine);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> == lineGrid)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Create a new straight grid failed.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Modify the name of the created grid</span></span><br><span class="line">    lineGrid.Name = <span class="string">&quot;New Name1&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create the geometry arc which the grid locates</span></span><br><span class="line">    XYZ end0 = <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    XYZ end1 = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">40</span>, <span class="number">0</span>);</span><br><span class="line">    XYZ pointOnCurve = <span class="keyword">new</span> XYZ(<span class="number">5</span>, <span class="number">7</span>, <span class="number">0</span>);</span><br><span class="line">    Arc geomArc = Arc.Create(end0, end1, pointOnCurve);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create a grid using the geometry arc</span></span><br><span class="line">    Grid arcGrid = Grid.Create(document, geomArc);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> == arcGrid)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Create a new curved grid failed.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Modify the name of the created grid</span></span><br><span class="line">    arcGrid.Name = <span class="string">&quot;New Name2&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：在Revit中，创建轴网时，轴网将自动按数字或字母顺序命名。</p>
+<h2 id="阶段"><a href="#阶段" class="headerlink" title="阶段"></a>阶段</h2><p>一些建筑项目，如翻新，分阶段进行。阶段具有以下特征：</p>
+<ul>
+<li>阶段表示项目生命周期中的不同时间段。</li>
+<li>建筑物内图元的寿命由阶段控制。</li>
+<li>每个元素都有一个构造阶段，但只有具有有限寿命的元素才有一个破坏阶段。</li>
+</ul>
+<p>项目中的所有阶段都可以从Document对象中检索。Phase对象包含三个有用的信息：Name、ID和UniqueId。其余属性始终返回null或空集合。</p>
+<p>添加到项目中的每个新建模构件都具有“创建的阶段ID”和“拆除的阶段ID”特性。Element.AllowPhases（）方法指示是否可以修改其阶段ID属性。</p>
+<p>“创建的阶段ID”特性具有以下特征：</p>
+<ul>
+<li>它标识添加组件的阶段。</li>
+<li>默认值为与当前视图“阶段”值相同的ID。</li>
+<li>通过选择与下拉列表相对应的新值来更改“创建的阶段ID”参数。</li>
+</ul>
+<p>已拆除阶段ID属性具有以下特征：</p>
+<ul>
+<li>它标识在哪个阶段拆除构件。</li>
+<li>默认值为无。</li>
+<li>使用拆除工具拆除构件会将特性更新为拆除图元所在视图中的当前阶段ID值。</li>
+<li>可以通过将“已拆除的阶段ID”特性设置为其他值来拆除构件。</li>
+<li>如果使用Revit Platform API删除某个阶段，则当前阶段中的所有建模构件仍然存在。这些元件的“创建的阶段ID”参数值将更改为“特性”对话框下拉列表中的下一项。 <img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-3840696A-98D6-4898-8004-EFB85A3247E1-low.png" alt="img"></li>
+</ul>
+<p>图65：阶段创建的组件参数值</p>
+<p>下面的代码示例显示当前文档中支持的所有阶段。阶段名称显示在消息框中。</p>
+<p>代码区域15-6：展示所有支持的阶段</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Getinfo_Phase</span>(<span class="params">Document doc</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">// Get the phase array which contains all the phases.</span></span><br><span class="line">        PhaseArray phases = doc.Phases;</span><br><span class="line">        <span class="comment">// Format the string which identifies all supported phases in the current document.</span></span><br><span class="line">        String prompt = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> != phases.Size)</span><br><span class="line">        &#123;</span><br><span class="line">                prompt = <span class="string">&quot;All the phases in current document list as follow:&quot;</span>;</span><br><span class="line">                <span class="keyword">foreach</span> (Phase ii <span class="keyword">in</span> phases)</span><br><span class="line">                &#123;</span><br><span class="line">                        prompt += <span class="string">&quot;\n\t&quot;</span> + ii.Name;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">                prompt = <span class="string">&quot;There are no phases in current document.&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// Give the user the information.</span></span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,prompt);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="设计选项"><a href="#设计选项" class="headerlink" title="设计选项"></a>设计选项</h2><p>设计选项提供了一种在项目中探索备选设计的方法。</p>
+<p>设计选项提供了适应项目范围变化或开发供审查的替代设计的灵活性。您可以开始使用主项目模型，然后沿着向客户展示的方式开发变体。大多数图元都可以添加到设计选项中。不能添加到设计选项中的图元被视为主模型的一部分，并且没有设计备选方案。</p>
+<p>设计选项的主要用途是作为元素类的属性。请参阅以下示例。</p>
+<p>代码区域15-7：使用设计选项</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Getinfo_DesignOption</span>(<span class="params">Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the selected Elements in the Active Document</span></span><br><span class="line">    UIDocument uidoc = <span class="keyword">new</span> UIDocument(document);</span><br><span class="line">    ICollection selectedIds = uidoc.Selection.GetElementIds();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">foreach</span> (ElementId id <span class="keyword">in</span> selectedIds)</span><br><span class="line">    &#123;</span><br><span class="line">        Element element = document.GetElement(id);</span><br><span class="line">        <span class="comment">//Use the DesignOption property of Element</span></span><br><span class="line">        <span class="keyword">if</span> (element.DesignOption != <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,element.DesignOption.Name.ToString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下规则适用于设计选项</p>
+<ul>
+<li>如果元素位于主模型中，则DesignOption属性的值为null。否则，将返回在Revit UI中创建的名称。</li>
+<li>ActiveDocument中只能存在一个活动DesignOption元素。<ul>
+<li>主选项被视为默认的活动DesignOption。例如，一个设计选项集名为“墙”，该设计选项集中有两个设计选项，分别名为“砖墙”和“玻璃墙”。如果“砖墙”是主选项，则元素迭代器只检索此选项和属于它的元素。“玻璃墙”不活跃。</li>
+</ul>
+</li>
+</ul>
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 Hexo
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;John Doe
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>
