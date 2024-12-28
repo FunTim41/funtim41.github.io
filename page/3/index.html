@@ -1,5 +1,160 @@
-extends includes/layout.pug
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>funtim - hello</title><meta name="author" content="XH"><meta name="copyright" content="XH"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="ddd">
+<meta property="og:type" content="website">
+<meta property="og:title" content="funtim">
+<meta property="og:url" content="https://funtim41.github.io/page/3/index.html">
+<meta property="og:site_name" content="funtim">
+<meta property="og:description" content="ddd">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://funtim41.github.io/img/butterfly-icon.png">
+<meta property="article:author" content="XH">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://funtim41.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://funtim41.github.io/page/3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
 
-block content
-  include ./includes/mixins/indexPostUI.pug
-  +indexPostUI
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'funtim',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="page" id="body-wrap"><header class="full_page" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">funtim</span></a></span><div id="menus"></div></nav><div id="site-info"><h1 id="site-title">funtim</h1></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/28/12%E5%A2%99%E3%80%81%E6%A5%BC%E6%9D%BF%E3%80%81%E5%A4%A9%E8%8A%B1%E6%9D%BF%E3%80%81%E5%B1%8B%E9%A1%B6%E5%92%8C%E6%B4%9E%E5%8F%A3/" title="无标题">无标题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-28T07:51:48.988Z" title="发表于 2024-12-28 15:51:48">2024-12-28</time></span></div><div class="content">墙、楼板、天花板、屋顶和洞口元素和表示内置位置构造的相应ElementType。 以下部分介绍与内置位置构造（如墙、楼板、天花板、屋顶和洞口）相关的类及其相应的属性。 本节中的页面  墙 楼板、天花板和基础 屋顶 幕墙 其他元素 复合结构 洞口 热属性  墙WallType.Kind枚举表示四种墙：  Stacked 叠层墙 Curtain 幕墙 Basic 基本 Unknown...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/28/11%E4%BA%8B%E5%8A%A1/" title="无标题">无标题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-28T07:51:48.977Z" title="发表于 2024-12-28 15:51:48">2024-12-28</time></span></div><div class="content">事务事务是类似于上下文的对象，可封装对Revit模型所做的任何更改。只有在存在打开的活动事务处理时，才能对文档进行任何更改。尝试在事务之外更改文档将引发异常。在提交活动事务之前，更改不会成为模型的一部分。因此，事务中的所有更改都可以显式或隐式回滚（通过析构函数）。在任何给定时间，每个文档只能打开一个事务。一个事务可以由一个或多个操作组成。 Revit API中有三个与事务相关的主要类：  Transaction 事务 SubTransaction 子事务 TransactionGroup 事务组  本节将更深入地讨论这些类中的每一个类。对文档进行更改时只需要Transaction类。其他类可用于更好地组织更改。 ***注意:***如果事务是从外部线程或外部非模态对话框启动的，则会引发异常。事务只能从支持的API工作流启动，例如外部命令、事件、更新程序或回调的一部分。 本节中的页面  Transaction Classes 事务类 Transactions in Events 事件中的事务 Failure Handling Options 故障处理选项 Getting...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/28/10%E8%A7%86%E5%9B%BE/" title="无标题">无标题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-28T07:51:48.968Z" title="发表于 2024-12-28 15:51:48">2024-12-28</time></span></div><div class="content">视图视图是从 Revit 模型生成的图像，具有对文档中存储的数据的特权访问权限。它们可以是图形 （如计划） 或文本 （如计划）。每个项目文档都有一个或多个不同的视图。最后一个聚焦窗口是活动视图。 Autodesk.Revit.DB.View 类是 Revit 文档中所有视图类型的基类。Autodesk.Revit.UI.UIView 类表示 Revit 用户界面中的窗口视图。 在以下部分中，您将了解如何生成视图、Revit 支持的视图类型、每个视图的功能以及用户界面中视图窗口的可用功能。 Pages in this section 此部分中的页面  About views 关于视图 View Graphics 视图图形 View Types 视图类型 Revisions 修改 View Filters 视图筛选器 View Cropping 视图裁剪 Displaced Views 置换视图 UIView  关于视图Revit API...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/28/09%E7%BC%96%E8%BE%91%E5%85%83%E7%B4%A0/" title="无标题">无标题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-28T07:51:48.954Z" title="发表于 2024-12-28 15:51:48">2024-12-28</time></span></div><div class="content">编辑元素在Revit中，可以使用Revit Platform API移动、复制、旋转、对齐、删除、镜像、编组和排列一个元素或一组元素。在API中使用编辑功能与在Revit UI中使用命令类似。 Pages in this section 本节中的页面  Moving Elements 移动元素 Copying Elements 复制元素 Rotating elements 旋转元素 Aligning Elements 对齐元素 Mirroring Elements 镜像元素 Grouping Elements 对元素进行分组 Creating Arrays of Elements 创建元素数组 Deleting Elements 删除元素 Pinned Elements 固定元素  移动元素ElementTransformUtils类提供两个静态方法来将一个或多个元素从一个位置移动到另一个位置。 表19：移动方法    Member **Description **    MoveElement( Document, ElementId,...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/28/08%E9%9B%86%E5%90%88/" title="无标题">无标题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-28T07:51:48.942Z" title="发表于 2024-12-28 15:51:48">2024-12-28</time></span></div><div class="content">集合大多数Revit Platform API属性和方法在提供对一组相关项的访问时都使用.NET Framework集合类。 在Revit集合类型中实现的IEnumerator和IEnumerator接口在System.Collection命名空间中定义。 Pages in this section 本节中的页面  Interface 接口 Collections and Iterators 集合和迭代器  Interface...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/28/07%E5%8F%82%E6%95%B0/" title="无标题">无标题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-28T07:51:48.933Z" title="发表于 2024-12-28 15:51:48">2024-12-28</time></span></div><div class="content">参数Revit提供了一种常规机制，为每个图元提供一组可编辑的参数。 在Revit UI中，某些图元参数在“图元属性”窗口中可见。以下各节介绍如何获取和使用内置参数、共享参数和全局参数。 在Revit Platform...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/28/06%E9%80%89%E6%8B%A9/" title="无标题">无标题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-28T07:51:48.921Z" title="发表于 2024-12-28 15:51:48">2024-12-28</time></span></div><div class="content">选择您可以使用UIDo.Selection.GetElementIds()方法从当前活动文档中获取所选对象，该方法返回所选元素的ElementIds集合。此方法返回的集合可以直接与FilteredElementCollector一起使用，以筛选选定的元素。 Selection对象还可以用于使用SetElementIds()方法以编程方式更改当前选择。 Pages in this section 本节中的页面  Changing the Selection 更改选择 User Selection 用户选择 Filtered User Selection 筛选的用户选择  更改选择要修改选定的图元，请执行以下操作：  创建新的ElementId列表。 把ElementIds放进去。 使用新列表调用SetElementIds()。  下面的示例说明了如何通过获取当前选择并仅过滤出墙以设置为新选择来更改选定的元素。 代码区域7-1：更改所选元素 123456789101112131415161718192021222324252627282930313233private void...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/28/05%E8%BF%87%E6%BB%A4/" title="无标题">无标题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-28T07:51:48.906Z" title="发表于 2024-12-28 15:51:48">2024-12-28</time></span></div><div class="content">Filtering 过滤Revit API提供了一种过滤和迭代Revit文档中图元的机制。这是获取一组相关元素（如文档中的所有墙或门）的最佳方法。过滤器也可以用来找到一个非常具体的元素集，如所有特定大小的梁。 获取通过指定过滤器的元素的基本步骤如下：  创建新的FilteredElementCollector 对它应用一个或多个过滤器 获取过滤后的元素或元素ID（使用以下几种方法之一）  下面的示例涵盖了在文档中筛选和迭代元素的基本步骤。 代码区域6-1：使用元素过滤获取文档中的所有墙实例 1234567891011121314// Find all Wall instances in the document by using category filterElementCategoryFilter filter = new ElementCategoryFilter(BuiltInCategory.OST_Walls);// Apply the filter to the elements in the active document// Use shortcut...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/28/04%E5%85%83%E7%B4%A0%E8%A6%81%E7%82%B9/" title="无标题">无标题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-28T07:51:48.891Z" title="发表于 2024-12-28 15:51:48">2024-12-28</time></span></div><div class="content">元素要点元素对应于单个建筑或绘图构件，例如门、墙或尺寸标注。此外，元素可以是门类型、视图或材质定义。 元素分类Revit 图元分为六组：模型、草图、视图、组、注释和信息。每个组都包含相关的元素及其相应的符号。 模型元素模型元素表示建筑项目中存在的物理项。“模型元素”组中的元素可以细分为以下元素： 族实例 - 族实例包含族实例对象。可以将族对象载入到项目中，也可以从族样板创建族对象。有关更多信息，请参阅系列实例。 主体图元 - 主体图元包含系统族对象，这些对象可以包含其他模型图元，例如墙、屋顶、天花板和楼板。有关主体图元的更多信息，请参见墙、楼板、屋顶和洞口。 结构元素-结构图元包含仅用于 Revit 结构特征的图元。有关 Structure Elements 的更多信息，请参见 Structural Engineering。 视图元素视图图元表示在 Revit 中查看其他对象并与其他对象交互的方式。有关更多信息，请参阅视图。 组元素组图元表示辅助图元，例如 Revit...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/28/03%E5%BA%94%E7%94%A8%E5%8F%8A%E6%96%87%E6%A1%A3/" title="无标题">无标题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-12-28T07:51:48.882Z" title="发表于 2024-12-28 15:51:48">2024-12-28</time></span></div><div class="content">Application及DocumentRevit 平台 API 中的顶级对象是Application和Document。这些类由 Application、UIApplication、Document 和 UIDocument 类表示。 Application对象是指单个 Revit 任务，提供对文档、选项和其他应用程序范围的数据和设置的访问。 Autodesk.Revit.UI.UIApplication - 提供对应用程序的 UI 级界面的访问，包括将 RibbonPanel 添加到用户界面的功能，以及在用户界面中获取活动文档的功能。 Autodesk.Revit.ApplicationServices.Application - 提供对所有其他应用程序级别属性的访问。 Document是表示建筑模型的单个 Revit 项目文件。Revit 可以打开多个项目，并为一个项目打开多个视图。 Autodesk.Revit.UI.UIDocument - 提供对文档的 UI...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/2/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#content-inner">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/#content-inner">4</a><a class="extend next" rel="next" href="/page/4/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">XH</div><div class="author-info-description">ddd</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/33%E5%91%BD%E4%BB%A4/" title="无标题">无标题</a><time datetime="2024-12-28T07:51:49.173Z" title="发表于 2024-12-28 15:51:49">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/32%E5%8A%A8%E6%80%81%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0/" title="无标题">无标题</a><time datetime="2024-12-28T07:51:49.166Z" title="发表于 2024-12-28 15:51:49">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/31%E5%8F%AF%E5%81%9C%E9%9D%A0%E5%AF%B9%E8%AF%9D%E6%A1%86%E7%AA%97%E6%A0%BC/" title="无标题">无标题</a><time datetime="2024-12-28T07:51:49.156Z" title="发表于 2024-12-28 15:51:49">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/30%E5%A4%96%E9%83%A8%E4%BA%8B%E4%BB%B6/" title="无标题">无标题</a><time datetime="2024-12-28T07:51:49.148Z" title="发表于 2024-12-28 15:51:49">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/29%E4%BA%8B%E4%BB%B6/" title="无标题">无标题</a><time datetime="2024-12-28T07:51:49.140Z" title="发表于 2024-12-28 15:51:49">2024-12-28</time></div></div></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      
+    </div>
+    <ul class="card-archive-list">
+  
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/12/">
+          <span class="card-archive-list-date">十二月 2024</span>
+          <span class="card-archive-list-count">32</span>
+        </a>
+      </li>
+    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">32</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2024-12-28T08:25:09.404Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By XH</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
