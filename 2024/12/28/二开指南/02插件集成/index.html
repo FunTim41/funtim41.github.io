@@ -1,0 +1,755 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>02插件集成 | funtim的博客</title><meta name="author" content="funtim"><meta name="copyright" content="funtim"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="插件集成开发人员通过创建和实现 External Commands 和 External Applications 来添加功能。Revit 使用 .addin 清单文件标识新命令和应用程序。外部命令显示在 Add-Ins 选项卡上的 External Tools 菜单按钮下。外部应用程序在 Revit 启动时调用，在 Revit 关闭时卸载。 本章重点介绍以下内容：  了解如何使用 Externa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="02插件集成">
+<meta property="og:url" content="https://funtim41.github.io/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/02%E6%8F%92%E4%BB%B6%E9%9B%86%E6%88%90/">
+<meta property="og:site_name" content="funtim的博客">
+<meta property="og:description" content="插件集成开发人员通过创建和实现 External Commands 和 External Applications 来添加功能。Revit 使用 .addin 清单文件标识新命令和应用程序。外部命令显示在 Add-Ins 选项卡上的 External Tools 菜单按钮下。外部应用程序在 Revit 启动时调用，在 Revit 关闭时卸载。 本章重点介绍以下内容：  了解如何使用 Externa">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://funtim41.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-28T12:53:19.000Z">
+<meta property="article:modified_time" content="2024-12-28T13:19:57.684Z">
+<meta property="article:author" content="funtim">
+<meta property="article:tag" content="Revit二次开发人员指南">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://funtim41.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/OIP.jfif"><link rel="canonical" href="https://funtim41.github.io/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/02%E6%8F%92%E4%BB%B6%E9%9B%86%E6%88%90/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: funtim","link":"链接: ","source":"来源: funtim的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '02插件集成',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/OIP.jfif" alt="Logo"><span class="site-name">funtim的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">02插件集成</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">02插件集成</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-28T12:53:19.000Z" title="发表于 2024-12-28 20:53:19">2024-12-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-28T13:19:57.684Z" title="更新于 2024-12-28 21:19:57">2024-12-28</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="插件集成"><a href="#插件集成" class="headerlink" title="插件集成"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Introduction_Add_In_Integration_html">插件集成</a></h1><p>开发人员通过创建和实现 External Commands 和 External Applications 来添加功能。Revit 使用 .addin 清单文件标识新命令和应用程序。外部命令显示在 Add-Ins 选项卡上的 External Tools 菜单按钮下。外部应用程序在 Revit 启动时调用，在 Revit 关闭时卸载。</p>
+<p>本章重点介绍以下内容：</p>
+<ul>
+<li>了解如何使用 External Commands 和 External Applications 添加功能。</li>
+<li>如何访问 Revit 事件。</li>
+<li>如何自定义 Revit UI。</li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Revit 平台 API 基于 Revit 应用程序功能。Revit 平台 API 由两个类库组成，这两个类库仅在 Revit 运行时工作。</p>
+<p>RevitAPI.dll包含用于在数据库级别访问 Revit 的应用程序、文档、图元和参数的方法。它还包含 IExternalDBApplication 和相关接口。</p>
+<p>RevitAPIUI.dll包含与 Revit 用户界面的操作和自定义相关的所有 API 接口，包括：</p>
+<ul>
+<li>IExternalCommand 和 External Command 相关接口</li>
+<li>IExternalApplication 和相关接口</li>
+<li>Selection 选择</li>
+<li>RibbonPanel、RibbonItem 和子类</li>
+<li>TaskDialogs 任务对话框</li>
+</ul>
+<p>如下图所示，Revit Architecture、Revit Structure 和 Revit MEP 分别特定于 Architecture、Structure 和 MEP。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-EADE225A-E8F2-4EB8-BB94-00CA8759C1E9-low.png" alt="[]()"></p>
+<p>要创建基于 RevitAPI 的插件，必须在插件 DLL 中提供特定的入口点类型。这些入口点类实现接口IExternalCommand、IExternalApplication 或 IExternalDBApplication。通过这种方式，加载项在某些事件上自动运行，或者在 IExternalCommand 和 IExternalApplication 的情况下，从“外部工具”菜单按钮手动运行。</p>
+<p>本章介绍了 IExternalCommand、IExternalApplication、IExternalDBApplication 和其他可用于附加模块集成的 Revit 事件。</p>
+<h2 id="外部命令"><a href="#外部命令" class="headerlink" title="外部命令"></a>外部命令</h2><p>开发人员可以通过实现 External Tools 菜单按钮中显示的 External Commands 来添加功能。</p>
+<h3 id="加载和运行外部命令"><a href="#加载和运行外部命令" class="headerlink" title="加载和运行外部命令"></a>加载和运行外部命令</h3><p>当 Revit 中没有其他命令或编辑模式处于活动状态时，将启用已注册的外部命令。选择命令后，将创建一个命令对象并调用其 Execute() 方法。此方法返回到 Revit 后，命令对象将被销毁。因此，在命令执行之间，数据无法保留在对象中。但是，还有其他方法可以在命令执行之间保存数据;例如，可以使用 Revit 共享参数机制将数据存储在 Revit 项目中。</p>
+<p>您可以将外部命令添加到“外部工具”菜单按钮下的“外部工具面板”中，或者作为“插件”选项卡、“分析”选项卡或新的自定义功能区选项卡上的自定义功能区面板。有关这两种方法的示例，请参阅演练：Hello World 和演练：添加 Hello World 功能区面板。<br>外部工具、功能区选项卡和功能区面板在启动时进行初始化。初始化步骤如下：</p>
+<ul>
+<li>Revit 读取清单文件并识别：</li>
+<li>可调用的外部应用程序。</li>
+<li>可添加到 Revit 外部工具菜单按钮的外部工具。</li>
+<li>外部应用程序会话将面板和内容添加到“加载项”选项卡中。</li>
+</ul>
+<h3 id="IExternalCommand"><a href="#IExternalCommand" class="headerlink" title="IExternalCommand"></a>IExternalCommand</h3><p>通过创建实现 IExternalCommand 接口的对象，可以创建外部命令。IExternalCommand 接口有一个抽象方法 Execute，它是外部命令的主要方法。</p>
+<p>Execute() 方法有三个参数：</p>
+<ul>
+<li>commandData (ExternalCommandData）</li>
+<li>message (String) </li>
+<li>elements (ElementSet)</li>
+</ul>
+<p>ExternalCommandData 对象包含外部命令所需的对 Application 和 View 的引用。所有 Revit 数据都是从外部命令中的此参数直接或间接检索的。</p>
+<p>例如，以下语句说明了如何从 commandData 参数检索 Autodesk.Revit.Document：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Document doc = commandData.Application.ActiveUIDocument.Document;</span><br></pre></td></tr></table></figure>
+
+<p>下表说明了 ExternalCommandData </p>
+<p>公共属性表 1：ExternalCommandData 公共属性</p>
+<table>
+<thead>
+<tr>
+<th><strong>Property 成员</strong></th>
+<th><strong>Description 描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Application (Autodesk.Revit.UI.UIApplication)</td>
+<td>检索表示当前 UIApplication for external 命令的对象。</td>
+</tr>
+<tr>
+<td>JournalData (IDictionary&lt;String, String&gt;)</td>
+<td>可用于将数据读取和写入 Revit 日志文件的数据映射。</td>
+</tr>
+<tr>
+<td>View (Autodesk.Revit.DB.View)</td>
+<td>检索表示 View 外部命令处理的对象。</td>
+</tr>
+</tbody></table>
+<p>message (String):错误消息由外部命令使用输出参数 message 返回。string-type 参数在外部命令进程中设置。返回 Autodesk.Revit.UI.Result.Failed 或 Autodesk.Revit.UI.Result.Cancelled 并设置消息参数时，会显示一个错误对话框。<br>以下代码示例说明了如何使用 message 参数。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">IExternalCommand_message</span> : <span class="title">IExternalCommand</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">public</span> Autodesk.Revit.UI.<span class="function">Result <span class="title">Execute</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">                Autodesk.Revit.ExternalCommandData commandData, <span class="keyword">ref</span> <span class="built_in">string</span> message,</span></span></span><br><span class="line"><span class="params"><span class="function">                Autodesk.Revit.ElementSet elements</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                message = <span class="string">&quot;Could not locate walls for analysis.&quot;</span>;</span><br><span class="line">                <span class="keyword">return</span> Autodesk.Revit.UI.Result.Failed;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实施前面的 external 命令会导致出现以下对话框：</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-6E76ABBE-ED74-437E-B2FC-D92C9955C035-low.png"></p>
+<p>elements（ElementSet）：每当返回 Autodesk.Revit.UI.Result.Failed 或 Autodesk.Revit.UI.Result.Canceled 且参数消息不为空时，都会显示错误或警告对话框。此外，如果向 elements 参数添加了任何元素，则这些元素将在屏幕上突出显示。每当命令失败时，无论是否还返回元素，最好设置 message 参数。 以下代码高亮显示预先选择的墙：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">IExternalcommand_elements</span> : <span class="title">IExternalCommand</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> Result <span class="title">Execute</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">                Autodesk.Revit.UI.ExternalCommandData commandData, <span class="keyword">ref</span> <span class="built_in">string</span> message,</span></span></span><br><span class="line"><span class="params"><span class="function">                Autodesk.Revit.DB.ElementSet elements</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                message = <span class="string">&quot;Please note the highlighted Walls.&quot;</span>;</span><br><span class="line">                FilteredElementCollector collector = <span class="keyword">new</span> FilteredElementCollector(commandData.Application.ActiveUIDocument.Document);</span><br><span class="line">                ICollection collection = collector.OfClass(<span class="keyword">typeof</span>(Wall)).ToElements();</span><br><span class="line">                <span class="keyword">foreach</span> (Element e <span class="keyword">in</span> collection)</span><br><span class="line">                &#123;</span><br><span class="line">                        elements.Insert(e);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> Result.Failed;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Return 返回:Return 结果表示执行失败、成功或被用户取消。如果不成功，Revit 将撤消外部命令所做的更改。</p>
+<p><strong>表 2：IExternalCommand.Result</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>Member Name 成员名称</strong></th>
+<th><strong>Description 描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Autodesk.Revit.UI.Result.Succeeded</td>
+<td>外部命令已成功完成。Revit 保留由外部命令所做的所有更改。</td>
+</tr>
+<tr>
+<td>Autodesk.Revit.UI.Result.Failed</td>
+<td>外部命令未能完成任务。Revit 将撤消由外部命令执行的操作。如果设置了 Execute 的消息参数，Revit 将显示一个对话框，其中包含文本“错误 - 无法忽略”。</td>
+</tr>
+<tr>
+<td>Autodesk.Revit.UI.Result.Cancelled</td>
+<td>Revit 将撤消由外部命令所做的更改。如果设置了 Execute 的消息参数，Revit 将显示一个对话框，其中包含文本“警告 - 可以忽略”。</td>
+</tr>
+</tbody></table>
+<p>以下示例显示问候消息，并允许用户选择返回值。使用 Execute() 方法作为 Revit 应用程序的入口。<br>代码区域 3-4：提示用户</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Autodesk.Revit.UI.<span class="function">Result <span class="title">Execute</span>(<span class="params">ExternalCommandData commandData,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="keyword">ref</span> <span class="built_in">string</span> message, ElementSet elements</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">        Document doc = commandData.Application.ActiveUIDocument.Document;</span><br><span class="line">        UIDocument uidoc = commandData.Application.ActiveUIDocument;</span><br><span class="line">        <span class="comment">// Delete selected elements</span></span><br><span class="line"></span><br><span class="line">        ICollection&lt;Autodesk.Revit.DB.ElementId&gt; ids =</span><br><span class="line">            doc.Delete(uidoc.Selection.GetElementIds());</span><br><span class="line">    </span><br><span class="line">        TaskDialog taskDialog = <span class="keyword">new</span> TaskDialog(<span class="string">&quot;Revit&quot;</span>); </span><br><span class="line">        taskDialog.MainContent = </span><br><span class="line">            (<span class="string">&quot;Click Yes to return Succeeded. Selected members will be deleted.\n&quot;</span> +</span><br><span class="line">            <span class="string">&quot;Click No to return Failed.  Selected members will not be deleted.\n&quot;</span> +</span><br><span class="line">            <span class="string">&quot;Click Cancel to return Cancelled.  Selected members will not be deleted.&quot;</span>);</span><br><span class="line">        TaskDialogCommonButtons buttons = TaskDialogCommonButtons.Yes | </span><br><span class="line">            TaskDialogCommonButtons.No | TaskDialogCommonButtons.Cancel;</span><br><span class="line">        taskDialog.CommonButtons = buttons;</span><br><span class="line">        TaskDialogResult taskDialogResult = taskDialog.Show();</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span> (taskDialogResult == TaskDialogResult.Yes)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> Autodesk.Revit.UI.Result.Succeeded;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (taskDialogResult == TaskDialogResult.No)</span><br><span class="line">        &#123;</span><br><span class="line">            ICollection selectedElementIds = uidoc.Selection.GetElementIds();</span><br><span class="line">            <span class="keyword">foreach</span> (ElementId id <span class="keyword">in</span> selectedElementIds)</span><br><span class="line">            &#123;</span><br><span class="line">                elements.Insert( doc.GetElement(id) );</span><br><span class="line">            &#125;</span><br><span class="line">            message = <span class="string">&quot;Failed to delete selection.&quot;</span>;</span><br><span class="line">            <span class="keyword">return</span> Autodesk.Revit.UI.Result.Failed;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> Autodesk.Revit.UI.Result.Cancelled;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span></span><br><span class="line">    &#123;</span><br><span class="line">        message = <span class="string">&quot;Unexpected Exception thrown.&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> Autodesk.Revit.UI.Result.Failed;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>IExternalCommandAvailability</p>
+<p>此界面允许您控制是否可以按下外部命令按钮。IsCommandAvailable 接口方法将应用程序和一组与 Revit 中选定项目的类别匹配的类别传递给您的实现。典型用途是检查所选类别，以查看它们是否满足要运行命令的条件。</p>
+<p>在此示例中，辅助功能检查允许在没有活动选择或至少选择了一面墙时单击按钮：</p>
+<p>代码区域 3-5：设置命令可用性</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SampleAccessibilityCheck</span> : <span class="title">IExternalCommandAvailability</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">IsCommandAvailable</span>(<span class="params">AutodeskAutodesk.Revit.UI.UIApplication applicationData,</span></span></span><br><span class="line"><span class="params"><span class="function">                CategorySet selectedCategories</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="comment">// Allow button click if there is no active selection</span></span><br><span class="line">                <span class="keyword">if</span> (selectedCategories.IsEmpty)</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                <span class="comment">// Allow button click if there is at least one wall selected</span></span><br><span class="line">                <span class="keyword">foreach</span> (Category c <span class="keyword">in</span> selectedCategories)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="keyword">if</span> (c.Id.IntegerValue == (<span class="built_in">int</span>)BuiltInCategory.OST_Walls)</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="外部应用程序"><a href="#外部应用程序" class="headerlink" title="外部应用程序"></a>外部应用程序</h2><p>开发人员可以通过外部应用程序和外部命令添加功能。功能区选项卡和功能区面板使用外部应用程序进行自定义。功能区面板按钮绑定到外部命令。</p>
+<h3 id="IExternalApplication"><a href="#IExternalApplication" class="headerlink" title="IExternalApplication"></a>IExternalApplication</h3><p>若要将外部应用程序添加到 Revit，请创建一个实现 IExternalApplication 接口的对象。IExternalApplication 接口有两个抽象方法，即 OnStartup() 和 OnShutdown()，您可以在外部应用程序中重写它们。Revit 在启动时调用 OnStartup()，在关闭时调用 OnShutdown()。</p>
+<p>这是 OnStartup() 和 OnShutdown() 抽象定义：</p>
+<p>代码区域 3-6：OnShutdown() 和 OnStartup()</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IExternalApplication</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">public</span> Autodesk.Revit.UI.<span class="function">Result <span class="title">OnStartup</span>(<span class="params">UIControlledApplication application</span>)</span>;</span><br><span class="line">        <span class="keyword">public</span> Autodesk.Revit.UI.<span class="function">Result <span class="title">OnShutdown</span>(<span class="params">UIControlledApplication application</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>UIControlledApplication 参数提供对某些 Revit 事件的访问，并允许自定义功能区面板和控件以及添加功能区选项卡。例如，UIControlledApplication 的公共事件 DialogBoxShowing 可用于捕获正在显示的对话框的事件。以下代码段注册了在显示对话框之前调用的处理函数。</p>
+<p>代码区域 3-7：DialogBoxShowing 事件</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">application.DialogBoxShowing += <span class="keyword">new</span> </span><br><span class="line">        EventHandler&lt;Autodesk.Revit.Events.DialogBoxShowingEventArgs&gt;(AppDialogShowing);</span><br></pre></td></tr></table></figure>
+
+<p>下面的代码示例说明了如何使用 UIControlledApplication 类型注册事件处理程序并在事件发生时处理事件。</p>
+<p>代码区域 3-8：使用 ControlledApplication</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Application_DialogBoxShowing</span> : <span class="title">IExternalApplication</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">// Implement the OnStartup method to register events when Revit starts.</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Result <span class="title">OnStartup</span>(<span class="params">UIControlledApplication application</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="comment">// Register related events</span></span><br><span class="line">                application.DialogBoxShowing += </span><br><span class="line">        <span class="keyword">new</span> EventHandler&lt;Autodesk.Revit.UI.Events.DialogBoxShowingEventArgs&gt;(AppDialogShowing);</span><br><span class="line">                <span class="keyword">return</span> Result.Succeeded;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Implement this method to unregister the subscribed events when Revit exits.</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Result <span class="title">OnShutdown</span>(<span class="params">UIControlledApplication application</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">    </span><br><span class="line">                <span class="comment">// unregister events</span></span><br><span class="line">                application.DialogBoxShowing -= </span><br><span class="line">        <span class="keyword">new</span> EventHandler&lt;Autodesk.Revit.UI.Events.DialogBoxShowingEventArgs&gt;(AppDialogShowing);</span><br><span class="line">                <span class="keyword">return</span> Result.Succeeded;</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// The DialogBoxShowing event handler, which allow you to </span></span><br><span class="line">        <span class="comment">// do some work before the dialog shows</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">AppDialogShowing</span>(<span class="params"><span class="built_in">object</span> sender, DialogBoxShowingEventArgs <span class="keyword">args</span></span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// Get the help id of the showing dialog</span></span><br><span class="line">            <span class="built_in">string</span> dialogId = <span class="keyword">args</span>.DialogId;</span><br><span class="line">    </span><br><span class="line">            <span class="comment">// return if the dialog has no DialogId (such as with a Task Dialog)</span></span><br><span class="line">            <span class="keyword">if</span> (dialogId == <span class="string">&quot;&quot;</span>)</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">    </span><br><span class="line">            <span class="comment">// Show the prompt message and allow the user to close the dialog directly.</span></span><br><span class="line">            TaskDialog taskDialog = <span class="keyword">new</span> TaskDialog(<span class="string">&quot;Revit&quot;</span>);</span><br><span class="line">            taskDialog.MainContent = <span class="string">&quot;A Revit dialog is about to be opened.\n&quot;</span> +</span><br><span class="line">                <span class="string">&quot;The DialogId of this dialog is &quot;</span> + dialogId + <span class="string">&quot;\n&quot;</span> +</span><br><span class="line">                <span class="string">&quot;Press &#x27;Cancel&#x27; to immediately dismiss the dialog&quot;</span>;</span><br><span class="line">            taskDialog.CommonButtons = TaskDialogCommonButtons.Ok |</span><br><span class="line">                                         TaskDialogCommonButtons.Cancel;</span><br><span class="line">            TaskDialogResult result = taskDialog.Show();</span><br><span class="line">            <span class="keyword">if</span> (TaskDialogResult.Cancel == result)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// dismiss the Revit dialog </span></span><br><span class="line">                <span class="keyword">args</span>.OverrideResult(<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="插件注册"><a href="#插件注册" class="headerlink" title="插件注册"></a>插件注册</h2><p>需要注册外部命令和外部应用程序才能显示在 Revit 中。可以通过将它们添加到 .addin 清单文件来注册它们。外部命令和应用程序在 Revit 中的列出顺序取决于 Revit 启动时的读入顺序。</p>
+<h3 id="清单文件"><a href="#清单文件" class="headerlink" title="清单文件"></a>清单文件</h3><p>Revit API 应用程序通过 .addin 清单文件注册到 Revit。将清单文件放置在用户系统上的两个位置之一时，Revit 会自动读取这些文件：</p>
+<ul>
+<li>C:\ProgramData\Autodesk\Revit\Addins\Revit 2018\</li>
+<li>C:\Users\AppData\Roaming\Autodesk\Revit\Addins\Revit 2018\</li>
+</ul>
+<p>在启动期间，Revit 将读取和处理这些位置中名为 .addin 的所有文件。用户特定位置和所有用户位置中的所有文件都被视为一起，并按字母顺序加载。如果所有用户清单文件与特定于用户的清单文件同名，则忽略所有用户清单文件。在每个清单文件中，外部命令和外部应用程序将按照它们的列出顺序加载。</p>
+<p>添加一个 ExternalCommand 的基本文件如下所示：</p>
+<p>代码区域 3-9：清单 .addin ExternalCommand</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span> standalone=<span class="string">&quot;no&quot;</span>?&gt;</span><br><span class="line">&lt;RevitAddIns&gt;</span><br><span class="line">        &lt;AddIn Type=<span class="string">&quot;Command&quot;</span>&gt;</span><br><span class="line">                &lt;Assembly&gt;c:\MyProgram\MyProgram.dll&lt;/Assembly&gt;</span><br><span class="line">                &lt;AddInId&gt;<span class="number">76</span>eb700a<span class="number">-2</span>c85<span class="number">-4888</span>-a78d<span class="number">-31429</span>ecae9ed&lt;/AddInId&gt;</span><br><span class="line">                &lt;FullClassName&gt;Revit.Samples.SampleCommand&lt;/FullClassName&gt;</span><br><span class="line">                &lt;Text&gt;Sample command&lt;/Text&gt;</span><br><span class="line">                &lt;VendorId&gt;ADSK&lt;/VendorId&gt;</span><br><span class="line">                &lt;VendorDescription&gt;Autodesk, www.autodesk.com&lt;/VendorDescription&gt; </span><br><span class="line">                &lt;VisibilityMode&gt;NotVisibleInFamily&lt;/VisibilityMode&gt;</span><br><span class="line">                &lt;Discipline&gt;Structure&lt;/Discipline&gt;</span><br><span class="line">                &lt;Discipline&gt;Architecture&lt;/Discipline&gt;</span><br><span class="line">                &lt;AvailabilityClassName&gt;Revit.Samples.SampleAccessibilityCheck&lt;/AvailabilityClassName&gt;</span><br><span class="line">                &lt;LongDescription&gt;</span><br><span class="line">                        This <span class="keyword">is</span> the <span class="built_in">long</span> description <span class="keyword">for</span> my command.</span><br><span class="line">                        This <span class="keyword">is</span> another descriptive paragraph, <span class="keyword">with</span> notes about how to use the command properly.</span><br><span class="line">                &lt;/LongDescription&gt;</span><br><span class="line">                &lt;TooltipImage&gt;c:\MyProgram\Autodesk.png&lt;/TooltipImage&gt;</span><br><span class="line">                &lt;LargeImage&gt;c:\MyProgram\MyProgramIcon.png&lt;/LargeImage&gt;</span><br><span class="line">        &lt;/AddIn&gt;</span><br><span class="line">&lt;/RevitAddIns&gt;</span><br></pre></td></tr></table></figure>
+
+<p>添加一个 ExternalApplication 的基本文件如下所示：</p>
+<p>代码区域 3-10：清单 .addin ExternalApplication</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span> standalone=<span class="string">&quot;no&quot;</span>?&gt;</span><br><span class="line">&lt;RevitAddIns&gt;</span><br><span class="line">&lt;AddIn Type=<span class="string">&quot;Application&quot;</span>&gt;</span><br><span class="line">                &lt;Name&gt;SampleApplication&lt;/Name&gt;</span><br><span class="line">                &lt;Assembly&gt;c:\MyProgram\MyProgram.dll&lt;/Assembly&gt;</span><br><span class="line">                &lt;AddInId&gt;<span class="number">604B</span>1052-F742<span class="number">-4951</span><span class="number">-8576</span>-C261D1993107&lt;/AddInId&gt;</span><br><span class="line">                &lt;FullClassName&gt;Revit.Samples.SampleApplication&lt;/FullClassName&gt;</span><br><span class="line">                &lt;VendorId&gt;ADSK&lt;/VendorId&gt;</span><br><span class="line">                &lt;VendorDescription&gt;Autodesk, www.autodesk.com&lt;/VendorDescription&gt;</span><br><span class="line">&lt;/AddIn&gt;</span><br><span class="line">&lt;/RevitAddIns&gt;</span><br></pre></td></tr></table></figure>
+
+<p>添加一个 DB 级 External Application 的基本文件如下所示：</p>
+<p>代码区域：manifest .addin ExternalDBApplication</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span> standalone=<span class="string">&quot;no&quot;</span>?&gt;</span><br><span class="line">&lt;RevitAddIns&gt;</span><br><span class="line">&lt;AddIn Type=<span class="string">&quot;DBApplication&quot;</span>&gt;</span><br><span class="line">                &lt;Assembly&gt;c:\MyDBLevelApplication\MyDBLevelApplication.dll&lt;/Assembly&gt;</span><br><span class="line">                &lt;AddInId&gt;DA3D570A<span class="number">-1</span>AB3<span class="number">-4</span>a4b-B09F<span class="number">-8</span>C15DFEC6BF0&lt;/AddInId&gt;</span><br><span class="line"></span><br><span class="line">                &lt;FullClassName&gt;MyCompany.MyDBLevelAddIn&lt;/FullClassName&gt;</span><br><span class="line">    </span><br><span class="line">                &lt;Name&gt;My DB-Level AddIn&lt;/Name&gt;                    </span><br><span class="line">                &lt;VendorId&gt;ADSK&lt;/VendorId&gt;</span><br><span class="line">                &lt;VendorDescription&gt;Autodesk, www.autodesk.com&lt;/VendorDescription&gt;</span><br><span class="line"></span><br><span class="line">&lt;/AddIn&gt;</span><br><span class="line">&lt;/RevitAddIns&gt;</span><br></pre></td></tr></table></figure>
+
+<p>单个清单文件中可以提供多个 AddIn 元素。</p>
+<p>下表描述了可用的 XML 标记：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Tag 标记</strong></th>
+<th><strong>Description 描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Assembly 程序集</td>
+<td>附加模块程序集文件的完整路径。所有 ExternalCommands 和 ExternalApplications 都需要。</td>
+</tr>
+<tr>
+<td>FullClassName 类的全名</td>
+<td>程序集文件中实现 IExternalCommand 或 IExternalApplication 的类的全名。所有 ExternalCommands 和 ExternalApplications 都需要。</td>
+</tr>
+<tr>
+<td>AddInId</td>
+<td>一个 GUID，表示此特定应用程序的 ID。AddInIds 对于 Revit 的给定会话必须是唯一的。Autodesk 建议您为每个已注册的应用程序或命令生成唯一的 GUID。所有 ExternalCommands 和 ExternalApplications 都需要。</td>
+</tr>
+<tr>
+<td>Name 名字</td>
+<td>应用程序的名称。必填;仅适用于 ExternalApplications。</td>
+</tr>
+<tr>
+<td>Text</td>
+<td>按钮的名称。自选;仅将此标记用于 ExternalCommands。默认值为 “External Tool”。</td>
+</tr>
+<tr>
+<td>VendorId 供应商 ID</td>
+<td>Revit 中的某些操作（例如，可扩展存储的标识）可能使用的唯一供应商标识符。这必须是唯一的，因此我们建议使用域名的反向版本，例如 com.autodesk 或 uk.co.autodesk。</td>
+</tr>
+<tr>
+<td>VendorDescription 供应商描述</td>
+<td>包含供应商的法定名称和&#x2F;或其他相关信息的描述。自选。</td>
+</tr>
+<tr>
+<td>Description 描述</td>
+<td>命令的简短描述将用作按钮工具提示。自选;仅将此标记用于 ExternalCommands。默认值为仅包含命令文本的工具提示。</td>
+</tr>
+<tr>
+<td>VisibilityMode 可见性模式</td>
+<td>外部命令可见的模式。可以为此选项设置多个值。自选;仅将此标记用于 ExternalCommands。默认情况下，在所有模式下显示命令，包括当没有活动文档时。以前编写的需要针对活动文档运行的外部命令应进行修改，以确保代码在没有活动文档时处理命令的调用，或者应用 NotVisibleWhenNoActiveDocument 模式。有关更多信息，请参阅下表。</td>
+</tr>
+<tr>
+<td>Discipline 学科</td>
+<td>外部命令将在其中可见的学科。可以为此选项设置多个值。自选;仅将此标记用于 ExternalCommands。默认情况下，在所有领域中显示该命令。如果列出了任何特定领域，则该命令将仅在这些领域中可见。有关更多信息，请参阅下表。</td>
+</tr>
+<tr>
+<td>AvailabilityClassName 可用性类名称</td>
+<td>程序集文件中实现 IExternalCommandAvailability 的类的全名。此类允许根据上下文有选择地将命令按钮灰显。自选;仅将此标记用于 ExternalCommands。默认命令是只要可见就可用的命令。</td>
+</tr>
+<tr>
+<td>LargeImage 大图像</td>
+<td>用于 External Tools 下拉菜单中的按钮的图标。自选;仅将此标记用于 ExternalCommands。默认情况下，显示不带图标的按钮。</td>
+</tr>
+<tr>
+<td>SmallImage 小图像</td>
+<td>按钮提升到快速访问工具栏时使用的图标。自选;仅将此标记用于 ExternalCommands。默认情况下，显示不带图标的快速访问工具栏按钮，这可能会使用户感到困惑。</td>
+</tr>
+<tr>
+<td>LongDescription 长描述</td>
+<td>命令的详细说明将用作按钮扩展工具提示的一部分，当鼠标悬停在命令上较长时间时显示。自选;仅将此标记用于 ExternalCommands。如果未提供此属性和 TooltipImage，则按钮将没有扩展的工具提示。</td>
+</tr>
+<tr>
+<td>TooltipImage Tooltip图像</td>
+<td>作为按钮扩展工具提示的一部分显示的图像文件，当鼠标悬停在命令上较长时间时显示。自选;仅将此标记用于 ExternalCommands。如果未提供此属性和 TooltipImage，则按钮将没有扩展的工具提示。</td>
+</tr>
+<tr>
+<td>LanguageType 语言类型</td>
+<td>外部工具按钮的 Text、Description、LargeImage、LongDescription 和 TooltipImage 的本地化设置。Revit 将从指定的语言资源 dll 加载资源值。该值可以是 Revit 支持的 11 种语言之一。如果未指定 LanguageType，则将自动加载当前 Revit 会话使用的语言资源。有关更多详细信息，请参阅本地化部分。</td>
+</tr>
+<tr>
+<td>AllowLoadIntoExistingSession</td>
+<td>加载权限的标志。设置为 false 可防止 Revit 在不重新启动的情况下自动加载新添加的 .addin 清单文件中的附加模块。自选。默认情况下。Revit 将自动从新添加的 .addin 清单文件加载附加模块，而无需重新启动 Revit。</td>
+</tr>
+</tbody></table>
+<p>VisibilityMode 成员</p>
+<table>
+<thead>
+<tr>
+<th><strong>Member Name 成员名称</strong></th>
+<th><strong>Description 描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AlwaysVisible 始终可见</td>
+<td>该命令在 Revit API 支持的所有可能模式下都可用。</td>
+</tr>
+<tr>
+<td>NotVisibleInProject 项目中不可见</td>
+<td>当项目文档处于活动状态时，该命令是不可见的。</td>
+</tr>
+<tr>
+<td>NotVisibleInFamily 族项目中不可见</td>
+<td>当族文档处于活动状态时，该命令不可见。</td>
+</tr>
+<tr>
+<td>NotVisibleWhenNoActiveDocument 无活动视图不可见</td>
+<td>当没有活动文档时，该命令是不可见的。</td>
+</tr>
+</tbody></table>
+<p>学科成员</p>
+<table>
+<thead>
+<tr>
+<th><strong>Member Name 会员名称</strong></th>
+<th><strong>Description 描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Any 任何</td>
+<td>该命令在 Revit API 支持的所有可能领域中均可用。</td>
+</tr>
+<tr>
+<td>Architecture 建筑</td>
+<td>该命令在 Autodesk Revit Architecture 中可见。</td>
+</tr>
+<tr>
+<td>Structure 结构</td>
+<td>该命令在 Autodesk Revit Structure 中可见。</td>
+</tr>
+<tr>
+<td>StructuralAnalysis 结构分析</td>
+<td>当 Structural Analysis 领域编辑工具可用时，该命令可见。</td>
+</tr>
+<tr>
+<td>MassingAndSite 体量与现场</td>
+<td>当 体量 和 场地 领域 编辑工具可用时，该命令可见。</td>
+</tr>
+<tr>
+<td>EnergyAnalysis 能量分析</td>
+<td>当 Energy Analysis 领域编辑工具可用时，该命令可见。</td>
+</tr>
+<tr>
+<td>Mechanical 机械</td>
+<td>当 Mechanical 领域编辑工具可用时（例如，在 Autodesk Revit MEP 中），该命令可见。</td>
+</tr>
+<tr>
+<td>Electrical 电气</td>
+<td>当 Electrical 领域编辑工具可用时（例如，在 Autodesk Revit MEP 中），该命令可见。</td>
+</tr>
+<tr>
+<td>Piping 管道</td>
+<td>当管道领域编辑工具可用时（例如，在 Autodesk Revit MEP 中），该命令可见。</td>
+</tr>
+<tr>
+<td>MechanicalAnalysis 机械分析</td>
+<td>当 Mechanical Analysis 领域编辑工具可用时，该命令可见。</td>
+</tr>
+<tr>
+<td>PipingAnalysis 管道分析</td>
+<td>当“管道分析”领域编辑工具可用时，该命令可见。</td>
+</tr>
+<tr>
+<td>ElectricalAnalysis 电气分析</td>
+<td>当 Electrical Analysis 领域编辑工具可用时，该命令可见。</td>
+</tr>
+</tbody></table>
+<p>用于清单文件的 .NET Add-in Utility</p>
+<p>代码区域 3-11：创建和编辑清单文件</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//create a new addin manifest</span></span><br><span class="line">RevitAddInManifest Manifest = <span class="keyword">new</span> RevitAddInManifest();</span><br><span class="line"></span><br><span class="line"><span class="comment">//create an external command</span></span><br><span class="line">RevitAddInCommand command1 = <span class="keyword">new</span> RevitAddInCommand(<span class="string">&quot;full path\assemblyName.dll&quot;</span>, </span><br><span class="line">     Guid.NewGuid(), <span class="string">&quot;namespace.className&quot;</span>);</span><br><span class="line">command1.Description = <span class="string">&quot;description&quot;</span>;</span><br><span class="line">command1.Text = <span class="string">&quot;display text&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// this command only visible in Revit MEP, Structure, and only visible </span></span><br><span class="line"><span class="comment">// in Project document or when no document at all</span></span><br><span class="line">command1.Discipline = Discipline.Mechanical | Discipline.Electrical |</span><br><span class="line">                        Discipline.Piping | Discipline.Structure;</span><br><span class="line">command1.VisibilityMode = VisibilityMode.NotVisibleInFamily;</span><br><span class="line"></span><br><span class="line"><span class="comment">//create an external application</span></span><br><span class="line">RevitAddInApplication application1 = <span class="keyword">new</span> RevitAddInApplication(<span class="string">&quot;appName&quot;</span>,</span><br><span class="line">    <span class="string">&quot;full path\assemblyName.dll&quot;</span>, Guid.NewGuid(), <span class="string">&quot;namespace.className&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//add both command(s) and application(s) into manifest</span></span><br><span class="line">Manifest.AddInCommands.Add(command1);</span><br><span class="line">Manifest.AddInApplications.Add(application1);</span><br><span class="line"></span><br><span class="line"><span class="comment">//save manifest to a file</span></span><br><span class="line">RevitProduct revitProduct1 = RevitProductUtility.GetAllInstalledRevitProducts()[<span class="number">0</span>];</span><br><span class="line">Manifest.SaveAs(revitProduct1.AllUsersAddInFolder + <span class="string">&quot;\RevitAddInUtilitySample.addin&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>代码区域 3-12：读取现有清单文件</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">RevitProduct revitProduct1 = RevitProductUtility.GetAllInstalledRevitProducts()[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">RevitAddInManifest revitAddInManifest = </span><br><span class="line">     Autodesk.RevitAddIns.AddInManifestUtility.GetRevitAddInManifest(</span><br><span class="line">          revitProduct1.AllUsersAddInFolder + <span class="string">&quot;\RevitAddInUtilitySample.addin&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="对-Revit-插件进行数字签名"><a href="#对-Revit-插件进行数字签名" class="headerlink" title="对 Revit 插件进行数字签名"></a>对 Revit 插件进行数字签名</h2><p>Revit 会检查插件的安全凭据。如果插件未使用受信任的证书颁发机构颁发的证书进行数字签名，则 Revit 会在打开时弹出一个对话框，询问用户确认他&#x2F;她是否要加载应用程序。下图显示了检测到未签名的加载项时的安全警告对话框示例。用户可以选择：1） 允许从现在开始始终加载同一插件，2） 仅加载这次并下次再次询问，以及 3） 不允许加载插件。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/UnsignedAddIn.png"></p>
+<p>如果您是专业开发人员，并且您的应用程序已由受信任的证书颁发机构进行数字签名，则您的附加模块已与 Revit 中的数字签名检入兼容。以下部分适用于编写附加模块但不熟悉 Revit 中的数字签名的开发人员。</p>
+<h3 id="对应用程序进行数字签名"><a href="#对应用程序进行数字签名" class="headerlink" title="对应用程序进行数字签名"></a>对应用程序进行数字签名</h3><p>如果您是 Revit 附加模块的发布者，则必须使用自己的证书对附加模块进行签名。</p>
+<p>要使用自己的证书对加载项进行签名，您首先需要从数字证书供应商处购买数字签名。获取证书 （cer） 或个人信息交换 （pfx） 文件后，您可以使用 signtool 对 DLL 进行签名。或者，您也可以使用在线 Authenticode 签名服务，例如 Symantec 的 Secure App Service - <a target="_blank" rel="noopener" href="https://www.symantec.com/code-signing/secure-app-service/%E3%80%82">https://www.symantec.com/code-signing/secure-app-service/。</a></p>
+<ul>
+<li><p>数字证书供应商</p>
+<p>以下是提供数字证书的供应商的非详尽列表：<br>Symantec - <a target="_blank" rel="noopener" href="http://www.symantec.com/">www.symantec.com</a><br>DigiCert - <a target="_blank" rel="noopener" href="http://www.digicert.com/">www.digicert.com</a><br>VERISIGN - <a target="_blank" rel="noopener" href="http://www.verisign.com/">www.verisign.com</a><br>Thawte - <a target="_blank" rel="noopener" href="http://www.thawte.com/">www.thawte.com</a></p>
+</li>
+<li><p>使用 “signtool” 进行签名</p>
+<p>您可以使用 signtool.exe.ASPX） 工具对 .NET dll 进行签名。该工具会自动随 Visual Studio 一起安装。要运行该工具，请使用 Developer Command Prompt。以下是命令行参数的格式：<br>命令区域：使用 signtool</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">signtool.exe sign /fd SHA256 /f &lt;.pfx-file-name&gt; /p  .dl</span><br></pre></td></tr></table></figure>
+
+<p>其中 &#x2F;fd 是要使用的文件摘要算法的标志。这里我们使用 SHA256。（SHA 代表安全哈希算法。signtool 默认值为 SHA1。我们建议使用 SHA256，这是一个更新、更安全的版本。&lt;.pfx-file-name&gt; 是您从供应商处获取的 .pfx（个人信息交换）文件的名称。是您在获取 PFX 文件时指定的密码。.dll 是要签名的 DLL 的名称。</p>
+<p>例如，如果您在任意文件夹中运行命令，则上述命令可能如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool&quot; sign /fd SHA256 /f &quot;C:/Dev/MyCert.pfx&quot; /p &quot;password123&quot; “C:/Dev/HelloRevit.dll”</span><br></pre></td></tr></table></figure>
+
+<p>注意：signtool 的确切位置在您的环境中可能有所不同。<br>使用授权证书对 DLL 进行签名后，Revit 在加载附加模块时将不再弹出安全警告对话框。<br>您还可以在 Visual Studio 的 Post-Built Event 部分包含该命令，以用于应用程序项目属性。<br>命令区域：构建后事件签名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe&quot; /fd SHA256 sign /f</span><br><span class="line">&quot;C:\Autodesk\MyCert.pfx&quot; /p MyPassword &quot;$(TargetDir)$(TargetFileName)&quot;</span><br></pre></td></tr></table></figure>
+
+<p>在签名时添加时间戳也是值得的（signtool.exe 中的 &#x2F;td 和 &#x2F;tr 开关）;否则，当证书过期时，应用程序将变得不受信任。添加时间戳可确保应用程序在过期之前签名，就永远受信任（除非证书被吊销）：<br>命令区域：添加时间戳</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">signtool.exe timestamp /td sha256 /tr  .dll</span><br></pre></td></tr></table></figure>
+
+<p>例如，以下代码使用 verisign 时间戳服务器：<br>命令区域：时间戳示例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">signtool.exe timestamp /td sha256 /tr &quot;http://sha256timestamp.ws.symantec.com/sha256/&quot; HelloRevit.dll</span><br></pre></td></tr></table></figure>
+
+<p>注意：上例中使用的 &#x2F;td sha256 和 &#x2F;tr 开关用于使用 sha256 时间戳进行签名。从 2017 年 1 月 1 日开始，Microsoft 会将 SHA1 时间戳视为未签名。有关更多详细信息，请参阅这篇文章。</p>
+</li>
+</ul>
+<h3 id="制作自己的证书以供测试和内部使用"><a href="#制作自己的证书以供测试和内部使用" class="headerlink" title="制作自己的证书以供测试和内部使用"></a>制作自己的证书以供测试和内部使用</h3><p>您可以制作自己的数字证书，以便在公司内部进行测试或使用。</p>
+<p>创建自己的数字证书</p>
+<ul>
+<li>使用 MakeCert.exe. ASPX)工具创建数字证书。</li>
+<li>使用 Pvk2Pfx.exe 工具创建个人信息交换 （pfx） 文件。</li>
+<li>对应用程序进行数字签名。</li>
+<li>将数字证书导入 Windows 证书存储区。（CertMgr.msc 或 CertUtil.exe.aspx</li>
+</ul>
+<p>1、创建数字证书</p>
+<p>您可以使用 MakeCert.exe.ASPX)工具制作您自己的数字证书以供测试和内部使用。以下是命令格式：</p>
+<p>命令区域：创建证书命令格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MakeCert.exe -r -sv .pvk -n &quot;CN=&quot; .cer -b  -e </span><br></pre></td></tr></table></figure>
+
+<p>其中 是你创建的 pvk 文件的名称，是你分配给 pvk 文件的密码。是认证文件或 .cer 文件的名称。是 .pfx 的名称。是要分配给 .pfx 文件的密码。</p>
+<p>例如：</p>
+<p>命令区域：MakeCert.exe示例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\MakeCert.exe&quot; -r -sv MyCert.pvk -n &quot;CN=DevABC&quot; MyCert.cer -b 01/01/2016 -e 12/31/2016</span><br></pre></td></tr></table></figure>
+
+<p>或:</p>
+<p>命令区域：MakeCert.exe示例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;C:\Program Files (x86)\Windows Kits\8.1\bin\x64\makecert.exe&quot; -r -sv MyCert.pvk -n &quot;CN=DevABC&quot; MyCert.cer -b 01/01/2016 -e 12/31/2016</span><br></pre></td></tr></table></figure>
+
+<p>此命令将弹出“创建私钥密码”对话框。在对话框中输入私钥密码。如果系统要求输入密码，请再次输入。完成所有操作后，您将在命令窗口中看到一条消息“成功”，并创建 .cer 和 .pvk 文件。</p>
+<p>2、转换为 PFX</p>
+<p>下一步是使用 pvk2pfx.exe 工具将数字证书转换为个人信息交换 （pfx） 文件。在此步骤中，您需要在上述步骤中创建的 .pvk 文件、.cer 文件和密码。命令格式如下所示：</p>
+<p>命令区域：转换为 PFX 命令格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> pvk2pfx.exe&quot; -pvk .pvk -pi  -spc .cer </span><br><span class="line">-pfx  -po </span><br></pre></td></tr></table></figure>
+
+<p>其中 是存储私钥的文件的名称，是开发者的名字，是证书文件的名称，是证书生效的日期（格式为 mm&#x2F;dd&#x2F;yyyy），是证书的有效期结束的日期。 </p>
+<p>例如：</p>
+<p>命令区域：转换为 PFX 示例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;C:\Program Files (x86)\Windows Kits\8.1\bin\x64\pvk2pfx.exe&quot; -pvk MyCert.pvk -pi password123 -spc MyCert.cer -pfx MyCert.pfx -po password234</span><br></pre></td></tr></table></figure>
+
+<p>操作成功后，命令结束，不显示错误消息，并将创建一个 .pfx 文件。</p>
+<p>3、拥有 pfx 文件后，您可以对应用程序进行数字签名。</p>
+<p>4、将数字证书导入 Windows 证书存储区</p>
+<p>制作自己的数字证书时，还需要执行的另一个步骤是将其导入计算机。您可以在 Certificate Manager （CertMgr.msc.ASPX）） 或 CertUtils.exe 工具。这里我们使用 UI 工具。请参阅此处了解替代方案。</p>
+<ul>
+<li>从开始 &gt;&gt; 运行 &gt;&gt; CertMgr.msc。（或在 Windows 8.1&#x2F;10 上，右键单击“开始”&gt;&gt; 运行 &gt;&gt; CertMgr.msc）CertMgr 打开。<br>在 CertMgr 对话框中，右键单击 Trusted Publishers &gt;&gt; All Tasks &gt;&gt; Import …</li>
+<li>按照证书导入向导中的说明进行操作。单击 Next。</li>
+<li>在询问“Files to Import”的对话框中，选择要导入的 pfx 文件。</li>
+<li>在 “Password” 对话框中，输入密码。保持“包括所有扩展属性”的选中状态。</li>
+<li>选择“将所有证书放在以下存储中”，然后单击下一步。</li>
+<li>确认并完成。</li>
+</ul>
+<p>如果您看到“Import a new Private signature key（导入新的私有签名密钥）”对话框，请单击“确定”。（这部分可能因您的环境而异。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/certmgr.png"></p>
+<p>对 Trusted Root Certification Authorities 重复相同的步骤。此步骤用于验证数字签名的二进制文件。</p>
+<h3 id="数字签名参考"><a href="#数字签名参考" class="headerlink" title="数字签名参考"></a>数字签名参考</h3><ul>
+<li><p>The following references provide more information on digitally signing apps.<br>以下参考资料提供了有关对应用程序进行数字签名的更多信息。</p>
+<h2 id="Revit-Help-Revit-帮助"><a href="#Revit-Help-Revit-帮助" class="headerlink" title="Revit Help Revit 帮助"></a>Revit Help Revit 帮助</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=GUID-1C5947F2-4525-4B9F-9764-4D83D9FD2157">About Digital Signatures 关于数字签名</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=GUID-900A3EBF-A809-4A0E-96ED-5EEC965A2728">Security: Signed File or Add-In<br>安全性：签名文件或加载项</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=GUID-36D29367-A540-4CFD-9773-4995BF1DF08A">Security: Unsigned File or Add-In<br>安全性：未签名的文件或加载项</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=GUID-A5654402-D25A-4993-9059-0486B36AA708">Security: Invalid Signature<br>安全性：签名无效</a></p>
+<h2 id="Microsoft-and-Other-Sites-Microsoft-和其他网站"><a href="#Microsoft-and-Other-Sites-Microsoft-和其他网站" class="headerlink" title="Microsoft and Other Sites Microsoft 和其他网站"></a>Microsoft and Other Sites Microsoft 和其他网站</h2></li>
+<li><p><a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/windows/desktop/jj835835(v=vs.85).aspx?f=255&mspperror=-2147217396">How to sign an app package using SignTool</a><br><a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/windows/desktop/jj835835(v=vs.85">如何使用 SignTool 对应用程序包进行签名</a>.aspx？f&#x3D;255&amp;mspperror&#x3D;-2147217396）</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/5510063/makecert-exe-missing-in-windows-7-how-to-get-it-and-use-it/9153635#9153635#9153635">makecert.exe missing in windows 7, how to get it and use it<br>Windows 7 中缺少makecert.exe，如何获取和使用它</a></p>
+</li>
+<li><p>The truth about SHA1, SHA-256 and Code Signing Certificates<br>关于 SHA1、SHA-256 和代码签名证书的真相</p>
+<h2 id="AutoCAD-references-AutoCAD-参考"><a href="#AutoCAD-references-AutoCAD-参考" class="headerlink" title="AutoCAD references AutoCAD 参考"></a>AutoCAD references AutoCAD 参考</h2></li>
+</ul>
+<p><strong>AutoCAD Blog AutoCAD 博客</strong></p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="http://adndevblog.typepad.com/autocad/2015/01/digitally-signing-plug-in-files.html">http://adndevblog.typepad.com/autocad/2015/01/digitally-signing-plug-in-files.html</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://through-the-interface.typepad.com/through_the_interface/2015/05/signing-your-application-modules-for-autocad-2016-part-1.html">http://through-the-interface.typepad.com/through_the_interface/2015/05/signing-your-application-modules-for-autocad-2016-part-1.html</a></p>
+<p><strong>AutoCAD Help AutoCAD 帮助</strong></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://help-staging.autodesk.com/view/ACD/2016/ENU/?guid=GUID-3DA95353-9EF3-4E29-9671-6AEB7704EBE6">To Digitally Sign a Binary (ObjectARX or Managed .NET) File<br>对二进制（ObjectARX 或托管 .NET）文件进行数字签名</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://help-staging.autodesk.com/view/ACD/2016/ENU/?guid=GUID-AA7BBBED-98D0-4003-8C80-D66173664DBA">To Digitally Sign a Binary (ObjectARX or Managed .NET) File with a Post-Build Event in Microsoft Visual Studio<br>在 Microsoft Visual Studio 中使用构建后事件对二进制（ObjectARX 或托管 .NET）文件进行数字签名</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://help-staging.autodesk.com/view/ACD/2016/ENU/?guid=GUID-26D7B31C-4165-410C-9FC4-2D556749D517">To Make a Digital Certificate<br>制作数字证书</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://help-staging.autodesk.com/view/ACD/2016/ENU/?guid=GUID-DC1B25FE-E063-486C-B90C-565AB5E87BBC">To Create A Personal Information Exchange (PFX) File<br>创建个人信息交换 （PFX） 文件</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://help-staging.autodesk.com/view/ACD/2016/ENU/?guid=GUID-19D6716A-0AD1-4A7A-82BA-A067E6D65F66">To Import a Digital Certificate<br>导入数字证书</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="本地化"><a href="#本地化" class="headerlink" title="本地化"></a>本地化</h2><p>您可以让 Revit 本地化外部命令按钮的用户可见资源（包括文字、大图标图像、长短描述以及工具提示图像）。您需要创建一个 .NET Satellite DLL，其中包含按钮的字符串、图像和图标。然后更改 .addin 文件中的标签值，使其与 Satellite dll 中的资源名称相对应，但前面要加上 @character。所以标签：</p>
+<p>代码区域 3-13：非本地化文本输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Extension Manager</span><br></pre></td></tr></table></figure>
+
+<p>成为：</p>
+<p>代码区域 3-14：本地化文本输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@ExtensionText</span><br></pre></td></tr></table></figure>
+
+<p>其中 ExtensionText 是在附属 DLL 中找到的资源的名称。</p>
+<p>附属 DLL 应位于具有语言区域性语言名称的目录中，例如 en 或 en-US。该目录应位于包含加载项程序集的目录中。请参阅 <a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/e9zazcx5.aspx">http://msdn.microsoft.com/en-us/library/e9zazcx5.aspx</a> 以创建托管的附属 DLL。</p>
+<p>通过使用 LanguageType 标记显式指定语言和区域性，可以强制 Revit 使用特定语言资源 DLL，而不管 Revit 会话的语言如何。</p>
+<p>代码区域 3-15：使用 LanguageType 标记</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">English_USA</span><br></pre></td></tr></table></figure>
+
+<p>例如，上面的条目将强制 Revit 始终加载 en-US Satellite 中的值，并在考虑外部命令清单文件的可本地化成员时忽略当前的 Revit 语言和区域性设置。</p>
+<p>Revit 支持 Autodesk.Revit.ApplicationServices.LanguageType 枚举类型中定义的 11 种语言：English_USA、德语、西班牙语、法语、意大利语、荷兰语、Chinese_Simplified语、Chinese_Traditional、日语、韩语和俄语。</p>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><p>Revit API 提供了多个用于配置 ExternalCommand 和 ExternalApplication 行为的特性。</p>
+<h3 id="TransactionAttribute"><a href="#TransactionAttribute" class="headerlink" title="TransactionAttribute"></a>TransactionAttribute</h3><p>自定义属性 Autodesk.Revit.Attributes.TransactionMode 必须应用于 IExternalCommand 接口的实现类，以控制外部命令的事务行为。此选项没有默认值。此模式控制 API 框架在调用命令时预期如何使用事务。支持的值为：</p>
+<p>TransactionMode.Manual - Revit 不会创建事务（但如果外部命令返回失败，它将创建一个外部事务组以回滚所有更改）。相反，您可以根据需要使用 Transactions、SubTransaction 和 TransactionGroups 的组合。您必须遵守有关使用交易和相关类的所有规则。您必须为您的交易命名，这些名称将出现在 Undo 菜单中。Revit 将检查从外部命令返回时，所有事务（包括组和子事务）是否已正确关闭。否则，Revit 将放弃对模型所做的所有更改。</p>
+<p>TransactionMode.ReadOnly - 不会创建任何事务 （或组） ，并且在命令的生存期内不得创建任何事务。External Command 只能使用从模型中读取的方法。如果命令尝试启动事务（或组）或尝试写入模型，则会引发异常。</p>
+<p>在任一模式下，TransactionMode 仅适用于活动文档。您可以在执行命令的过程中打开其他文档，并且可以完全控制在这些其他文档上创建和使用 Transactions、SubTransactions 和 TransactionGroups（即使在 ReadOnly 模式下也是如此）。<br>例如，要将外部命令设置为使用手动事务模式：</p>
+<p>代码区域 3-18：TransactionAttribute</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Transaction(TransactionMode.Manual)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Command</span> : <span class="title">IExternalCommand</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">public</span> Autodesk.Revit.IExternalCommand.<span class="function">Result <span class="title">Execute</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">                Autodesk.Revit.ExternalCommandData commandData,</span></span></span><br><span class="line"><span class="params"><span class="function">                <span class="keyword">ref</span> <span class="built_in">string</span> message, Autodesk.Revit.DB.ElementSet elements</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="comment">// Command implementation, which modifies the active document directly </span></span><br><span class="line">                <span class="comment">// after starting a new transaction</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>请参阅 事务。</p>
+<h3 id="JournalingAttribute"><a href="#JournalingAttribute" class="headerlink" title="JournalingAttribute"></a>JournalingAttribute</h3><p>可以选择将自定义属性 Autodesk.Revit.Attributes.JournalingAttribute 应用于 IExternalCommand 接口的实现类，以控制外部命令执行期间的日记行为。日记有两个选项： </p>
+<p>JournalMode.NoCommandData - ExternalCommandData.JournalData 映射的内容未写入 Revit 日志。此选项允许 Revit API 调用根据需要写入日志。此选项允许调用 Revit UI 进行选择或响应任务对话框的命令正确重放。</p>
+<p>JournalMode.UsingCommandData - 使用命令数据中提供的 IDictionary&lt;String,String&gt;。这将隐藏外部命令调用与 IDictionary&lt;String,String&gt;条目之间的所有 Revit 日志条目。调用 Revit UI 进行选择或响应任务对话框的命令可能无法正确重放。如果未指定 JournalingAttribute，则这是默认值。</p>
+<p>代码区域 3-19：JournalingAttribute</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[Journaling(JournalingMode.UsingCommandData)]</span><br><span class="line">public class Command : IExternalCommand</span><br><span class="line">&#123;</span><br><span class="line">        public Autodesk.Revit.IExternalCommand.Result Execute(</span><br><span class="line">                Autodesk.Revit.ExternalCommandData commandData, </span><br><span class="line">                ref string message, Autodesk.Revit.DB.ElementSet elements)</span><br><span class="line">        &#123;</span><br><span class="line">                return Autodesk.Revit.UI.Result.Succeeded;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Revit-异常"><a href="#Revit-异常" class="headerlink" title="Revit 异常"></a>Revit 异常</h2><p>当 API 方法遇到非致命错误时，它们会引发异常。Revit附加模块应捕获异常。Revit API 帮助文件指定了特定方法通常遇到的异常。所有 Revit API 方法都会引发 Autodesk.Revit.Exceptions.ApplicationException 的子类。这些异常与标准 .NET 异常非常相似，例如：</p>
+<ul>
+<li>ArgumentException ArgumentException（参数异常）</li>
+<li>InvalidOperationException</li>
+<li>FileNotFoundException</li>
+</ul>
+<p>但是，其中一些子类对于 Revit 是唯一的：</p>
+<ul>
+<li>AutoJoinFailedException</li>
+<li>RegenerationFailedException</li>
+<li>ModificationOutsideTransactionException</li>
+</ul>
+<p>此外，还有一种称为 InternalException 的特殊异常类型，它表示未预料到的失败路径。此类异常会附带额外的诊断信息，这些信息可以传回 Autodesk 进行诊断。</p>
+<h2 id="功能区面板和控件"><a href="#功能区面板和控件" class="headerlink" title="功能区面板和控件"></a>功能区面板和控件</h2><p>Revit 提供了 API 解决方案来集成自定义功能区面板和控件。</p>
+<p>这些 API 与 IExternalApplication 一起使用。自定义功能区面板可以添加到“加载项”选项卡、“分析”选项卡或新的自定义功能区选项卡中。</p>
+<p>面板可以包括大按钮和小按钮，这些按钮可以是简单的按钮、包含多个命令的下拉按钮，也可以是拆分按钮，这些按钮是附加了默认按钮的下拉按钮。除了按钮之外，面板还可以包括单选按钮组、组合框和文本框。面板还可以包含垂直分隔符，以帮助将命令分隔到逻辑组中。最后，面板可以包含一个滑出控件，可通过单击面板底部来访问该控件。</p>
+<p>有关开发符合 Autodesk 所用标准的用户界面的信息，请参见 API 用户界面指南部分中的功能区指南。</p>
+<h3 id="创建新的-Ribbon-选项卡"><a href="#创建新的-Ribbon-选项卡" class="headerlink" title="创建新的 Ribbon 选项卡"></a>创建新的 Ribbon 选项卡</h3><p>虽然可以将功能区面板添加到“加载项”或“分析”选项卡中，但也可以将其添加到新的自定义功能区选项卡中。仅在必要时才应使用此选项。为确保标准 Revit 功能区选项卡保持可见，自定义功能区选项卡限制为 20 个。下图显示了一个新的功能区选项卡，其中包含一个功能区面板和一些简单的控件。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/NewRibbonTab.jpg" alt="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/NewRibbonTab.jpg"></p>
+<p>下面是生成上述功能区选项卡的代码。</p>
+<p>代码区域：“新建功能区”选项卡</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public Result OnStartup(UIControlledApplication application)</span><br><span class="line">&#123;</span><br><span class="line">    // Create a custom ribbon tab</span><br><span class="line">    String tabName = &quot;This Tab Name&quot;;</span><br><span class="line">    application.CreateRibbonTab(tabName);</span><br><span class="line"></span><br><span class="line">    // Create two push buttons</span><br><span class="line">    PushButtonData button1 = new PushButtonData(&quot;Button1&quot;, &quot;My Button #1&quot;,</span><br><span class="line">        @&quot;C:\ExternalCommands.dll&quot;, &quot;Revit.Test.Command1&quot;);</span><br><span class="line">    PushButtonData button2 = new PushButtonData(&quot;Button2&quot;, &quot;My Button #2&quot;,</span><br><span class="line">        @&quot;C:\ExternalCommands.dll&quot;, &quot;Revit.Test.Command2&quot;);</span><br><span class="line">    </span><br><span class="line">    // Create a ribbon panel</span><br><span class="line">    RibbonPanel m_projectPanel = application.CreateRibbonPanel(tabName, &quot;This Panel Name&quot;); </span><br><span class="line">    </span><br><span class="line">    // Add the buttons to the panel</span><br><span class="line">    List projectButtons = new List();</span><br><span class="line">    projectButtons.AddRange(m_projectPanel.AddStackedItems(button1, button2));</span><br><span class="line">    </span><br><span class="line">    return Result.Succeeded;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="创建新的-Ribbon-面板和控件"><a href="#创建新的-Ribbon-面板和控件" class="headerlink" title="创建新的 Ribbon 面板和控件"></a>创建新的 Ribbon 面板和控件</h3><p>下图显示了使用各种功能区面板控件的 Add-Ins （加载项） 选项卡上的功能区面板。以下部分更详细地介绍了这些控件，并提供了用于创建功能区每个部分的代码示例。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-EC547A32-2941-4731-A9C9-135CEDAB4DF0-low.png" alt="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-EC547A32-2941-4731-A9C9-135CEDAB4DF0-low.png"></p>
+<p>图 14：新的功能区面板和控件</p>
+<p>以下代码概述了创建如上图所示的功能区面板所采取的步骤。此示例中调用的每个函数将在本节后面的后续示例中提供。这些示例假定有一个位于 D：\ Sample\HelloWorld\bin\Debug\Hello.dll 的程序集，其中包含外部命令类型：</p>
+<ul>
+<li>Hello.HelloButton</li>
+<li>Hello.HelloOne </li>
+<li>Hello.HelloTwo</li>
+<li>Hello.HelloThree </li>
+<li>Hello.HelloA </li>
+<li>Hello.HelloB </li>
+<li>Hello.HelloC </li>
+<li>Hello.HelloRed </li>
+<li>Hello.HelloBlue</li>
+<li>Hello.HelloGreen</li>
+</ul>
+<p>代码区域：功能区面板和控件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public Result OnStartup(Autodesk.Revit.UI.UIControlledApplication app)</span><br><span class="line">&#123;</span><br><span class="line">        RibbonPanel panel = app.CreateRibbonPanel(&quot;New Ribbon Panel&quot;);</span><br><span class="line"></span><br><span class="line">        AddRadioGroup(panel);</span><br><span class="line">        panel.AddSeparator();</span><br><span class="line">        AddPushButton(panel);</span><br><span class="line">        AddSplitButton(panel);</span><br><span class="line">        AddStackedButtons(panel);</span><br><span class="line">        AddSlideOut(panel);</span><br><span class="line">    </span><br><span class="line">        return Result.Succeeded;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h3 id="Ribbon-Panel-功能区面板"><a href="#Ribbon-Panel-功能区面板" class="headerlink" title="Ribbon Panel 功能区面板"></a>Ribbon Panel 功能区面板</h3><p>自定义功能区面板可以添加到“加载项”选项卡（默认）或“分析”选项卡中，也可以添加到新的自定义功能区选项卡中。可以将各种类型的功能区控件添加到功能区面板中，下一节将更详细地讨论这些控件。所有功能区控件都具有一些通用属性和功能。<br>功能区控件类<br>每个功能区控件都有两个与之关联的类 - 一个派生自 RibbonItemData，用于创建控件（即 SplitButtonData）并将其添加到功能区面板，另一个派生自 RibbonItem（即 SplitButton），表示将项添加到面板后的项目。RibbonItemData（和派生类）中提供的属性也可从 RibbonItem（和相应的派生类）中获得。可以在将控件添加到面板之前设置这些属性，也可以在将控件添加到面板之后使用 RibbonItem 类进行设置。</p>
+<h4 id="Tooltips-工具提示"><a href="#Tooltips-工具提示" class="headerlink" title="Tooltips 工具提示"></a>Tooltips 工具提示</h4><p>大多数控件都可以设置工具提示（使用 ToolTip 属性），当用户将鼠标移到控件上时，将显示该工具提示。当用户长时间将鼠标悬停在控件上时，将使用 LongDescription 和 ToolTipImage 属性显示扩展工具提示。如果 LongDescription 和 ToolTipImage 均未设置，则不会显示扩展的工具提示。如果未提供工具提示，则当鼠标移动到控件上时，将显示控件的文本 （RibbonItem.ItemText）。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-261A8653-F926-4D87-8352-E86BF03EC3D0-low.png" alt="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-261A8653-F926-4D87-8352-E86BF03EC3D0-low.png"></p>
+<h4 id="Contextual-Help-上下文帮助"><a href="#Contextual-Help-上下文帮助" class="headerlink" title="Contextual Help 上下文帮助"></a>Contextual Help 上下文帮助</h4><p>控件可以具有与之关联的上下文帮助。当用户将鼠标悬停在控件上并按 F1 时，将触发上下文帮助。上下文帮助选项包括链接到外部 URL、启动本地安装的帮助 （chm） 文件或链接到 Autodesk 帮助 Wiki 上的主题。ContextualHelp 类用于创建一种上下文帮助类型，然后 RibbonItem.SetContextualHelp()（或 RibbonItemData.SetContextualHelp()）将其与控件相关联。当 ContextualHelp 实例与控件关联时，当鼠标悬停在控件上时，文本“按 F1 获取更多帮助”将出现在工具提示下方，如下所示。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/ContextualHelp.jpg" alt="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/ContextualHelp.jpg"></p>
+<p>下面的示例将新的 ContextualHelp 与按钮控件相关联。将鼠标悬停在按钮上时按 F1 将在新的浏览器窗口中打开 Autodesk 主页。</p>
+<p>代码区域：上下文帮助</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">private void AddPushButton(RibbonPanel panel)</span><br><span class="line">&#123;</span><br><span class="line">    PushButton pushButton = panel.AddItem(new PushButtonData(&quot;HelloWorld&quot;,</span><br><span class="line">        &quot;HelloWorld&quot;, @&quot;D:\Sample\HelloWorld\bin\Debug\HelloWorld.dll&quot;, &quot;HelloWorld.CsHelloWorld&quot;)) as PushButton;</span><br><span class="line"></span><br><span class="line">    // Set ToolTip and contextual help</span><br><span class="line">    pushButton.ToolTip = &quot;Say Hello World&quot;;</span><br><span class="line">    ContextualHelp contextHelp = new ContextualHelp(ContextualHelpType.Url,</span><br><span class="line">        &quot;http://www.autodesk.com&quot;);</span><br><span class="line">    pushButton.SetContextualHelp(contextHelp);</span><br><span class="line">    </span><br><span class="line">    // Set the large image shown on button</span><br><span class="line">    pushButton.LargeImage =</span><br><span class="line">        new BitmapImage(new Uri(@&quot;D:\Sample\HelloWorld\bin\Debug\39-Globe_32x32.png&quot;));</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ContextualHelp 类具有一个 Launch() 方法，可以调用该方法来随时显示由此 ContextualHelp 对象的内容指定的帮助主题，这与在控件处于活动状态时按下 F1 键时相同。这允许将帮助主题与加载项应用程序创建的对话框中的用户界面组件相关联。<br>将图像与控件关联 </p>
+<p>所有这些控件都可以使用 LargeImage 属性具有与其关联的图像。与大型控件（如非堆叠功能区和下拉按钮）关联的图像的最佳大小为 32×32 像素，但较大的图像将进行调整以适合按钮。堆叠按钮和小控件（如文本框和组合框）应具有 16×16 像素的图像集。大按钮还应为 Image 属性设置 16×16 像素的图像。如果命令移动到快速访问工具栏，则使用此图像。如果未设置 Image 属性，则当命令移动到快速访问工具栏时，将不显示任何图像。请注意，如果使用大于 16×16 像素的图像，则不会调整它以适应工具栏。 ToolTipImage 将显示在扩展工具提示中的 LongDescription 下方（如果提供）。此图像没有建议的大小。</p>
+<h4 id="功能区控制可用性"><a href="#功能区控制可用性" class="headerlink" title="功能区控制可用性"></a>功能区控制可用性</h4><p> 可以使用 RibbonItem.Enabled 属性启用或禁用功能区控件，也可以使用 RibbonItem.Visible 属性使功能区控件可见或不可见。</p>
+<h4 id="功能区控件"><a href="#功能区控件" class="headerlink" title="功能区控件"></a>功能区控件</h4><p> 除了以下控件之外，还可以将垂直分隔符添加到功能区面板，以对相关的控件集进行分组。</p>
+<h5 id="按钮"><a href="#按钮" class="headerlink" title="按钮"></a>按钮</h5><p>您可以向面板添加三种类型的按钮：简单按钮、下拉按钮和拆分按钮。图 14 中的 HelloWorld 按钮是一个按钮。按下该按钮时，将触发相应的命令。 除了 Enabled 属性之外，PushButton 还具有 AvailabilityClassName 属性，该属性可用于设置 IExternalCommandAvailability 接口的名称，该接口控制命令何时可用。</p>
+<p>代码区域：添加按钮</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private void AddPushButton(RibbonPanel panel)</span><br><span class="line">&#123;</span><br><span class="line">        PushButton pushButton = panel.AddItem(new PushButtonData(&quot;HelloWorld&quot;,</span><br><span class="line">                &quot;HelloWorld&quot;, @&quot;D:\HelloWorld.dll&quot;, &quot;HelloWorld.CsHelloWorld&quot;)) as PushButton;</span><br><span class="line"></span><br><span class="line">        pushButton.ToolTip = &quot;Say Hello World&quot;;</span><br><span class="line">        // Set the large image shown on button</span><br><span class="line">        pushButton.LargeImage = </span><br><span class="line">                new BitmapImage(new Uri(@&quot;D:\Sample\HelloWorld\bin\Debug\39-Globe_32x32.png&quot;));</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="Drop-down-buttons-下拉按钮"><a href="#Drop-down-buttons-下拉按钮" class="headerlink" title="Drop-down buttons 下拉按钮"></a>Drop-down buttons 下拉按钮</h5><p>下拉按钮展开后，可在下拉菜单中显示两个或多个命令。在 Revit API 中，下拉按钮称为 PulldownButtons。可以在下拉菜单中的项目之间添加水平分隔符。</p>
+<p>下拉菜单中的每个命令也可以具有关联的 LargeImage，如上面的示例所示。</p>
+<p>Split buttons 拆分按钮</p>
+<p>拆分按钮是附加了默认按钮的下拉按钮。按钮的上半部分类似于按钮，而下半部分用作下拉按钮。图 14 中的 Option One 按钮是一个拆分按钮。</p>
+<p>最初，按钮将是下拉列表中的顶部项目。但是，通过使用 IsSynchronizedWithCurrentItem 属性，默认命令（显示为拆分按钮的上半部分）可以与上次使用的命令同步。默认情况下，它将同步。在上面图 14 的 split 按钮中选择选项 2 将产生：</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-FCBB9C72-5786-4B34-BF1F-E41A99F446C3-low.png" alt="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-FCBB9C72-5786-4B34-BF1F-E41A99F446C3-low.png"></p>
+<p>图 16：与当前项目同步的 Split 按钮</p>
+<p>请注意，将忽略 SplitButton 的 ToolTip、ToolTipImage 和 LongDescription 属性。而是显示当前按钮的工具提示。<br>代码区域：添加拆分按钮</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">AddSplitButton</span>(<span class="params">RibbonPanel panel</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="built_in">string</span> assembly = <span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\Hello.dll&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// create push buttons for split button drop down</span></span><br><span class="line">        PushButtonData bOne = <span class="keyword">new</span> PushButtonData(<span class="string">&quot;ButtonNameA&quot;</span>, <span class="string">&quot;Option One&quot;</span>,</span><br><span class="line">         assembly, <span class="string">&quot;Hello.HelloOne&quot;</span>);</span><br><span class="line">        bOne.LargeImage = </span><br><span class="line">                <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\One.bmp&quot;</span>));</span><br><span class="line">    </span><br><span class="line">        PushButtonData bTwo = <span class="keyword">new</span> PushButtonData(<span class="string">&quot;ButtonNameB&quot;</span>, <span class="string">&quot;Option Two&quot;</span>, </span><br><span class="line">                assembly, <span class="string">&quot;Hello.HelloTwo&quot;</span>);</span><br><span class="line">        bTwo.LargeImage =</span><br><span class="line">         <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\Two.bmp&quot;</span>));</span><br><span class="line">    </span><br><span class="line">        PushButtonData bThree = <span class="keyword">new</span> PushButtonData(<span class="string">&quot;ButtonNameC&quot;</span>, <span class="string">&quot;Option Three&quot;</span>,</span><br><span class="line">         assembly, <span class="string">&quot;Hello.HelloThree&quot;</span>);</span><br><span class="line">        bThree.LargeImage = </span><br><span class="line">                <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\Three.bmp&quot;</span>));</span><br><span class="line">    </span><br><span class="line">        SplitButtonData sb1 = <span class="keyword">new</span> SplitButtonData(<span class="string">&quot;splitButton1&quot;</span>, <span class="string">&quot;Split&quot;</span>);</span><br><span class="line">        SplitButton sb = panel.AddItem(sb1) <span class="keyword">as</span> SplitButton;</span><br><span class="line">        sb.AddPushButton(bOne);</span><br><span class="line">        sb.AddPushButton(bTwo);</span><br><span class="line">        sb.AddPushButton(bThree);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="Radio-buttons-单选按钮"><a href="#Radio-buttons-单选按钮" class="headerlink" title="Radio buttons 单选按钮"></a>Radio buttons 单选按钮</h5><p>单选按钮组是一组互斥的切换按钮;一次只能选择一个。将 RadioButtonGroup 添加到面板后，使用 AddItem() 或 AddItems() 方法将切换按钮添加到该组。切换按钮派生自 PushButton。RadioButtonGroup.Current 属性可用于访问当前选定的按钮。</p>
+<p>请注意，工具提示不适用于单选按钮组。相反，当鼠标移动到各个按钮上时，将显示每个切换按钮的工具提示。</p>
+<p>代码区域：添加单选按钮组</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">AddRadioGroup</span>(<span class="params">RibbonPanel panel</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">// add radio button group</span></span><br><span class="line">        RadioButtonGroupData radioData = <span class="keyword">new</span> RadioButtonGroupData(<span class="string">&quot;radioGroup&quot;</span>);</span><br><span class="line">        RadioButtonGroup radioButtonGroup = panel.AddItem(radioData) <span class="keyword">as</span> RadioButtonGroup;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// create toggle buttons and add to radio button group</span></span><br><span class="line">        ToggleButtonData tb1 = <span class="keyword">new</span> ToggleButtonData(<span class="string">&quot;toggleButton1&quot;</span>, <span class="string">&quot;Red&quot;</span>);</span><br><span class="line">        tb1.ToolTip = <span class="string">&quot;Red Option&quot;</span>;</span><br><span class="line">        tb1.LargeImage = <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\Red.bmp&quot;</span>));</span><br><span class="line">        ToggleButtonData tb2 = <span class="keyword">new</span> ToggleButtonData(<span class="string">&quot;toggleButton2&quot;</span>, <span class="string">&quot;Green&quot;</span>);</span><br><span class="line">        tb2.ToolTip = <span class="string">&quot;Green Option&quot;</span>;</span><br><span class="line">        tb2.LargeImage = <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\Green.bmp&quot;</span>));</span><br><span class="line">        ToggleButtonData tb3 = <span class="keyword">new</span> ToggleButtonData(<span class="string">&quot;toggleButton3&quot;</span>, <span class="string">&quot;Blue&quot;</span>);</span><br><span class="line">        tb3.ToolTip = <span class="string">&quot;Blue Option&quot;</span>;</span><br><span class="line">        tb3.LargeImage = <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\Blue.bmp&quot;</span>));</span><br><span class="line">        radioButtonGroup.AddItem(tb1);</span><br><span class="line">        radioButtonGroup.AddItem(tb2);</span><br><span class="line">        radioButtonGroup.AddItem(tb3);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="Text-box-文本框"><a href="#Text-box-文本框" class="headerlink" title="Text box 文本框"></a>Text box 文本框</h5><p>文本框是供用户输入文本的输入控件。通过将 ShowImageAsButton 属性设置为 true，可以将文本框的图像用作可单击的按钮。默认值为 false。当 ShowImageAsButton 为 false 时，图像显示在文本框的左侧，当它充当按钮时，图像显示在文本框的右端，如图 14 所示。仅当用户按 Enter 键或在图像显示为按钮时单击关联的图像时，才会接受在文本框中输入的文本。否则，文本将恢复为之前的值。<br>除了为文本框提供工具提示外，PromptText 属性还可用于向用户指示要在文本框中输入的信息类型。当文本框为空且没有键盘焦点时，将显示提示文本。此文本以斜体显示。图 14 中的文本框具有提示文本 “Enter a comment”。</p>
+<p>可以使用 Width 属性设置文本框的宽度。默认值为 200 个与设备无关的单位。</p>
+<p>当用户按 Enter 键时，或者当 ShowImageAsButton 设置为 true 时，当用户单击文本框的关联图像时，将触发 TextBox.EnterPressed 事件。在实现 EnterPressed 事件处理程序时，将 sender 对象强制转换为 TextBox 以获取用户输入的值，如以下示例所示。</p>
+<p>代码区域：TextBox.EnterPressed 事件处理程序</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ProcessText</span>(<span class="params"><span class="built_in">object</span> sender, Autodesk.Revit.UI.Events.TextBoxEnterPressedEventArgs <span class="keyword">args</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">// cast sender as TextBox to retrieve text value</span></span><br><span class="line">        TextBox textBox = sender <span class="keyword">as</span> TextBox;</span><br><span class="line">        <span class="built_in">string</span> strText = textBox.Value <span class="keyword">as</span> <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>继承的 ItemText 属性对 TextBox 没有影响。用户输入的文本可以从 Value 属性中获取，该属性必须转换为字符串。 有关将 TextBox 添加到功能区面板的示例，包括如何注册上述事件，请参阅堆叠功能区项部分。</p>
+<h5 id="组合框"><a href="#组合框" class="headerlink" title="组合框"></a>组合框</h5><p> 组合框是包含一组可选项的下拉列表。将 ComboBox 添加到面板后，使用 AddItem() 或 AddItems() 方法将 ComboBoxMembers 添加到列表中。 还可以将分隔符添加到列表中的单独项中，或者可以选择使用 ComboBoxMember.GroupName 属性对成员进行分组。具有相同 GroupName 的所有成员将分组在一起，并显示组名称的标头。任何未分配 GroupName 的项目都将放置在列表顶部。请注意，在对项目进行分组时，不应使用分隔符，因为它们将放置在组的末尾，而不是按添加顺序放置。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-62DBB2D2-0D7B-4EDC-945B-DC86BAE6BF6F-low.png" alt="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-62DBB2D2-0D7B-4EDC-945B-DC86BAE6BF6F-low.png"></p>
+<p>图 17：带分组的组合框 </p>
+<p>ComboBox 有三个事件： </p>
+<p>CurrentChanged - 当 ComboBox 的当前项发生更改时触发</p>
+<p> DropDownClosed - 关闭 ComboBox 的下拉列表时触发  </p>
+<p>DropDownClosed - 打开 ComboBox 的下拉菜单时触发 </p>
+<p>有关将 ComboBox 添加到功能区面板的示例，请参阅以下有关堆叠功能区项的代码区域。</p>
+<h5 id="堆叠面板项目"><a href="#堆叠面板项目" class="headerlink" title="堆叠面板项目"></a>堆叠面板项目</h5><p> 为了节省面板空间，您可以以 2 个或 3 个为一组的形式添加小面板项。堆栈中的每个项都可以是按钮、下拉按钮、组合框或文本框。单选按钮组和拆分按钮不能堆叠。堆叠按钮应具有通过其 Image 属性关联的图像，而不是 LargeImage。16×16 图像非常适合小型堆叠按钮。 以下示例生成图 14 中的堆叠文本框和组合框。</p>
+<p>代码区域：将文本框和组合框添加为堆叠项</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">AddStackedButtons</span>(<span class="params">RibbonPanel panel</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        ComboBoxData cbData = <span class="keyword">new</span> ComboBoxData(<span class="string">&quot;comboBox&quot;</span>);</span><br><span class="line"></span><br><span class="line">        TextBoxData textData = <span class="keyword">new</span> TextBoxData(<span class="string">&quot;Text Box&quot;</span>);</span><br><span class="line">        textData.Image = </span><br><span class="line">                <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\39-Globe_16x16.png&quot;</span>));</span><br><span class="line">        textData.Name = <span class="string">&quot;Text Box&quot;</span>;</span><br><span class="line">        textData.ToolTip = <span class="string">&quot;Enter some text here&quot;</span>;</span><br><span class="line">        textData.LongDescription = <span class="string">&quot;This is text that will appear next to the image&quot;</span> </span><br><span class="line">                + <span class="string">&quot;when the user hovers the mouse over the control&quot;</span>;</span><br><span class="line">        textData.ToolTipImage = </span><br><span class="line">                <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\39-Globe_32x32.png&quot;</span>));</span><br><span class="line">    </span><br><span class="line">        IList stackedItems = panel.AddStackedItems(textData, cbData);</span><br><span class="line">        <span class="keyword">if</span> (stackedItems.Count &gt; <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                TextBox tBox = stackedItems[<span class="number">0</span>] <span class="keyword">as</span> TextBox;</span><br><span class="line">                <span class="keyword">if</span> (tBox != <span class="literal">null</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        tBox.PromptText = <span class="string">&quot;Enter a comment&quot;</span>;</span><br><span class="line">                        tBox.ShowImageAsButton = <span class="literal">true</span>;</span><br><span class="line">                        tBox.ToolTip = <span class="string">&quot;Enter some text&quot;</span>;</span><br><span class="line">                        <span class="comment">// Register event handler ProcessText</span></span><br><span class="line">                        tBox.EnterPressed += </span><br><span class="line">                <span class="keyword">new</span> EventHandler&lt;Autodesk.Revit.UI.Events.TextBoxEnterPressedEventArgs&gt;(ProcessText);</span><br><span class="line">                &#125;</span><br><span class="line">    </span><br><span class="line">                ComboBox cBox = stackedItems[<span class="number">1</span>] <span class="keyword">as</span> ComboBox;</span><br><span class="line">                <span class="keyword">if</span> (cBox != <span class="literal">null</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                        cBox.ItemText = <span class="string">&quot;ComboBox&quot;</span>;</span><br><span class="line">                        cBox.ToolTip = <span class="string">&quot;Select an Option&quot;</span>;</span><br><span class="line">                        cBox.LongDescription = <span class="string">&quot;Select a number or letter&quot;</span>;</span><br><span class="line">    </span><br><span class="line">                        ComboBoxMemberData cboxMemDataA = <span class="keyword">new</span> ComboBoxMemberData(<span class="string">&quot;A&quot;</span>, <span class="string">&quot;Option A&quot;</span>);</span><br><span class="line">                        cboxMemDataA.Image = </span><br><span class="line">                                <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\A.bmp&quot;</span>));</span><br><span class="line">                        cboxMemDataA.GroupName = <span class="string">&quot;Letters&quot;</span>;</span><br><span class="line">                        cBox.AddItem(cboxMemDataA);</span><br><span class="line">    </span><br><span class="line">                        ComboBoxMemberData cboxMemDataB = <span class="keyword">new</span> ComboBoxMemberData(<span class="string">&quot;B&quot;</span>, <span class="string">&quot;Option B&quot;</span>);</span><br><span class="line">                        cboxMemDataB.Image = </span><br><span class="line">                                <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\B.bmp&quot;</span>));</span><br><span class="line">                        cboxMemDataB.GroupName = <span class="string">&quot;Letters&quot;</span>;</span><br><span class="line">                        cBox.AddItem(cboxMemDataB);</span><br><span class="line">    </span><br><span class="line">                        ComboBoxMemberData cboxMemData = <span class="keyword">new</span> ComboBoxMemberData(<span class="string">&quot;One&quot;</span>, <span class="string">&quot;Option 1&quot;</span>);</span><br><span class="line">                        cboxMemData.Image = </span><br><span class="line">                                <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\One.bmp&quot;</span>));</span><br><span class="line">                        cboxMemData.GroupName = <span class="string">&quot;Numbers&quot;</span>;</span><br><span class="line">                        cBox.AddItem(cboxMemData);</span><br><span class="line">                        ComboBoxMemberData cboxMemData2 = <span class="keyword">new</span> ComboBoxMemberData(<span class="string">&quot;Two&quot;</span>, <span class="string">&quot;Option 2&quot;</span>);</span><br><span class="line">                        cboxMemData2.Image = </span><br><span class="line">                                <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\Two.bmp&quot;</span>));</span><br><span class="line">                        cboxMemData2.GroupName = <span class="string">&quot;Numbers&quot;</span>;</span><br><span class="line">                        cBox.AddItem(cboxMemData2);</span><br><span class="line">                        ComboBoxMemberData cboxMemData3 = <span class="keyword">new</span> ComboBoxMemberData(<span class="string">&quot;Three&quot;</span>, <span class="string">&quot;Option 3&quot;</span>);</span><br><span class="line">                        cboxMemData3.Image = </span><br><span class="line">                                <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\Three.bmp&quot;</span>));</span><br><span class="line">                        cboxMemData3.GroupName = <span class="string">&quot;Numbers&quot;</span>;</span><br><span class="line">                        cBox.AddItem(cboxMemData3);</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="Slide-out-panel-滑出面板"><a href="#Slide-out-panel-滑出面板" class="headerlink" title="Slide-out panel 滑出面板"></a>Slide-out panel 滑出面板</h5><p>使用 RibbonPanel.AddSlideOut() 方法将幻灯片向功能区面板的底部添加。添加滑出后，面板底部会显示一个箭头，单击该箭头时将显示滑出。调用 AddSlideOut() 后，用于向面板添加新项的后续调用将添加到滑出式面板，因此必须在将所有其他控件添加到功能区面板后添加滑出式控件。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-5B17EB5F-D4B4-472D-9033-B11C35F7E40B-low.png" alt="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-5B17EB5F-D4B4-472D-9033-B11C35F7E40B-low.png"></p>
+<p>图 18：滑出</p>
+<p>以下示例生成上面所示的滑出：</p>
+<p>代码区域：TextBox.EnterPressed 事件处理程序</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">AddSlideOut</span>(<span class="params">RibbonPanel panel</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="built_in">string</span> assembly = <span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\Hello.dll&quot;</span>;</span><br><span class="line"></span><br><span class="line">        panel.AddSlideOut();</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// create some controls for the slide out</span></span><br><span class="line">        PushButtonData b1 = <span class="keyword">new</span> PushButtonData(<span class="string">&quot;ButtonName1&quot;</span>, <span class="string">&quot;Button 1&quot;</span>, </span><br><span class="line">                assembly, <span class="string">&quot;Hello.HelloButton&quot;</span>);</span><br><span class="line">        b1.LargeImage = </span><br><span class="line">                <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\39-Globe_32x32.png&quot;</span>));</span><br><span class="line">        PushButtonData b2 = <span class="keyword">new</span> PushButtonData(<span class="string">&quot;ButtonName2&quot;</span>, <span class="string">&quot;Button 2&quot;</span>, </span><br><span class="line">                assembly, <span class="string">&quot;Hello.HelloTwo&quot;</span>);</span><br><span class="line">        b2.LargeImage =</span><br><span class="line">                <span class="keyword">new</span> BitmapImage(<span class="keyword">new</span> Uri(<span class="string">@&quot;D:\Sample\HelloWorld\bin\Debug\39-Globe_16x16.png&quot;</span>));</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// items added after call to AddSlideOut() are added to slide-out automatically</span></span><br><span class="line">        panel.AddItem(b1);</span><br><span class="line">        panel.AddItem(b2);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Revit-样式的任务对话框"><a href="#Revit-样式的任务对话框" class="headerlink" title="Revit 样式的任务对话框"></a>Revit 样式的任务对话框</h2><p>TaskDialog 是简单 Windows MessageBox 的 Revit 样式替代方案。它可用于显示信息和接收来自用户的简单输入。它具有一组通用的控件，这些控件按标准顺序排列，以确保与 Revit 的其余部分保持一致的外观。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-6D0C2A00-3CB5-4963-B108-515FA6924728-low.png" alt="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-6D0C2A00-3CB5-4963-B108-515FA6924728-low.png"></p>
+<p>图 19：Revit 风格的任务对话框</p>
+<p>有两种方法可以创建任务对话框并向用户显示。</p>
+<p>第一个选项是构造 TaskDialog，单独设置其属性，并使用实例方法 Show() 向用户显示它。</p>
+<p>第二种方法是使用静态 Show() 方法之一在一个步骤中构建和显示对话框。使用 static 方法时，只能指定选项的子集。<br>有关开发符合 Autodesk 使用的标准的任务对话框的信息，请参见 API 用户界面准则部分中的对话框准则。</p>
+<p>以下示例显示如何创建和显示上面显示的任务对话框。</p>
+<p>代码区域 3-27：显示 Revit 样式的 TaskDialog</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.ReadOnly)</span>]</span><br><span class="line"><span class="keyword">class</span> <span class="title">TaskDialogExample</span> : <span class="title">IExternalCommand</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">public</span> Autodesk.Revit.UI.<span class="function">Result <span class="title">Execute</span>(<span class="params">ExternalCommandData commandData, <span class="keyword">ref</span> <span class="built_in">string</span> message, Autodesk.Revit.DB.ElementSet elements</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="comment">// Get the application and document from external command data.</span></span><br><span class="line">                Application app = commandData.Application.Application;</span><br><span class="line">                Document activeDoc = commandData.Application.ActiveUIDocument.Document;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Creates a Revit task dialog to communicate information to the user.</span></span><br><span class="line">                TaskDialog mainDialog = <span class="keyword">new</span> TaskDialog(<span class="string">&quot;Hello, Revit!&quot;</span>);</span><br><span class="line">                mainDialog.MainInstruction = <span class="string">&quot;Hello, Revit!&quot;</span>;</span><br><span class="line">                mainDialog.MainContent = </span><br><span class="line">                        <span class="string">&quot;This sample shows how to use a Revit task dialog to communicate with the user.&quot;</span> </span><br><span class="line">                        + <span class="string">&quot;The command links below open additional task dialogs with more information.&quot;</span>;</span><br><span class="line">    </span><br><span class="line">                <span class="comment">// Add commmandLink options to task dialog</span></span><br><span class="line">                mainDialog.AddCommandLink(TaskDialogCommandLinkId.CommandLink1,</span><br><span class="line">                         <span class="string">&quot;View information about the Revit installation&quot;</span>);</span><br><span class="line">                mainDialog.AddCommandLink(TaskDialogCommandLinkId.CommandLink2, </span><br><span class="line">                                <span class="string">&quot;View information about the active document&quot;</span>);</span><br><span class="line">    </span><br><span class="line">                <span class="comment">// Set common buttons and default button. If no CommonButton or CommandLink is added,</span></span><br><span class="line">                <span class="comment">// task dialog will show a Close button by default</span></span><br><span class="line">                mainDialog.CommonButtons = TaskDialogCommonButtons.Close;</span><br><span class="line">                mainDialog.DefaultButton = TaskDialogResult.Close;</span><br><span class="line">    </span><br><span class="line">                <span class="comment">// Set footer text. Footer text is usually used to link to the help document.</span></span><br><span class="line">                mainDialog.FooterText = </span><br><span class="line">                        <span class="string">&quot;&quot;</span>                          + <span class="string">&quot;Click here for the Revit API Developer Center&quot;</span>;</span><br><span class="line">    </span><br><span class="line">                TaskDialogResult tResult = mainDialog.Show();</span><br><span class="line">    </span><br><span class="line">                <span class="comment">// If the user clicks the first command link, a simple Task Dialog </span></span><br><span class="line">                <span class="comment">// with only a Close button shows information about the Revit installation. </span></span><br><span class="line">                <span class="keyword">if</span> (TaskDialogResult.CommandLink1 == tResult)</span><br><span class="line">                &#123;</span><br><span class="line">                        TaskDialog dialog_CommandLink1 = <span class="keyword">new</span> TaskDialog(<span class="string">&quot;Revit Build Information&quot;</span>);</span><br><span class="line">                        dialog_CommandLink1.MainInstruction = </span><br><span class="line">                                <span class="string">&quot;Revit Version Name is: &quot;</span> + app.VersionName + <span class="string">&quot;\n&quot;</span></span><br><span class="line">                         + <span class="string">&quot;Revit Version Number is: &quot;</span> + app.VersionNumber + <span class="string">&quot;\n&quot;</span> </span><br><span class="line">                                + <span class="string">&quot;Revit Version Build is: &quot;</span> + app.VersionBuild;</span><br><span class="line">    </span><br><span class="line">                        dialog_CommandLink1.Show();</span><br><span class="line">    </span><br><span class="line">                &#125;</span><br><span class="line">    </span><br><span class="line">                <span class="comment">// If the user clicks the second command link, a simple Task Dialog </span></span><br><span class="line">                <span class="comment">// created by static method shows information about the active document</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (TaskDialogResult.CommandLink2 == tResult)</span><br><span class="line">                &#123;</span><br><span class="line">                        TaskDialog.Show(<span class="string">&quot;Active Document Information&quot;</span>, </span><br><span class="line">                                <span class="string">&quot;Active document: &quot;</span> + activeDoc.Title + <span class="string">&quot;\n&quot;</span></span><br><span class="line">                         + <span class="string">&quot;Active view name: &quot;</span> + activeDoc.ActiveView.Name);</span><br><span class="line">                &#125;</span><br><span class="line">    </span><br><span class="line">                <span class="keyword">return</span> Autodesk.Revit.UI.Result.Succeeded;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="数据库级外部应用程序"><a href="#数据库级外部应用程序" class="headerlink" title="数据库级外部应用程序"></a>数据库级外部应用程序</h2><p>数据库级附加模块是外部应用程序，不会向 Revit UI 添加任何内容。当应用程序的目的是将事件和&#x2F;或更新程序分配给 Revit 会话时，可以使用数据库级外部应用程序。</p>
+<p>要向 Revit 添加 DB 级外部应用程序，请创建一个实现 IExternalDBApplication 接口的对象。</p>
+<p>IExternalDBApplication 接口有两个抽象方法：OnStartup() 和 OnShutdown()，您可以在 DB 级外部应用程序中重写它们。</p>
+<p>Revit 在启动时调用 OnStartup()，在关闭时调用 OnShutdown()。这与 IExternalApplication 非常相似，但请注意，这些方法返回 Autodesk.Revit.DB.ExternalDBApplicationResult 而不是 Autodesk.Revit.UI.Result，并使用 ControlledApplication 而不是 UIControlledApplication。</p>
+<p>代码区域：IExternalDBApplication OnShutdown() 和 OnStartup()</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IExternalDBApplication</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">public</span> Autodesk.Revit.DB.<span class="function">ExternalDBApplicationResult <span class="title">OnStartup</span>(<span class="params">ControlledApplication application</span>)</span>;</span><br><span class="line">        <span class="keyword">public</span> Autodesk.Revit.DB.<span class="function">ExternalDBApplicationResult <span class="title">OnShutdown</span>(<span class="params">ControlledApplication application</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ControlledApplication 参数提供对 Revit 数据库事件的访问。数据库级应用程序将响应的事件和更新程序可以在 OnStartup 方法中注册。</p>
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://funtim41.github.io">funtim</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://funtim41.github.io/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/02%E6%8F%92%E4%BB%B6%E9%9B%86%E6%88%90/">https://funtim41.github.io/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/02%E6%8F%92%E4%BB%B6%E9%9B%86%E6%88%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="null" target="_blank">null</a> 许可协议。转载请注明来源 <a href="https://funtim41.github.io" target="_blank">funtim的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Revit%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/">Revit二次开发人员指南</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/01%E5%BC%80%E5%A7%8B/" title="01开始"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">01开始</div></div><div class="info-2"><div class="info-item-1">开始Revit 平台 API 可通过与 Microsoft .NET Framework 4.5.2 或 4.6 兼容的任何语言（如 Visual C# 或 Visual Basic .NET （VB.NET））进行完全访问。Visual C# 和 VB.NET 通常用于开发 Revit 平台 API 应用程序。但是，本手册的重点是使用 Visual C# 开发应用程序。 欢迎使用 Revit Platform API所有基于 Autodesk Revit 的产品都是参数化建筑信息模型 （BIM） 工具。这样的工具可以看作是用于构建 3D 模型的 CAD 程序，而不是一组单独的图纸文件。Autodesk Revit 建模是通过柱、墙、门和窗等真实世界的元素完成的。用户可以创建模型的视图，包括平面图、剖面图和详图索引。所有这些视图都是直接从 3D 物理模型生成的，因此在一个视图中所做的更改将自动传播到所有其他视图。此过程几乎消除了在模型中进行更改时更新多个图纸和细节的需要。 Autodesk Revit API 旨在反映与程序的图形用户界面相同的用户交互范例。因此，了解 API...</div></div></div></a><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/03%E5%BA%94%E7%94%A8%E5%8F%8A%E6%96%87%E6%A1%A3/" title="03应用及文档"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">03应用及文档</div></div><div class="info-2"><div class="info-item-1">Application及DocumentRevit 平台 API 中的顶级对象是Application和Document。这些类由 Application、UIApplication、Document 和 UIDocument 类表示。 Application对象是指单个 Revit 任务，提供对文档、选项和其他应用程序范围的数据和设置的访问。 Autodesk.Revit.UI.UIApplication - 提供对应用程序的 UI 级界面的访问，包括将 RibbonPanel 添加到用户界面的功能，以及在用户界面中获取活动文档的功能。 Autodesk.Revit.ApplicationServices.Application - 提供对所有其他应用程序级别属性的访问。 Document是表示建筑模型的单个 Revit 项目文件。Revit 可以打开多个项目，并为一个项目打开多个视图。 Autodesk.Revit.UI.UIDocument - 提供对文档的 UI...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/01%E5%BC%80%E5%A7%8B/" title="01开始"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-28</div><div class="info-item-2">01开始</div></div><div class="info-2"><div class="info-item-1">开始Revit 平台 API 可通过与 Microsoft .NET Framework 4.5.2 或 4.6 兼容的任何语言（如 Visual C# 或 Visual Basic .NET （VB.NET））进行完全访问。Visual C# 和 VB.NET 通常用于开发 Revit 平台 API 应用程序。但是，本手册的重点是使用 Visual C# 开发应用程序。 欢迎使用 Revit Platform API所有基于 Autodesk Revit 的产品都是参数化建筑信息模型 （BIM） 工具。这样的工具可以看作是用于构建 3D 模型的 CAD 程序，而不是一组单独的图纸文件。Autodesk Revit 建模是通过柱、墙、门和窗等真实世界的元素完成的。用户可以创建模型的视图，包括平面图、剖面图和详图索引。所有这些视图都是直接从 3D 物理模型生成的，因此在一个视图中所做的更改将自动传播到所有其他视图。此过程几乎消除了在模型中进行更改时更新多个图纸和细节的需要。 Autodesk Revit API 旨在反映与程序的图形用户界面相同的用户交互范例。因此，了解 API...</div></div></div></a><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/03%E5%BA%94%E7%94%A8%E5%8F%8A%E6%96%87%E6%A1%A3/" title="03应用及文档"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-28</div><div class="info-item-2">03应用及文档</div></div><div class="info-2"><div class="info-item-1">Application及DocumentRevit 平台 API 中的顶级对象是Application和Document。这些类由 Application、UIApplication、Document 和 UIDocument 类表示。 Application对象是指单个 Revit 任务，提供对文档、选项和其他应用程序范围的数据和设置的访问。 Autodesk.Revit.UI.UIApplication - 提供对应用程序的 UI 级界面的访问，包括将 RibbonPanel 添加到用户界面的功能，以及在用户界面中获取活动文档的功能。 Autodesk.Revit.ApplicationServices.Application - 提供对所有其他应用程序级别属性的访问。 Document是表示建筑模型的单个 Revit 项目文件。Revit 可以打开多个项目，并为一个项目打开多个视图。 Autodesk.Revit.UI.UIDocument - 提供对文档的 UI...</div></div></div></a><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/04%E5%85%83%E7%B4%A0%E8%A6%81%E7%82%B9/" title="04元素要点"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-28</div><div class="info-item-2">04元素要点</div></div><div class="info-2"><div class="info-item-1">元素要点元素对应于单个建筑或绘图构件，例如门、墙或尺寸标注。此外，元素可以是门类型、视图或材质定义。 元素分类Revit 图元分为六组：模型、草图、视图、组、注释和信息。每个组都包含相关的元素及其相应的符号。 模型元素模型元素表示建筑项目中存在的物理项。“模型元素”组中的元素可以细分为以下元素： 族实例 - 族实例包含族实例对象。可以将族对象载入到项目中，也可以从族样板创建族对象。有关更多信息，请参阅系列实例。 主体图元 - 主体图元包含系统族对象，这些对象可以包含其他模型图元，例如墙、屋顶、天花板和楼板。有关主体图元的更多信息，请参见墙、楼板、屋顶和洞口。 结构元素-结构图元包含仅用于 Revit 结构特征的图元。有关 Structure Elements 的更多信息，请参见 Structural Engineering。 视图元素视图图元表示在 Revit 中查看其他对象并与其他对象交互的方式。有关更多信息，请参阅视图。 组元素组图元表示辅助图元，例如 Revit...</div></div></div></a><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/05%E8%BF%87%E6%BB%A4/" title="05过滤"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-28</div><div class="info-item-2">05过滤</div></div><div class="info-2"><div class="info-item-1">Filtering 过滤Revit API提供了一种过滤和迭代Revit文档中图元的机制。这是获取一组相关元素（如文档中的所有墙或门）的最佳方法。过滤器也可以用来找到一个非常具体的元素集，如所有特定大小的梁。 获取通过指定过滤器的元素的基本步骤如下：  创建新的FilteredElementCollector 对它应用一个或多个过滤器 获取过滤后的元素或元素ID（使用以下几种方法之一）  下面的示例涵盖了在文档中筛选和迭代元素的基本步骤。 代码区域6-1：使用元素过滤获取文档中的所有墙实例 1234567891011121314// Find all Wall instances in the document by using category filterElementCategoryFilter filter = new ElementCategoryFilter(BuiltInCategory.OST_Walls);// Apply the filter to the elements in the active document// Use shortcut...</div></div></div></a><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/06%E9%80%89%E6%8B%A9/" title="06选择"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-28</div><div class="info-item-2">06选择</div></div><div class="info-2"><div class="info-item-1">选择您可以使用UIDo.Selection.GetElementIds()方法从当前活动文档中获取所选对象，该方法返回所选元素的ElementIds集合。此方法返回的集合可以直接与FilteredElementCollector一起使用，以筛选选定的元素。 Selection对象还可以用于使用SetElementIds()方法以编程方式更改当前选择。 Pages in this section 本节中的页面  Changing the Selection 更改选择 User Selection 用户选择 Filtered User Selection 筛选的用户选择  更改选择要修改选定的图元，请执行以下操作：  创建新的ElementId列表。 把ElementIds放进去。 使用新列表调用SetElementIds()。  下面的示例说明了如何通过获取当前选择并仅过滤出墙以设置为新选择来更改选定的元素。 代码区域7-1：更改所选元素 123456789101112131415161718192021222324252627282930313233private void...</div></div></div></a><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/07%E5%8F%82%E6%95%B0/" title="07参数"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-28</div><div class="info-item-2">07参数</div></div><div class="info-2"><div class="info-item-1">参数Revit提供了一种常规机制，为每个图元提供一组可编辑的参数。 在Revit UI中，某些图元参数在“图元属性”窗口中可见。以下各节介绍如何获取和使用内置参数、共享参数和全局参数。 在Revit Platform...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">funtim</div><div class="author-info-description">这是一个描述</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/FunTim41"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/FunTim41" target="_blank" title="Github"><i class="fab fa-github" style="color: #FFFFFF;"></i></a><a class="social-icon" href="mailto:funtim41@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E9%9B%86%E6%88%90"><span class="toc-number">1.</span> <span class="toc-text">插件集成</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E9%83%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.2.</span> <span class="toc-text">外部命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E5%92%8C%E8%BF%90%E8%A1%8C%E5%A4%96%E9%83%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.2.1.</span> <span class="toc-text">加载和运行外部命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IExternalCommand"><span class="toc-number">1.2.2.</span> <span class="toc-text">IExternalCommand</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E9%83%A8%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.3.</span> <span class="toc-text">外部应用程序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IExternalApplication"><span class="toc-number">1.3.1.</span> <span class="toc-text">IExternalApplication</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E6%B3%A8%E5%86%8C"><span class="toc-number">1.4.</span> <span class="toc-text">插件注册</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%85%E5%8D%95%E6%96%87%E4%BB%B6"><span class="toc-number">1.4.1.</span> <span class="toc-text">清单文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9-Revit-%E6%8F%92%E4%BB%B6%E8%BF%9B%E8%A1%8C%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D"><span class="toc-number">1.5.</span> <span class="toc-text">对 Revit 插件进行数字签名</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D"><span class="toc-number">1.5.1.</span> <span class="toc-text">对应用程序进行数字签名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C%E8%87%AA%E5%B7%B1%E7%9A%84%E8%AF%81%E4%B9%A6%E4%BB%A5%E4%BE%9B%E6%B5%8B%E8%AF%95%E5%92%8C%E5%86%85%E9%83%A8%E4%BD%BF%E7%94%A8"><span class="toc-number">1.5.2.</span> <span class="toc-text">制作自己的证书以供测试和内部使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E5%8F%82%E8%80%83"><span class="toc-number">1.5.3.</span> <span class="toc-text">数字签名参考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Revit-Help-Revit-%E5%B8%AE%E5%8A%A9"><span class="toc-number">1.6.</span> <span class="toc-text">Revit Help Revit 帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Microsoft-and-Other-Sites-Microsoft-%E5%92%8C%E5%85%B6%E4%BB%96%E7%BD%91%E7%AB%99"><span class="toc-number">1.7.</span> <span class="toc-text">Microsoft and Other Sites Microsoft 和其他网站</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AutoCAD-references-AutoCAD-%E5%8F%82%E8%80%83"><span class="toc-number">1.8.</span> <span class="toc-text">AutoCAD references AutoCAD 参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E5%8C%96"><span class="toc-number">1.9.</span> <span class="toc-text">本地化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E6%80%A7"><span class="toc-number">1.10.</span> <span class="toc-text">特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TransactionAttribute"><span class="toc-number">1.10.1.</span> <span class="toc-text">TransactionAttribute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JournalingAttribute"><span class="toc-number">1.10.2.</span> <span class="toc-text">JournalingAttribute</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Revit-%E5%BC%82%E5%B8%B8"><span class="toc-number">1.11.</span> <span class="toc-text">Revit 异常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E5%8C%BA%E9%9D%A2%E6%9D%BF%E5%92%8C%E6%8E%A7%E4%BB%B6"><span class="toc-number">1.12.</span> <span class="toc-text">功能区面板和控件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84-Ribbon-%E9%80%89%E9%A1%B9%E5%8D%A1"><span class="toc-number">1.12.1.</span> <span class="toc-text">创建新的 Ribbon 选项卡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84-Ribbon-%E9%9D%A2%E6%9D%BF%E5%92%8C%E6%8E%A7%E4%BB%B6"><span class="toc-number">1.12.2.</span> <span class="toc-text">创建新的 Ribbon 面板和控件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ribbon-Panel-%E5%8A%9F%E8%83%BD%E5%8C%BA%E9%9D%A2%E6%9D%BF"><span class="toc-number">1.12.3.</span> <span class="toc-text">Ribbon Panel 功能区面板</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Tooltips-%E5%B7%A5%E5%85%B7%E6%8F%90%E7%A4%BA"><span class="toc-number">1.12.3.1.</span> <span class="toc-text">Tooltips 工具提示</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Contextual-Help-%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B8%AE%E5%8A%A9"><span class="toc-number">1.12.3.2.</span> <span class="toc-text">Contextual Help 上下文帮助</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E5%8C%BA%E6%8E%A7%E5%88%B6%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="toc-number">1.12.3.3.</span> <span class="toc-text">功能区控制可用性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E5%8C%BA%E6%8E%A7%E4%BB%B6"><span class="toc-number">1.12.3.4.</span> <span class="toc-text">功能区控件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8C%89%E9%92%AE"><span class="toc-number">1.12.3.4.1.</span> <span class="toc-text">按钮</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Drop-down-buttons-%E4%B8%8B%E6%8B%89%E6%8C%89%E9%92%AE"><span class="toc-number">1.12.3.4.2.</span> <span class="toc-text">Drop-down buttons 下拉按钮</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Radio-buttons-%E5%8D%95%E9%80%89%E6%8C%89%E9%92%AE"><span class="toc-number">1.12.3.4.3.</span> <span class="toc-text">Radio buttons 单选按钮</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Text-box-%E6%96%87%E6%9C%AC%E6%A1%86"><span class="toc-number">1.12.3.4.4.</span> <span class="toc-text">Text box 文本框</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E6%A1%86"><span class="toc-number">1.12.3.4.5.</span> <span class="toc-text">组合框</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A0%86%E5%8F%A0%E9%9D%A2%E6%9D%BF%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.12.3.4.6.</span> <span class="toc-text">堆叠面板项目</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Slide-out-panel-%E6%BB%91%E5%87%BA%E9%9D%A2%E6%9D%BF"><span class="toc-number">1.12.3.4.7.</span> <span class="toc-text">Slide-out panel 滑出面板</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Revit-%E6%A0%B7%E5%BC%8F%E7%9A%84%E4%BB%BB%E5%8A%A1%E5%AF%B9%E8%AF%9D%E6%A1%86"><span class="toc-number">1.13.</span> <span class="toc-text">Revit 样式的任务对话框</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BA%A7%E5%A4%96%E9%83%A8%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.14.</span> <span class="toc-text">数据库级外部应用程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%EF%BC%9A%E7%BF%BB%E8%AF%91%E8%87%AARevit-API-Developers-Guide"><span class="toc-number">1.15.</span> <span class="toc-text">注：翻译自Revit API Developers Guide</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/06%E9%80%89%E6%8B%A9/" title="06选择">06选择</a><time datetime="2024-12-28T13:19:50.000Z" title="发表于 2024-12-28 21:19:50">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/07%E5%8F%82%E6%95%B0/" title="07参数">07参数</a><time datetime="2024-12-28T13:19:50.000Z" title="发表于 2024-12-28 21:19:50">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/08%E9%9B%86%E5%90%88/" title="08集合">08集合</a><time datetime="2024-12-28T13:19:50.000Z" title="发表于 2024-12-28 21:19:50">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/09%E7%BC%96%E8%BE%91%E5%85%83%E7%B4%A0/" title="09编辑元素">09编辑元素</a><time datetime="2024-12-28T13:19:50.000Z" title="发表于 2024-12-28 21:19:50">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/11%E4%BA%8B%E5%8A%A1/" title="11事务">11事务</a><time datetime="2024-12-28T13:19:50.000Z" title="发表于 2024-12-28 21:19:50">2024-12-28</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By funtim</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>(() => {
+  const panguFn = () => {
+    if (typeof pangu === 'object') pangu.autoSpacingPage()
+    else {
+      btf.getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+        .then(() => {
+          pangu.autoSpacingPage()
+        })
+    }
+  }
+
+  const panguInit = () => {
+    if (false){
+      GLOBAL_CONFIG_SITE.isPost && panguFn()
+    } else {
+      panguFn()
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', panguInit, 'pangu')
+  document.addEventListener('DOMContentLoaded', panguInit)
+})()</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

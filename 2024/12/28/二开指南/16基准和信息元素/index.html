@@ -1,0 +1,276 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>16基准和信息元素 | funtim的博客</title><meta name="author" content="funtim"><meta name="copyright" content="funtim"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="基准和信息元素本章介绍Revit中的基准元素和信息元素。  基准元素包括标高、轴网和模型线。 信息元素包括阶段、设计选项和EnergyDataSettings。  有关Revit图元分类的详细信息，请参见图元要素。 注：如果您需要更多信息，请参阅相关章节：  有关荷载基础、荷载工况、荷载组合、荷载性质和荷载用途，请参阅结构工程 对于模型曲线，请参阅草图 对于材质和填充图案，请参阅材质 有关能量数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="16基准和信息元素">
+<meta property="og:url" content="https://funtim41.github.io/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/16%E5%9F%BA%E5%87%86%E5%92%8C%E4%BF%A1%E6%81%AF%E5%85%83%E7%B4%A0/">
+<meta property="og:site_name" content="funtim的博客">
+<meta property="og:description" content="基准和信息元素本章介绍Revit中的基准元素和信息元素。  基准元素包括标高、轴网和模型线。 信息元素包括阶段、设计选项和EnergyDataSettings。  有关Revit图元分类的详细信息，请参见图元要素。 注：如果您需要更多信息，请参阅相关章节：  有关荷载基础、荷载工况、荷载组合、荷载性质和荷载用途，请参阅结构工程 对于模型曲线，请参阅草图 对于材质和填充图案，请参阅材质 有关能量数据">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://funtim41.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2024-12-28T13:19:50.000Z">
+<meta property="article:modified_time" content="2024-12-28T13:19:57.705Z">
+<meta property="article:author" content="funtim">
+<meta property="article:tag" content="Revit二次开发人员指南">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://funtim41.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/OIP.jfif"><link rel="canonical" href="https://funtim41.github.io/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/16%E5%9F%BA%E5%87%86%E5%92%8C%E4%BF%A1%E6%81%AF%E5%85%83%E7%B4%A0/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: funtim","link":"链接: ","source":"来源: funtim的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '16基准和信息元素',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/OIP.jfif" alt="Logo"><span class="site-name">funtim的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">16基准和信息元素</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">16基准和信息元素</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-28T13:19:50.000Z" title="发表于 2024-12-28 21:19:50">2024-12-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-28T13:19:57.705Z" title="更新于 2024-12-28 21:19:57">2024-12-28</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="基准和信息元素"><a href="#基准和信息元素" class="headerlink" title="基准和信息元素"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Revit_Geometric_Elements_Datum_and_Information_Elements_html">基准和信息元素</a></h1><p>本章介绍Revit中的基准元素和信息元素。</p>
+<ul>
+<li>基准元素包括标高、轴网和模型线。</li>
+<li>信息元素包括阶段、设计选项和EnergyDataSettings。</li>
+</ul>
+<p>有关Revit图元分类的详细信息，请参见图元要素。</p>
+<p>注：如果您需要更多信息，请参阅相关章节：</p>
+<ul>
+<li>有关荷载基础、荷载工况、荷载组合、荷载性质和荷载用途，请参阅结构工程</li>
+<li>对于模型曲线，请参阅草图</li>
+<li>对于材质和填充图案，请参阅材质</li>
+<li>有关能量数据设置，请参阅能量数据</li>
+</ul>
+<p>本节中的页面</p>
+<ul>
+<li>Levels 标高</li>
+<li>Grids 轴网</li>
+<li>Phase 阶段</li>
+<li>Design Options 设计选项</li>
+</ul>
+<h2 id="标高"><a href="#标高" class="headerlink" title="标高"></a>标高</h2><p>标高是一个有限的水平面，用作以标高为主体的图元（如墙、屋顶、楼板和天花板）的参照。</p>
+<p>在Revit Platform API中，Level类派生自DatumPlane类，而DatumPlane类派生自Element类。继承的Name属性用于检索Revit UI中标高编号旁边的用户可见标高名称。若要检索项目中的所有标高，请将ElementClassFilter与Level类一起使用。</p>
+<h3 id="高程"><a href="#高程" class="headerlink" title="高程"></a>高程</h3><p>Level类具有以下属性：</p>
+<ul>
+<li>“高程”特性用于检索或更改高于或低于地平面的高程。</li>
+<li>ProjectElevation属性用于检索相对于项目原点的高程，而不考虑高程基准参数值。</li>
+<li>“高程基准”值是一个标高类型参数。<ul>
+<li>它的内置参数是LEVEL_RELATIVE_BASE_TYPE。</li>
+<li>它的类型是整型</li>
+<li>0对应于项目，1对应于共享。</li>
+</ul>
+</li>
+</ul>
+<p>下面的代码示例阐释如何使用Level类筛选器检索项目中的所有标高。</p>
+<p>代码区域15-1：检索所有标高</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Getinfo_Level</span>(<span class="params">Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        StringBuilder levelInformation = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="built_in">int</span> levelNumber = <span class="number">0</span>;</span><br><span class="line">        FilteredElementCollector collector = <span class="keyword">new</span> FilteredElementCollector(document);</span><br><span class="line">        ICollection collection = collector.OfClass(<span class="keyword">typeof</span>(Level)).ToElements();</span><br><span class="line">        <span class="keyword">foreach</span> (Element e <span class="keyword">in</span> collection)</span><br><span class="line">        &#123;</span><br><span class="line">                Level level = e <span class="keyword">as</span> Level;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (<span class="literal">null</span> != level)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="comment">// keep track of number of levels</span></span><br><span class="line">                        levelNumber++;</span><br><span class="line"></span><br><span class="line">                        <span class="comment">//get the name of the level</span></span><br><span class="line">                        levelInformation.Append(<span class="string">&quot;\nLevel Name: &quot;</span> + level.Name);</span><br><span class="line"></span><br><span class="line">                        <span class="comment">//get the elevation of the level</span></span><br><span class="line">                        levelInformation.Append(<span class="string">&quot;\n\tElevation: &quot;</span> + level.Elevation);</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// get the project elevation of the level</span></span><br><span class="line">                        levelInformation.Append(<span class="string">&quot;\n\tProject Elevation: &quot;</span> + level.ProjectElevation);</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//number of total levels in current document</span></span><br><span class="line">        levelInformation.Append(<span class="string">&quot;\n\n There are &quot;</span> + levelNumber + <span class="string">&quot; levels in the document!&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//show the level information in the messagebox</span></span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,levelInformation.ToString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创造标高"><a href="#创造标高" class="headerlink" title="创造标高"></a>创造标高</h3><p>使用“标高”命令，可以定义建筑内的垂直高度或楼层，还可以为每个现有楼层或其他建筑参照创建标高。必须在剖面视图或立面视图中添加标高。此外，还可以使用Revit平台API创建新标高。</p>
+<p>下面的代码示例阐释如何创建新标高。</p>
+<p>代码区域15-2：创建新标高</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Level <span class="title">CreateLevel</span>(<span class="params">Autodesk.Revit.DB.Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// The elevation to apply to the new level</span></span><br><span class="line">    <span class="built_in">double</span> elevation = <span class="number">20.0</span>; </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Begin to create a level</span></span><br><span class="line">    Level level = Level.Create(document, elevation);</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> == level)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Create a new level failed.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Change the level name</span></span><br><span class="line">    level.Name = <span class="string">&quot;New level&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> level;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：创建新标高后，Revit不会为此标高创建关联的平面视图。如果有必要，您可以自己创建。有关如何创建平面视图的详细信息，请参见平面视图。</p>
+<h2 id="轴网"><a href="#轴网" class="headerlink" title="轴网"></a>轴网</h2><p>Grid类表示Autodesk Revit中的一条轴网线。</p>
+<p>网格由Grid类表示，Grid类派生自DatumPlane类，DatumPlane类派生自Element类。它包含所有网格属性和方法。继承的Name属性用于检索网格线的内容。</p>
+<h3 id="曲线"><a href="#曲线" class="headerlink" title="曲线"></a>曲线</h3><p>Grid类Curve属性获取表示网格线几何图形的对象。</p>
+<ul>
+<li>如果IsCurved属性返回true，则Curve属性将是Arc类对象。</li>
+<li>如果IsCurved属性返回false，则Curve属性将是Line类对象。</li>
+</ul>
+<p>有关详细信息，请参考几何图形。</p>
+<p>下面的代码是一个使用Grid类的简单示例。调用命令后，结果将显示在消息框中。</p>
+<p>代码区域15-3：使用Grid类</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GetInfo_Grid</span>(<span class="params">Grid grid</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">string</span> message = <span class="string">&quot;Grid : &quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Show IsCurved property</span></span><br><span class="line">    message += <span class="string">&quot;\nIf grid is Arc : &quot;</span> + grid.IsCurved;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Show Curve information</span></span><br><span class="line">    Autodesk.Revit.DB.Curve curve = grid.Curve;</span><br><span class="line">    <span class="keyword">if</span> (grid.IsCurved)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// if the curve is an arc, give center and radius information</span></span><br><span class="line">        Autodesk.Revit.DB.Arc arc = curve <span class="keyword">as</span> Autodesk.Revit.DB.Arc;</span><br><span class="line">        message += <span class="string">&quot;\nArc&#x27;s radius: &quot;</span> + arc.Radius;</span><br><span class="line">        message += <span class="string">&quot;\nArc&#x27;s center:  (&quot;</span> + XYZToString(arc.Center);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// if the curve is a line, give length information</span></span><br><span class="line">        Autodesk.Revit.DB.Line line = curve <span class="keyword">as</span> Autodesk.Revit.DB.Line;</span><br><span class="line">        message += <span class="string">&quot;\nLine&#x27;s Length: &quot;</span> + line.Length;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Get curve start point</span></span><br><span class="line">    message += <span class="string">&quot;\nStart point: &quot;</span> + XYZToString(curve.GetEndPoint(<span class="number">0</span>));</span><br><span class="line">    <span class="comment">// Get curve end point</span></span><br><span class="line">    message += <span class="string">&quot;; End point: &quot;</span> + XYZToString(curve.GetEndPoint(<span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,message);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// output the point&#x27;s three coordinates</span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">XYZToString</span>(<span class="params">XYZ point</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;(&quot;</span> + point.X + <span class="string">&quot;, &quot;</span> + point.Y + <span class="string">&quot;, &quot;</span> + point.Z + <span class="string">&quot;)&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建轴网"><a href="#创建轴网" class="headerlink" title="创建轴网"></a>创建轴网</h3><p>Grid类中有两个重载的Create（）方法可用于在Revit Platform API中创建新的轴网。使用以下方法和不同的参数，可以创建曲线或直线格线：</p>
+<p>代码区域15-4：Grid.Create（）</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Grid <span class="title">Create</span>(<span class="params"> Document document, Arc arc </span>)</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> Grid <span class="title">Create</span>(<span class="params"> Document document, Line line </span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>注意：用于创建网格的弧或线必须位于水平面内。</p>
+<p>下面的代码示例演示如何创建带有直线或圆弧的新轴网。</p>
+<p>代码区域15-5：使用直线或圆弧创建网格</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CreateGrid</span>(<span class="params">Autodesk.Revit.DB.Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Create the geometry line which the grid locates</span></span><br><span class="line">    XYZ start = <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    XYZ end = <span class="keyword">new</span> XYZ(<span class="number">30</span>, <span class="number">30</span>, <span class="number">0</span>);</span><br><span class="line">    Line geomLine = Line.CreateBound(start, end);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create a grid using the geometry line</span></span><br><span class="line">    Grid lineGrid = Grid.Create(document, geomLine);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> == lineGrid)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Create a new straight grid failed.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Modify the name of the created grid</span></span><br><span class="line">    lineGrid.Name = <span class="string">&quot;New Name1&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create the geometry arc which the grid locates</span></span><br><span class="line">    XYZ end0 = <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    XYZ end1 = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">40</span>, <span class="number">0</span>);</span><br><span class="line">    XYZ pointOnCurve = <span class="keyword">new</span> XYZ(<span class="number">5</span>, <span class="number">7</span>, <span class="number">0</span>);</span><br><span class="line">    Arc geomArc = Arc.Create(end0, end1, pointOnCurve);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create a grid using the geometry arc</span></span><br><span class="line">    Grid arcGrid = Grid.Create(document, geomArc);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> == arcGrid)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;Create a new curved grid failed.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Modify the name of the created grid</span></span><br><span class="line">    arcGrid.Name = <span class="string">&quot;New Name2&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：在Revit中，创建轴网时，轴网将自动按数字或字母顺序命名。</p>
+<h2 id="阶段"><a href="#阶段" class="headerlink" title="阶段"></a>阶段</h2><p>一些建筑项目，如翻新，分阶段进行。阶段具有以下特征：</p>
+<ul>
+<li>阶段表示项目生命周期中的不同时间段。</li>
+<li>建筑物内图元的寿命由阶段控制。</li>
+<li>每个元素都有一个构造阶段，但只有具有有限寿命的元素才有一个破坏阶段。</li>
+</ul>
+<p>项目中的所有阶段都可以从Document对象中检索。Phase对象包含三个有用的信息：Name、ID和UniqueId。其余属性始终返回null或空集合。</p>
+<p>添加到项目中的每个新建模构件都具有“创建的阶段ID”和“拆除的阶段ID”特性。Element.AllowPhases（）方法指示是否可以修改其阶段ID属性。</p>
+<p>“创建的阶段ID”特性具有以下特征：</p>
+<ul>
+<li>它标识添加组件的阶段。</li>
+<li>默认值为与当前视图“阶段”值相同的ID。</li>
+<li>通过选择与下拉列表相对应的新值来更改“创建的阶段ID”参数。</li>
+</ul>
+<p>已拆除阶段ID属性具有以下特征：</p>
+<ul>
+<li>它标识在哪个阶段拆除构件。</li>
+<li>默认值为无。</li>
+<li>使用拆除工具拆除构件会将特性更新为拆除图元所在视图中的当前阶段ID值。</li>
+<li>可以通过将“已拆除的阶段ID”特性设置为其他值来拆除构件。</li>
+<li>如果使用Revit Platform API删除某个阶段，则当前阶段中的所有建模构件仍然存在。这些元件的“创建的阶段ID”参数值将更改为“特性”对话框下拉列表中的下一项。 <img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-3840696A-98D6-4898-8004-EFB85A3247E1-low.png" alt="img"></li>
+</ul>
+<p>图65：阶段创建的组件参数值</p>
+<p>下面的代码示例显示当前文档中支持的所有阶段。阶段名称显示在消息框中。</p>
+<p>代码区域15-6：展示所有支持的阶段</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Getinfo_Phase</span>(<span class="params">Document doc</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">// Get the phase array which contains all the phases.</span></span><br><span class="line">        PhaseArray phases = doc.Phases;</span><br><span class="line">        <span class="comment">// Format the string which identifies all supported phases in the current document.</span></span><br><span class="line">        String prompt = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> != phases.Size)</span><br><span class="line">        &#123;</span><br><span class="line">                prompt = <span class="string">&quot;All the phases in current document list as follow:&quot;</span>;</span><br><span class="line">                <span class="keyword">foreach</span> (Phase ii <span class="keyword">in</span> phases)</span><br><span class="line">                &#123;</span><br><span class="line">                        prompt += <span class="string">&quot;\n\t&quot;</span> + ii.Name;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">                prompt = <span class="string">&quot;There are no phases in current document.&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// Give the user the information.</span></span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,prompt);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="设计选项"><a href="#设计选项" class="headerlink" title="设计选项"></a>设计选项</h2><p>设计选项提供了一种在项目中探索备选设计的方法。</p>
+<p>设计选项提供了适应项目范围变化或开发供审查的替代设计的灵活性。您可以开始使用主项目模型，然后沿着向客户展示的方式开发变体。大多数图元都可以添加到设计选项中。不能添加到设计选项中的图元被视为主模型的一部分，并且没有设计备选方案。</p>
+<p>设计选项的主要用途是作为元素类的属性。请参阅以下示例。</p>
+<p>代码区域15-7：使用设计选项</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Getinfo_DesignOption</span>(<span class="params">Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the selected Elements in the Active Document</span></span><br><span class="line">    UIDocument uidoc = <span class="keyword">new</span> UIDocument(document);</span><br><span class="line">    ICollection selectedIds = uidoc.Selection.GetElementIds();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">foreach</span> (ElementId id <span class="keyword">in</span> selectedIds)</span><br><span class="line">    &#123;</span><br><span class="line">        Element element = document.GetElement(id);</span><br><span class="line">        <span class="comment">//Use the DesignOption property of Element</span></span><br><span class="line">        <span class="keyword">if</span> (element.DesignOption != <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,element.DesignOption.Name.ToString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下规则适用于设计选项</p>
+<ul>
+<li>如果元素位于主模型中，则DesignOption属性的值为null。否则，将返回在Revit UI中创建的名称。</li>
+<li>ActiveDocument中只能存在一个活动DesignOption元素。<ul>
+<li>主选项被视为默认的活动DesignOption。例如，一个设计选项集名为“墙”，该设计选项集中有两个设计选项，分别名为“砖墙”和“玻璃墙”。如果“砖墙”是主选项，则元素迭代器只检索此选项和属于它的元素。“玻璃墙”不活跃。</li>
+</ul>
+</li>
+</ul>
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://funtim41.github.io">funtim</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://funtim41.github.io/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/16%E5%9F%BA%E5%87%86%E5%92%8C%E4%BF%A1%E6%81%AF%E5%85%83%E7%B4%A0/">https://funtim41.github.io/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/16%E5%9F%BA%E5%87%86%E5%92%8C%E4%BF%A1%E6%81%AF%E5%85%83%E7%B4%A0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="null" target="_blank">null</a> 许可协议。转载请注明来源 <a href="https://funtim41.github.io" target="_blank">funtim的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Revit%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/">Revit二次开发人员指南</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/14%E6%97%8F%E6%96%87%E6%A1%A3/" title="14族文档"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">14族文档</div></div><div class="info-2"><div class="info-item-1">族文档本节讨论族以及如何：  创建和修改族文档 访问族类型和参数  本节中的页面  关于族文档 在族中创建图元 族元素的可见性 管理族类型和参数  关于族文档族族对象表示整个Revit族。族文档是表示族的文档(rfa)而不是Revit项目。 使用Revit API的族创建功能，可以创建和编辑族及其类型。当您有来自外部系统的现有数据并希望将其转换为Revit族库时，此功能特别有用。 对系统族编辑的API访问不可用。 类别如前一节所述，Family.FamilyCategory属性指示族的类别，如柱、家具、结构框架或窗。 以下代码可用于确定打开的Revit族文档中族的类别。 1string categoryName = familyDoc.OwnerFamily.FamilyCategory.Name;  还可以设置FamilyCategory，以允许更改正在编辑的族的类别。  参数设置 可以从族文档的OwnerFamily属性访问族参数，如下例所示。 代码区域13-2：打开的Revit族文档的类别 1234567// get the owner family of the...</div></div></div></a><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/17%E6%B3%A8%E9%87%8A%E5%85%83%E7%B4%A0/" title="17注释元素"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">17注释元素</div></div><div class="info-2"><div class="info-item-1">注释元素本节介绍Revit注释元素，例如尺寸标注、文字注释、注释记号、标记和符号。 请注意：  尺寸标注是视图专有的图元，用于显示项目中的尺寸和距离。 为详图创建详图曲线。它们仅在绘制它们的视图中可见。它们通常绘制在模型视图上。 标签是用于标识图形中图元的注释。与标签关联的特性可以显示在明细表中。 AnnotationSymbol在加载到项目中时具有多个引线选项。  有关Revit Element分类的详细信息，请参见元素要点。 尺寸标注和约束永久性尺寸标注和尺寸标注相关约束。 Dimension类表示永久性尺寸标注和与尺寸标注相关的约束元素。在UI中编辑元素时创建的临时尺寸标注不可访问。高程点和高程点坐标由SpotDimension类表示。 下面的代码示例在结尾处说明了如何区分永久性尺寸标注和约束元素。 代码区域16-1：区分永久性尺寸标注和约束 1234567891011121314151617181920212223242526272829303132333435363738public void GetInfo_Dimension(Dimension...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/01%E5%BC%80%E5%A7%8B/" title="01开始"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-28</div><div class="info-item-2">01开始</div></div><div class="info-2"><div class="info-item-1">开始Revit 平台 API 可通过与 Microsoft .NET Framework 4.5.2 或 4.6 兼容的任何语言（如 Visual C# 或 Visual Basic .NET （VB.NET））进行完全访问。Visual C# 和 VB.NET 通常用于开发 Revit 平台 API 应用程序。但是，本手册的重点是使用 Visual C# 开发应用程序。 欢迎使用 Revit Platform API所有基于 Autodesk Revit 的产品都是参数化建筑信息模型 （BIM） 工具。这样的工具可以看作是用于构建 3D 模型的 CAD 程序，而不是一组单独的图纸文件。Autodesk Revit 建模是通过柱、墙、门和窗等真实世界的元素完成的。用户可以创建模型的视图，包括平面图、剖面图和详图索引。所有这些视图都是直接从 3D 物理模型生成的，因此在一个视图中所做的更改将自动传播到所有其他视图。此过程几乎消除了在模型中进行更改时更新多个图纸和细节的需要。 Autodesk Revit API 旨在反映与程序的图形用户界面相同的用户交互范例。因此，了解 API...</div></div></div></a><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/02%E6%8F%92%E4%BB%B6%E9%9B%86%E6%88%90/" title="02插件集成"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-28</div><div class="info-item-2">02插件集成</div></div><div class="info-2"><div class="info-item-1">插件集成开发人员通过创建和实现 External Commands 和 External Applications 来添加功能。Revit 使用 .addin 清单文件标识新命令和应用程序。外部命令显示在 Add-Ins 选项卡上的 External Tools 菜单按钮下。外部应用程序在 Revit 启动时调用，在 Revit 关闭时卸载。 本章重点介绍以下内容：  了解如何使用 External Commands 和 External Applications 添加功能。 如何访问 Revit 事件。 如何自定义 Revit UI。  概述Revit 平台 API 基于 Revit 应用程序功能。Revit 平台 API 由两个类库组成，这两个类库仅在 Revit 运行时工作。 RevitAPI.dll包含用于在数据库级别访问 Revit 的应用程序、文档、图元和参数的方法。它还包含 IExternalDBApplication 和相关接口。 RevitAPIUI.dll包含与 Revit 用户界面的操作和自定义相关的所有 API...</div></div></div></a><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/03%E5%BA%94%E7%94%A8%E5%8F%8A%E6%96%87%E6%A1%A3/" title="03应用及文档"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-28</div><div class="info-item-2">03应用及文档</div></div><div class="info-2"><div class="info-item-1">Application及DocumentRevit 平台 API 中的顶级对象是Application和Document。这些类由 Application、UIApplication、Document 和 UIDocument 类表示。 Application对象是指单个 Revit 任务，提供对文档、选项和其他应用程序范围的数据和设置的访问。 Autodesk.Revit.UI.UIApplication - 提供对应用程序的 UI 级界面的访问，包括将 RibbonPanel 添加到用户界面的功能，以及在用户界面中获取活动文档的功能。 Autodesk.Revit.ApplicationServices.Application - 提供对所有其他应用程序级别属性的访问。 Document是表示建筑模型的单个 Revit 项目文件。Revit 可以打开多个项目，并为一个项目打开多个视图。 Autodesk.Revit.UI.UIDocument - 提供对文档的 UI...</div></div></div></a><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/04%E5%85%83%E7%B4%A0%E8%A6%81%E7%82%B9/" title="04元素要点"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-28</div><div class="info-item-2">04元素要点</div></div><div class="info-2"><div class="info-item-1">元素要点元素对应于单个建筑或绘图构件，例如门、墙或尺寸标注。此外，元素可以是门类型、视图或材质定义。 元素分类Revit 图元分为六组：模型、草图、视图、组、注释和信息。每个组都包含相关的元素及其相应的符号。 模型元素模型元素表示建筑项目中存在的物理项。“模型元素”组中的元素可以细分为以下元素： 族实例 - 族实例包含族实例对象。可以将族对象载入到项目中，也可以从族样板创建族对象。有关更多信息，请参阅系列实例。 主体图元 - 主体图元包含系统族对象，这些对象可以包含其他模型图元，例如墙、屋顶、天花板和楼板。有关主体图元的更多信息，请参见墙、楼板、屋顶和洞口。 结构元素-结构图元包含仅用于 Revit 结构特征的图元。有关 Structure Elements 的更多信息，请参见 Structural Engineering。 视图元素视图图元表示在 Revit 中查看其他对象并与其他对象交互的方式。有关更多信息，请参阅视图。 组元素组图元表示辅助图元，例如 Revit...</div></div></div></a><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/05%E8%BF%87%E6%BB%A4/" title="05过滤"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-28</div><div class="info-item-2">05过滤</div></div><div class="info-2"><div class="info-item-1">Filtering 过滤Revit API提供了一种过滤和迭代Revit文档中图元的机制。这是获取一组相关元素（如文档中的所有墙或门）的最佳方法。过滤器也可以用来找到一个非常具体的元素集，如所有特定大小的梁。 获取通过指定过滤器的元素的基本步骤如下：  创建新的FilteredElementCollector 对它应用一个或多个过滤器 获取过滤后的元素或元素ID（使用以下几种方法之一）  下面的示例涵盖了在文档中筛选和迭代元素的基本步骤。 代码区域6-1：使用元素过滤获取文档中的所有墙实例 1234567891011121314// Find all Wall instances in the document by using category filterElementCategoryFilter filter = new ElementCategoryFilter(BuiltInCategory.OST_Walls);// Apply the filter to the elements in the active document// Use shortcut...</div></div></div></a><a class="pagination-related" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/06%E9%80%89%E6%8B%A9/" title="06选择"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-28</div><div class="info-item-2">06选择</div></div><div class="info-2"><div class="info-item-1">选择您可以使用UIDo.Selection.GetElementIds()方法从当前活动文档中获取所选对象，该方法返回所选元素的ElementIds集合。此方法返回的集合可以直接与FilteredElementCollector一起使用，以筛选选定的元素。 Selection对象还可以用于使用SetElementIds()方法以编程方式更改当前选择。 Pages in this section 本节中的页面  Changing the Selection 更改选择 User Selection 用户选择 Filtered User Selection 筛选的用户选择  更改选择要修改选定的图元，请执行以下操作：  创建新的ElementId列表。 把ElementIds放进去。 使用新列表调用SetElementIds()。  下面的示例说明了如何通过获取当前选择并仅过滤出墙以设置为新选择来更改选定的元素。 代码区域7-1：更改所选元素 123456789101112131415161718192021222324252627282930313233private void...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">funtim</div><div class="author-info-description">这是一个描述</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/FunTim41"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/FunTim41" target="_blank" title="Github"><i class="fab fa-github" style="color: #FFFFFF;"></i></a><a class="social-icon" href="mailto:funtim41@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E5%87%86%E5%92%8C%E4%BF%A1%E6%81%AF%E5%85%83%E7%B4%A0"><span class="toc-number">1.</span> <span class="toc-text">基准和信息元素</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E9%AB%98"><span class="toc-number">1.1.</span> <span class="toc-text">标高</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E7%A8%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">高程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E9%80%A0%E6%A0%87%E9%AB%98"><span class="toc-number">1.1.2.</span> <span class="toc-text">创造标高</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%B4%E7%BD%91"><span class="toc-number">1.2.</span> <span class="toc-text">轴网</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B2%E7%BA%BF"><span class="toc-number">1.2.1.</span> <span class="toc-text">曲线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%BD%B4%E7%BD%91"><span class="toc-number">1.2.2.</span> <span class="toc-text">创建轴网</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B6%E6%AE%B5"><span class="toc-number">1.3.</span> <span class="toc-text">阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E9%80%89%E9%A1%B9"><span class="toc-number">1.4.</span> <span class="toc-text">设计选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%EF%BC%9A%E7%BF%BB%E8%AF%91%E8%87%AARevit-API-Developers-Guide"><span class="toc-number">1.5.</span> <span class="toc-text">注：翻译自Revit API Developers Guide</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/06%E9%80%89%E6%8B%A9/" title="06选择">06选择</a><time datetime="2024-12-28T13:19:50.000Z" title="发表于 2024-12-28 21:19:50">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/07%E5%8F%82%E6%95%B0/" title="07参数">07参数</a><time datetime="2024-12-28T13:19:50.000Z" title="发表于 2024-12-28 21:19:50">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/08%E9%9B%86%E5%90%88/" title="08集合">08集合</a><time datetime="2024-12-28T13:19:50.000Z" title="发表于 2024-12-28 21:19:50">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/09%E7%BC%96%E8%BE%91%E5%85%83%E7%B4%A0/" title="09编辑元素">09编辑元素</a><time datetime="2024-12-28T13:19:50.000Z" title="发表于 2024-12-28 21:19:50">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/28/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/11%E4%BA%8B%E5%8A%A1/" title="11事务">11事务</a><time datetime="2024-12-28T13:19:50.000Z" title="发表于 2024-12-28 21:19:50">2024-12-28</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By funtim</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>(() => {
+  const panguFn = () => {
+    if (typeof pangu === 'object') pangu.autoSpacingPage()
+    else {
+      btf.getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+        .then(() => {
+          pangu.autoSpacingPage()
+        })
+    }
+  }
+
+  const panguInit = () => {
+    if (false){
+      GLOBAL_CONFIG_SITE.isPost && panguFn()
+    } else {
+      panguFn()
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', panguInit, 'pangu')
+  document.addEventListener('DOMContentLoaded', panguInit)
+})()</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
