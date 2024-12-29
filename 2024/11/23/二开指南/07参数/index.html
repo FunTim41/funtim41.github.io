@@ -1,0 +1,678 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>07参数 | funtim的博客</title><meta name="author" content="funtim41@gmail.com"><meta name="copyright" content="funtim41@gmail.com"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="参数Revit提供了一种常规机制，为每个图元提供一组可编辑的参数。 在Revit UI中，某些图元参数在“图元属性”窗口中可见。以下各节介绍如何获取和使用内置参数、共享参数和全局参数。 在Revit Platform API中，参数在Element类中进行管理。您可以通过以下方式访问参数：  通过迭代元素的所有参数的Element.Parameters集合（有关示例，请参见获取选定元素参数演练中的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="07参数">
+<meta property="og:url" content="https://funtim41.github.io/2024/11/23/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/07%E5%8F%82%E6%95%B0/">
+<meta property="og:site_name" content="funtim的博客">
+<meta property="og:description" content="参数Revit提供了一种常规机制，为每个图元提供一组可编辑的参数。 在Revit UI中，某些图元参数在“图元属性”窗口中可见。以下各节介绍如何获取和使用内置参数、共享参数和全局参数。 在Revit Platform API中，参数在Element类中进行管理。您可以通过以下方式访问参数：  通过迭代元素的所有参数的Element.Parameters集合（有关示例，请参见获取选定元素参数演练中的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://funtim41.github.io/images/4stars.png">
+<meta property="article:published_time" content="2024-11-23T09:44:22.000Z">
+<meta property="article:modified_time" content="2024-12-29T07:31:06.851Z">
+<meta property="article:author" content="funtim41@gmail.com">
+<meta property="article:tag" content="Revit">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://funtim41.github.io/images/4stars.png"><link rel="shortcut icon" href="/images/OIP.jfif"><link rel="canonical" href="https://funtim41.github.io/2024/11/23/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/07%E5%8F%82%E6%95%B0/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: funtim41@gmail.com","link":"链接: ","source":"来源: funtim的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '07参数',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background: Color(#995a82);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/4stars.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/images/topback.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/OIP.jfif" alt="Logo"><span class="site-name">funtim的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">07参数</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">07参数</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-23T09:44:22.000Z" title="发表于 2024-11-23 17:44:22">2024-11-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-29T07:31:06.851Z" title="更新于 2024-12-29 15:31:06">2024-12-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Revit%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/">Revit二次开发人员指南</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="参数"><a href="#参数" class="headerlink" title="参数"></a><a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_Basic_Interaction_with_Revit_Elements_Parameters_html">参数</a></h1><p>Revit提供了一种常规机制，为每个图元提供一组可编辑的参数。</p>
+<p>在Revit UI中，某些图元参数在“图元属性”窗口中可见。以下各节介绍如何获取和使用内置参数、共享参数和全局参数。</p>
+<p>在Revit Platform API中，参数在Element类中进行管理。您可以通过以下方式访问参数：</p>
+<ul>
+<li>通过迭代元素的所有参数的Element.Parameters集合（有关示例，请参见获取选定元素参数演练中的示例代码）。</li>
+<li>通过迭代Element.GetOrderedParameters()返回的集合，该集合仅返回属性选项板中可见的参数。</li>
+<li>通过重载的Element.Parameter属性直接访问参数。如果参数不存在，则属性返回null。</li>
+<li>通过Element.ParametersMap集合按名称访问参数。</li>
+<li>按名称字符串Element.LookupParameter()或Element.GetParameters()。</li>
+</ul>
+<p>如果知道内置ID、定义或参数，则可以使用重载的Parameter属性从Element中检索Parameter对象。Parameter[NULL]属性重载根据其全局唯一ID（Global Unique ID，NULL）获取共享参数，该全局唯一ID在创建共享参数时分配给该共享参数。}]}</p>
+<p>Element.LookupParameter()方法根据参数的本地化名称获取参数，因此如果要按名称查找参数并且需要在多个区域设置中运行，则代码应处理不同的语言。此外，请记住，可能会出现同名参数的多个匹配，因为即使已经存在同名的内置参数，共享参数或项目参数也可以绑定到元素类别。因此，最好使用Element. GetParameter()，它将返回与给定名称匹配的所有参数。LookupParameter()将返回找到的第一个匹配项。</p>
+<p>本节中的页面</p>
+<ul>
+<li>演练：获取选定的元素参数</li>
+<li>参数关系</li>
+<li>定义</li>
+<li>内置参数</li>
+<li>共享参数</li>
+<li>全局参数</li>
+<li>参数</li>
+</ul>
+<h2 id="演练：获取选定的元素参数"><a href="#演练：获取选定的元素参数" class="headerlink" title="演练：获取选定的元素参数"></a>演练：获取选定的元素参数</h2><p>元素参数是通过遍历元素参数集来检索的。下面的代码示例阐释如何从选定的元素中检索Parameter。</p>
+<p>****注意：****此示例使用了一些参数成员，如AsValueString和DataType，这些将在后续主题中介绍。</p>
+<p>代码区域8-1：获取选定的元素参数</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">GetElementParameterInformation</span>(<span class="params">Document document, Element element</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Format the prompt information string</span></span><br><span class="line">    String prompt = <span class="string">&quot;Show parameters in selected Element: \n\r&quot;</span>;</span><br><span class="line"></span><br><span class="line">    StringBuilder st = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    <span class="comment">// iterate element&#x27;s parameters</span></span><br><span class="line">    <span class="keyword">foreach</span> (Parameter para <span class="keyword">in</span> element.Parameters)</span><br><span class="line">    &#123;</span><br><span class="line">        st.AppendLine(GetParameterInformation(para, document));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Give the user some information</span></span><br><span class="line">    TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>, prompt + st.ToString());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">String <span class="title">GetParameterInformation</span>(<span class="params">Parameter para, Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">string</span> defName = para.Definition.Name + <span class="string">&quot;\t : &quot;</span>;</span><br><span class="line">    <span class="built_in">string</span> defValue = <span class="built_in">string</span>.Empty;</span><br><span class="line">    <span class="comment">// Use different method to get parameter data according to the storage type</span></span><br><span class="line">    <span class="keyword">switch</span> (para.StorageType)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> StorageType.Double:</span><br><span class="line">            <span class="comment">//covert the number into Metric</span></span><br><span class="line">            defValue = para.AsValueString();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> StorageType.ElementId:</span><br><span class="line">            <span class="comment">//find out the name of the element</span></span><br><span class="line">            Autodesk.Revit.DB.ElementId id = para.AsElementId();</span><br><span class="line">            <span class="keyword">if</span> (id.IntegerValue &gt;= <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                defValue = document.GetElement(id).Name;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                defValue = id.IntegerValue.ToString();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> StorageType.Integer:</span><br><span class="line">            <span class="keyword">if</span> (ParameterType.YesNo == para.Definition.ParameterType)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (para.AsInteger() == <span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    defValue = <span class="string">&quot;False&quot;</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    defValue = <span class="string">&quot;True&quot;</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                defValue = para.AsInteger().ToString();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> StorageType.String:</span><br><span class="line">            defValue = para.AsString();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="literal">default</span>:</span><br><span class="line">            defValue = <span class="string">&quot;Unexposed parameter.&quot;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> defName + defValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-07A40B76-5AD7-46C8-983F-494CECF88543-low.png"></p>
+<p>图26：获取墙参数结果</p>
+<p>注意：在Revit中，某些参数的值位于“图元属性”对话框的下拉列表中。可以使用Revit Platform API获取与Parameter的枚举类型对应的数值，但不能使用Parameter.AsValueString()方法获取值的字符串表示形式。</p>
+<h2 id="参数关系"><a href="#参数关系" class="headerlink" title="参数关系"></a>参数关系</h2><p>参数可以相互影响。</p>
+<p>参数之间存在关系，其中一个参数的值可以影响：</p>
+<ul>
+<li>是否可以设置另一个参数，或者是否为只读</li>
+<li>哪些参数对元素有效</li>
+<li>另一个参数的计算值</li>
+</ul>
+<p>此外，某些参数始终是只读的。</p>
+<p>某些参数在Revit中计算，例如墙长度和面积参数。这些参数总是只读的，因为它们依赖于元素的内部状态。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-B11C1A73-B5DE-4429-B728-C739D963AE1A-low.png"></p>
+<p>在此代码示例中，洞口的“Sill Height”参数将被调整，从而导致重新计算“Head Height”参数：</p>
+<p>代码区域：参数关系示例</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// opening should be an opening such as a window or a door</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ShowParameterRelationship</span>(<span class="params">FamilyInstance opening</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">// get the original Sill Height and Head Height parameters for the opening</span></span><br><span class="line">        Parameter sillPara = opening.get_Parameter(BuiltInParameter.INSTANCE_SILL_HEIGHT_PARAM);</span><br><span class="line">        Parameter headPara = opening.get_Parameter(BuiltInParameter.INSTANCE_HEAD_HEIGHT_PARAM);</span><br><span class="line">        <span class="built_in">double</span> sillHeight = sillPara.AsDouble();</span><br><span class="line">        <span class="built_in">double</span> origHeadHeight = headPara.AsDouble();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Change the Sill Height only and notice that Head Height is recalculated</span></span><br><span class="line">        sillPara.Set(sillHeight + <span class="number">2.0</span>);</span><br><span class="line">        <span class="built_in">double</span> newHeadHeight = headPara.AsDouble();</span><br><span class="line">        MessageBox.Show(<span class="string">&quot;Old head height: &quot;</span> + origHeadHeight + <span class="string">&quot;; new head height: &quot;</span> </span><br><span class="line">                + newHeadHeight);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>全局参数也与其他参数有关系。有关详细信息，请参见“全局参数基础”主题。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>定义对象描述数据类型、名称和其他参数细节。</p>
+<p>有两种类型的定义对象派生自该对象。</p>
+<ul>
+<li>InternalDefinition表示完全存在于Revit数据库中的所有类型的定义。</li>
+<li>ExternalDefinition表示存储在磁盘上的共享参数文件中的定义。</li>
+</ul>
+<p>您应该编写使用Definition基类的代码，以便该代码适用于内部和外部参数定义。下面的代码示例演示如何使用定义类型查找特定参数。</p>
+<p> 代码区域8-2：根据定义类型查找参数</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Find parameter using the Parameter&#x27;s definition type.</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Parameter <span class="title">FindParameter</span>(<span class="params">Element element</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        Parameter foundParameter = <span class="literal">null</span>;</span><br><span class="line">        <span class="comment">// This will find the first parameter that measures length</span></span><br><span class="line">        <span class="keyword">foreach</span> (Parameter parameter <span class="keyword">in</span> element.Parameters)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">if</span> (parameter.Definition.ParameterType == ParameterType.Length)</span><br><span class="line">                &#123;</span><br><span class="line">                        foundParameter = parameter;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> foundParameter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="参数类型"><a href="#参数类型" class="headerlink" title="参数类型"></a>参数类型</h3><p>此属性返回参数数据类型，这会影响参数在Revit UI中的显示方式。一些参数类型枚举成员包括：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Member name 成员名称</strong></th>
+<th><strong>Description 描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>Number</em></td>
+<td>参数数据应解释为真实的数字，可能包括小数点。</td>
+</tr>
+<tr>
+<td><em>Moment</em></td>
+<td>数据值将表示为力矩。</td>
+</tr>
+<tr>
+<td><em>AreaForce</em></td>
+<td>数据值将表示为面积力。</td>
+</tr>
+<tr>
+<td><em>LinearForce</em></td>
+<td>数据值将表示为线性力。</td>
+</tr>
+<tr>
+<td><em>Force</em></td>
+<td>数据值将表示为力。</td>
+</tr>
+<tr>
+<td><em>YesNo</em></td>
+<td>一个布尔值，表示为Yes或No。</td>
+</tr>
+<tr>
+<td><em>Material</em></td>
+<td>此属性的值被视为材料。</td>
+</tr>
+<tr>
+<td><em>URL</em></td>
+<td>表示网址的文本字符串。</td>
+</tr>
+<tr>
+<td><em>Angle</em></td>
+<td>参数数据表示角度。内部表示将以弧度表示。用户可见表示将使用用户选择的单位。</td>
+</tr>
+<tr>
+<td><em>Volume</em></td>
+<td>参数数据表示体积。内部表示将以十进制立方英尺为单位。用户可见表示将使用用户选择的单位。</td>
+</tr>
+<tr>
+<td><em>Area</em></td>
+<td>参数数据表示一个区域。内部表示将以十进制平方英尺为单位。用户可见表示将使用用户选择的单位。</td>
+</tr>
+<tr>
+<td><em>Integer</em></td>
+<td>参数数据应解释为整数，正数或负数。</td>
+</tr>
+<tr>
+<td><em>Invalid</em></td>
+<td>参数类型无效。不应使用此值。</td>
+</tr>
+<tr>
+<td><em>Length</em></td>
+<td>参数数据表示长度。内部表示将以十进制英尺为单位。用户可见表示将在用户选择的单位系统中。</td>
+</tr>
+<tr>
+<td><em>Text</em></td>
+<td>参数数据应解释为文本字符串。</td>
+</tr>
+<tr>
+<td><em>MultilineText</em></td>
+<td>此参数的值将表示为多行文本。</td>
+</tr>
+<tr>
+<td><em>FamilyType</em></td>
+<td>用于控制嵌套在另一个族中的族的类型的参数。</td>
+</tr>
+<tr>
+<td><em>Image</em></td>
+<td>该参数的值是图像的id。</td>
+</tr>
+</tbody></table>
+<p>有关参数类型.材质的更多详细信息，请参见材质。</p>
+<p>ParameterGroup 参数组</p>
+<p>定义类参数组属性返回参数定义组ID。BuiltInParameterGroup是一种枚举类型，列出了Revit支持的所有内置参数组。参数组用于对“图元属性”对话框中的参数进行排序。</p>
+<h2 id="内部定义"><a href="#内部定义" class="headerlink" title="内部定义"></a>内部定义</h2><p>每个Parameter对象都有一个InternalDefinition，它可以从Definition属性中获得。InternalDefinition表示Revit文档中的参数定义。除了从Definition继承的属性之外，它还具有一些其他关键属性。</p>
+<h3 id="BuiltInParameter-内置参数"><a href="#BuiltInParameter-内置参数" class="headerlink" title="BuiltInParameter 内置参数"></a>BuiltInParameter 内置参数</h3><p>此属性测试此定义是否标识内置参数。对于内置参数，此属性返回BuiltInParameter枚举值之一。对于自定义参数（如共享参数、全局参数或族参数），该值将为BuiltInParameter.INVALID。</p>
+<h3 id="Id"><a href="#Id" class="headerlink" title="Id"></a>Id</h3><p>如果参数不是内置的，则此属性返回关联的ParameterElement的ID。</p>
+<h3 id="VariesAcrossGroups"><a href="#VariesAcrossGroups" class="headerlink" title="VariesAcrossGroups"></a>VariesAcrossGroups</h3><p>该属性和相应的SetAllowVaryBetweenGroups()方法确定该参数的值是否可以在组实例的相关成员之间变化。如果为False，则组实例中相关成员的值将保持一致。这只能为非内置参数设置。</p>
+<h3 id="Visible-可见"><a href="#Visible-可见" class="headerlink" title="Visible 可见"></a>Visible 可见</h3><p>visible属性指示是否对用户隐藏共享参数。如果您希望将数据添加到仅对您的应用程序有意义而对用户没有意义的元素中，这将非常有用。此值只能在创建共享参数定义时设置。</p>
+<h2 id="内置参数"><a href="#内置参数" class="headerlink" title="内置参数"></a>内置参数</h2><p>Revit Platform API具有大量内置参数。</p>
+<p>内置参数在Autodesk.Revit.Parameters.BuiltInParameter枚举中定义（有关此枚举的定义，请参见RevitAPI Help.chm文件）。此枚举已生成可从Visual Studio intellisense看到的文档，如下所示。每个id的文档都包括参数名称，如Autodesk Revit英文版的“图元属性”对话框中所示。请注意，多个不同的参数id可能映射到同一个英文名称;在这种情况下，您必须检查与特定元素关联的参数，以确定使用哪个参数id。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/BuiltInParameter-76164.jpg"></p>
+<p>参数ID用于从元素中检索特定参数，如果它存在，使用Element.Parameter属性。但是，并非所有参数都可以使用ID进行检索。例如，族参数未在Revit Platform API中显示，因此，您无法使用内置参数ID获取它们。</p>
+<p>以下代码示例显示如何使用BuiltInParameter Id获取特定参数：</p>
+<p>代码区域8-3：基于BuiltInParameter获取参数</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Parameter <span class="title">FindWithBuiltinParameterID</span>(<span class="params">Wall wall</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">// Use the WALL_BASE_OFFSET paramametId</span></span><br><span class="line">        <span class="comment">// to get the base offset parameter of the wall.</span></span><br><span class="line">        BuiltInParameter paraIndex = BuiltInParameter.WALL_BASE_OFFSET;</span><br><span class="line">        Parameter parameter = wall.get_Parameter(paraIndex);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> parameter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：通过Parameter重载，可以使用枚举类型BuiltInParameter作为方法参数.例如，使用BuiltInParameter.GENERIC_WIDTH。</p>
+<p>如果不知道确切的BuiltInParameter ID，请通过迭代ParameterSet集合获取参数。另一种用于测试或识别目的的方法是使用get_Parameter()方法测试每个BuiltInParameter。当您使用此方法时，参数集集合可能不包含从get_Parameter()方法返回的所有参数，尽管这种情况并不常见。</p>
+<h2 id="共享参数"><a href="#共享参数" class="headerlink" title="共享参数"></a>共享参数</h2><p>共享参数是存储在外部文本文件中的参数定义。</p>
+<p>定义由创建定义时生成的唯一标识符标识，并且可以在多个项目中使用。</p>
+<p>与共享参数关联的主要对象有：</p>
+<ul>
+<li>DefinitionFile -表示磁盘上的共享参数文件</li>
+<li>DefinitionGroup -一组共享参数，它们被组织成有意义的集合</li>
+<li>ExternalDefinition -表示一个共享参数定义，属于一个配置组</li>
+<li>ExternalDefinitions -支持创建新的共享参数定义</li>
+<li>Binding-将参数定义绑定到一个或多个类别</li>
+<li>BindingMap -包含Autodesk Revit项目中存在的所有参数绑定</li>
+<li>ParameterElement-存储有关文档中特定用户定义参数的信息</li>
+<li>SharedParameterElement -从ParameterElement派生，存储共享参数的定义以下各节介绍如何通过Revit Platform API访问共享参数定义，包括如何获取共享参数定义并将其绑定到某些类别中的元素。</li>
+</ul>
+<p>要在定义共享参数并将其绑定到类别后访问共享参数，请参见参数。</p>
+<p>本节中的页面</p>
+<ul>
+<li>Definition File</li>
+<li>Working with the Definition File</li>
+<li>Binding </li>
+<li>SharedParameterElement</li>
+</ul>
+<h3 id="Definition-File"><a href="#Definition-File" class="headerlink" title="Definition File"></a>Definition File</h3><p>DefinitionFile 表示一个共享参数文件，它是一个通用文本文件。</p>
+<h4 id="Format-格式"><a href="#Format-格式" class="headerlink" title="Format 格式"></a>Format 格式</h4><p>共享参数定义文件是一个文本文件（.txt），包含三个块：Meta、GROUP和PARAM。GROUP和PARAM块与Revit API中的共享参数功能相关。不要直接编辑定义文件;而是使用UI或API编辑它。</p>
+<p>尽管Revit API负责阅读和写入此文件，但以下部分提供了文件格式的信息，该文件格式与用于访问共享参数的API对象和方法密切对应。该文件使用制表符分隔字段，在文本编辑器中很难阅读。下面的代码区域显示了示例共享参数文本文件的内容。</p>
+<p>代码区域22-1：参数定义文件示例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># This is a Revit shared parameter file.</span><br><span class="line"># Do not edit manually.</span><br><span class="line">META    VERSION    MINVERSION</span><br><span class="line">META    2    1</span><br><span class="line">GROUP    ID    NAME</span><br><span class="line">GROUP    1    MyGroup</span><br><span class="line">GROUP    2    AnotherGroup</span><br><span class="line">*PARAM    GUID    NAME    DATATYPE    DATACATEGORY    GROUP    VISIBLE    DESCRIPTION    USERMODIFIABLE</span><br><span class="line">PARAM    bb7f0005-9692-4b76-8fa3-30cec8aecf74    Price    INTEGER        2    1    Enter price in USD    1</span><br><span class="line">PARAM    b7ea2654-b206-4694-a087-756359b52e7f    areaTags    FAMILYTYPE    -2005020    1    1        1</span><br><span class="line">PARAM    d1a5439d-dc8d-4053-99fa-2f33804bae0e    MyParam    TEXT        1    1        1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>GROUP块包含将每个参数定义与组关联的组条目。以下字段显示在GROUP块中：</p>
+<ul>
+<li>ID -唯一标识组并将参数定义与组关联。</li>
+<li>Name - UI中显示的组名称。</li>
+</ul>
+</li>
+<li><p>PARAM块包含参数定义。以下字段出现在PARAM块中：</p>
+<ul>
+<li><p>GUID - 识别参数定义。</p>
+</li>
+<li><p>NAME - 参数定义名称。</p>
+</li>
+<li><p>DATATYPE -参数类型。此字段可以是常见类型（TEXT、INTEGER等），结构类型（力、力矩等）或常用族类型（面积标记等）。通用类型和结构类型参数直接在文本文件中指定（例如：文本，力）。如果DATATYPE字段的值为FAMILYTYPE，则添加一个额外的数字。例如，FAMILYTYPE后跟-2005020表示族类型：面积标记。</p>
+</li>
+<li><p>DATACATEGORY -DATATYPE为FAMILYTYPE的参数的可选字段。</p>
+</li>
+<li><p>GROUP -用于标识包含当前参数定义的组的组ID。</p>
+</li>
+<li><p>VISIBLE -确定参数是否可见。此字段的值为0或1.0 </p>
+</li>
+<li><p>DESCRIPTION - 此参数的工具提示的可选字段。</p>
+</li>
+<li><p>USERMODIFIABLE -确定参数是否可由用户编辑。0 &#x3D;用户无法编辑参数，并且该参数在UI中呈灰色显示</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>在示例定义文件中，有两个组：</p>
+<ul>
+<li>MyGroup - ID 1 -包含MyParam的参数定义（文本类型参数）和areaTags的定义（家庭类型参数）。</li>
+<li>AnotherGroup - ID 2 -包含Price的参数定义，它是一个价格类型参数。</li>
+</ul>
+<p>Of the 3 parameters in the sample file, only Price has a description. All of the parameters are visible and user modifiable.<br>在示例文件中的3个参数中，只有Price有描述。所有的参数都是可见的，用户可以修改。</p>
+<h3 id="Working-with-the-Definition-File"><a href="#Working-with-the-Definition-File" class="headerlink" title="Working with the Definition File"></a>Working with the Definition File</h3><p>定在定义文件中设置参数义文件提供对共享参数的访问。</p>
+<h4 id="在定义文件中设置参数"><a href="#在定义文件中设置参数" class="headerlink" title="在定义文件中设置参数"></a>在定义文件中设置参数</h4><p>使用以下步骤访问定义文件及其参数：</p>
+<ol>
+<li>使用现有文本文件或新文本文件指定Application.SharedParametersFiltrate属性。</li>
+<li>使用Application.OpenSharedParameterFile()方法打开共享参数文件。</li>
+<li>打开一个现有组或使用configtionFile.groups属性创建一个新组。</li>
+<li>打开现有的外部参数定义或使用configuretionGroup.Definitions属性创建新定义。</li>
+</ol>
+<p>Autodesk. Revit. DB命名空间中的以下类和方法提供了使用Revit API访问共享参数的功能。</p>
+<ul>
+<li>DefinitionFile 类<ul>
+<li>使用Application.OpenSharedParameterFile()方法检索。Revit每次使用一个共享参数文件。</li>
+<li>表示一个共享参数文件。</li>
+<li>包含多个Group对象。</li>
+<li>共享参数被分组以便于管理，并包含共享参数定义。</li>
+<li>可以根据需要添加新的定义。</li>
+</ul>
+</li>
+<li>ExternalDefinition 类<ul>
+<li>ExternalDefinition对象是由一个共享参数文件中的ExternationGroup对象创建的。</li>
+<li>外部参数定义必须属于一个组，该组是共享参数定义的集合。</li>
+</ul>
+</li>
+<li>Application.SharedParametersFilename 属性<ul>
+<li>使用此属性获取和设置共享参数文件路径。</li>
+<li>默认情况下，Revit没有共享参数文件。</li>
+<li>使用前初始化此属性。如果它没有初始化，则会引发异常。</li>
+</ul>
+</li>
+</ul>
+<h4 id="创建共享参数文件"><a href="#创建共享参数文件" class="headerlink" title="创建共享参数文件"></a>创建共享参数文件</h4><p>代码区域22-3：创建共享参数文件</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">CreateExternalSharedParamFile</span>(<span class="params"><span class="built_in">string</span> sharedParameterFile</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        System.IO.FileStream fileStream = System.IO.File.Create(sharedParameterFile);</span><br><span class="line">        fileStream.Close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="访问现有共享参数文件"><a href="#访问现有共享参数文件" class="headerlink" title="访问现有共享参数文件"></a>访问现有共享参数文件</h4><p>由于Revit可以有许多共享参数文件，因此必须明确标识要访问的文件和外部参数。以下两个过程说明如何访问现有的共享参数文件。</p>
+<p>从外部参数文件中获取配置文件</p>
+<p>按照下面的代码所示设置共享参数文件路径，然后调用Application.OpenSharedParameterFile()方法。</p>
+<p>代码区域22-4：从外部参数文件获取定义文件</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> DefinitionFile <span class="title">SetAndOpenExternalSharedParamFile</span>(<span class="params">Autodesk.Revit.ApplicationServices.Application application, <span class="built_in">string</span> sharedParameterFile</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// set the path of shared parameter file to current Revit</span></span><br><span class="line">    application.SharedParametersFilename = sharedParameterFile;</span><br><span class="line">    <span class="comment">// open the file</span></span><br><span class="line">    <span class="keyword">return</span> application.OpenSharedParameterFile();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注：设置共享参数路径时，请考虑以下几点： 在每次安装过程中，Revit无法检测是否在其他版本中设置了共享参数文件。必须再次为新的Revit安装绑定共享参数文件。 如果Application. SharedParametersFilm设置为无效路径，则仅在调用OpenSharedParameterFile()时引发异常。 * Revit可以使用多个共享参数文件。即使加载参数时只使用一个参数文件，也可以自由更改当前文件。 </p>
+<h4 id="遍历所有参数"><a href="#遍历所有参数" class="headerlink" title="遍历所有参数"></a>遍历所有参数</h4><p>下面的示例阐释如何遍历参数项并在消息框中显示结果。</p>
+<p>代码区域22-5：遍历参数条目</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ShowDefinitionFileInfo</span>(<span class="params">DefinitionFile myDefinitionFile</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    StringBuilder fileInformation = <span class="keyword">new</span> StringBuilder(<span class="number">500</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get the file name </span></span><br><span class="line">    fileInformation.AppendLine(<span class="string">&quot;File Name: &quot;</span> + myDefinitionFile.Filename);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// iterate the Definition groups of this file</span></span><br><span class="line">    <span class="keyword">foreach</span> (DefinitionGroup myGroup <span class="keyword">in</span> myDefinitionFile.Groups)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// get the group name</span></span><br><span class="line">        fileInformation.AppendLine(<span class="string">&quot;Group Name: &quot;</span> + myGroup.Name);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// iterate the difinitions</span></span><br><span class="line">        <span class="keyword">foreach</span> (Definition definition <span class="keyword">in</span> myGroup.Definitions)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// get definition name</span></span><br><span class="line">            fileInformation.AppendLine(<span class="string">&quot;Definition Name: &quot;</span> + definition.Name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>,fileInformation.ToString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="更改参数定义所有者组"><a href="#更改参数定义所有者组" class="headerlink" title="更改参数定义所有者组"></a>更改参数定义所有者组</h4><p>以下示例说明如何更改参数定义组所有者。</p>
+<p>代码区域22-6：更改参数定义组所有者</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ReadEditExternalParam</span>(<span class="params">DefinitionFile <span class="keyword">file</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// get ExternalDefinition from shared parameter file</span></span><br><span class="line">    DefinitionGroups myGroups = <span class="keyword">file</span>.Groups;</span><br><span class="line">    DefinitionGroup myGroup = myGroups.get_Item(<span class="string">&quot;MyGroup&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (myGroup != <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        ExternalDefinition myExtDef = myGroup.Definitions.get_Item(<span class="string">&quot;MyParam&quot;</span>) <span class="keyword">as</span> ExternalDefinition;</span><br><span class="line">        <span class="keyword">if</span> (myExtDef != <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            DefinitionGroup newGroup = myGroups.get_Item(<span class="string">&quot;AnotherGroup&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (newGroup != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// change the OwnerGroup of the ExternalDefinition</span></span><br><span class="line">                myExtDef.OwnerGroup = newGroup;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Binding"><a href="#Binding" class="headerlink" title="Binding"></a>Binding</h3><p>绑定是将共享参数与模型中某些类别的元素联系在一起。</p>
+<p>有两种类型的绑定可用，实例绑定和类型绑定。两者之间的主要区别在于，实例绑定参数出现在这些类别中元素的所有实例上。更改其中一个实例的参数不会影响该参数的其他实例。类型绑定参数仅出现在类型对象上，并由使用该类型的所有实例共享。更改类型绑定参数会影响使用该类型的元素的所有实例。请注意，定义只能绑定到实例或类型，而不能同时绑定到两者。</p>
+<p>要绑定参数，请执行以下操作：</p>
+<ol>
+<li>使用InstanceBinding或TypeBinding对象可以创建一个新的Binding对象，该对象包括参数绑定到的类别。</li>
+<li>使用Document.ParameterBindings属性提供的BindingMap对象将绑定和定义添加到文档中。</li>
+</ol>
+<p>Autodesk.Revit.DB命名空间中的以下类和方法提供了有关将参数绑定到元素的详细信息。</p>
+<ul>
+<li>BindingMap类<ul>
+<li>从Document.ParameterBindings属性检索。</li>
+<li>参数绑定将参数定义连接到一个或多个类别中的元素。</li>
+<li>该映射用于查询现有绑定以及使用Insert方法生成新的参数绑定。</li>
+</ul>
+</li>
+<li>BindingMap.Insert()方法<ul>
+<li>绑定对象类型规定参数是绑定到所有实例还是仅绑定到类型。</li>
+<li>参数定义不能同时绑定到实例和类型。</li>
+<li>如果参数绑定存在，则该方法返回false。</li>
+</ul>
+</li>
+</ul>
+<h4 id="Type-Binding"><a href="#Type-Binding" class="headerlink" title="Type Binding"></a>Type Binding</h4><p>TypeBinding对象用于将特性绑定到Revit类型（如墙类型）。它与实例绑定的不同之处在于，该属性由类型绑定中标识的所有实例共享。更改一个类型的参数会影响同一类型的所有实例。</p>
+<p>下面的代码示例演示如何使用共享参数文件添加参数定义。以下代码执行的操作与使用Revit UI中的对话框执行的操作相同。参数定义按以下顺序创建：</p>
+<ol>
+<li>将创建共享参数文件。</li>
+<li>将为墙类型创建定义组和参数定义。</li>
+<li>定义将根据墙类别绑定到当前文档中的墙类型参数。</li>
+</ol>
+<p>代码区域22-7：使用共享参数文件添加类型参数定义</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">SetNewParameterToTypeWall</span>(<span class="params">UIApplication app, DefinitionFile myDefinitionFile</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Create a new group in the shared parameters file</span></span><br><span class="line">    DefinitionGroups myGroups = myDefinitionFile.Groups;</span><br><span class="line">    DefinitionGroup myGroup = myGroups.Create(<span class="string">&quot;MyParameters&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create a type definition</span></span><br><span class="line">    ExternalDefinitionCreationOptions option = <span class="keyword">new</span> ExternalDefinitionCreationOptions(<span class="string">&quot;CompanyName&quot;</span>, ParameterType.Text);</span><br><span class="line">    Definition myDefinition_CompanyName = myGroup.Definitions.Create(option);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create a category set and insert category of wall to it</span></span><br><span class="line">    CategorySet myCategories = app.Application.Create.NewCategorySet();</span><br><span class="line">    <span class="comment">// Use BuiltInCategory to get category of wall</span></span><br><span class="line">    Category myCategory = Category.GetCategory(app.ActiveUIDocument.Document, BuiltInCategory.OST_Walls);</span><br><span class="line"></span><br><span class="line">    myCategories.Insert(myCategory);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Create an object of TypeBinding according to the Categories</span></span><br><span class="line">    TypeBinding typeBinding = app.Application.Create.NewTypeBinding(myCategories);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get the BingdingMap of current document.</span></span><br><span class="line">    BindingMap bindingMap = app.ActiveUIDocument.Document.ParameterBindings;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Bind the definitions to the document</span></span><br><span class="line">    <span class="built_in">bool</span> typeBindOK = bindingMap.Insert(myDefinition_CompanyName, typeBinding,</span><br><span class="line">        BuiltInParameterGroup.PG_TEXT);</span><br><span class="line">    <span class="keyword">return</span> typeBindOK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Instance-Binding"><a href="#Instance-Binding" class="headerlink" title="Instance Binding"></a>Instance Binding</h4><p>InstanceBinding对象指示参数定义和某些类别实例中的参数之间的绑定。</p>
+<p>Once bound, the parameter appears in all property dialog boxes for the instance (if the visible property is set to true). Changing the parameter in any one instance does not change the value in any other instance.<br>绑定后，该参数将显示在实例的所有属性对话框中（如果visible属性设置为true）。在任何一个实例中更改参数不会更改任何其他实例中的值。</p>
+<p>The following code sample demonstrates how to add parameter definitions using a shared parameter file. Parameter definitions are added in the following order:<br>下面的代码示例演示如何使用共享参数文件添加参数定义。参数定义按以下顺序添加：</p>
+<ol>
+<li>A shared parameter file is created<br>创建共享参数文件</li>
+<li>A definition group and a definition for all Walls instances is created<br>将创建所有墙实例的定义组和定义</li>
+<li>Definitions are bound to each wall instance parameter in the current document based on the wall category.<br>定义将根据墙类别绑定到当前文档中的每个墙实例参数。</li>
+</ol>
+<p>代码区域22-8：使用共享参数文件添加实例参数定义</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">SetNewParameterToInstanceWall</span>(<span class="params">UIApplication app, DefinitionFile myDefinitionFile</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// create a new group in the shared parameters file</span></span><br><span class="line">    DefinitionGroups myGroups = myDefinitionFile.Groups;</span><br><span class="line">    DefinitionGroup myGroup = myGroups.Create(<span class="string">&quot;MyParameters1&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// create an instance definition in definition group MyParameters</span></span><br><span class="line">    ExternalDefinitonCreationOptions option = <span class="keyword">new</span> ExternalDefinitonCreationOptions(<span class="string">&quot;Instance_ProductDate&quot;</span>, ParameterType.Text);</span><br><span class="line">    <span class="comment">// Don&#x27;t let the user modify the value, only the API</span></span><br><span class="line">    option.UserModifiable = <span class="literal">false</span>;</span><br><span class="line">    <span class="comment">// Set tooltip</span></span><br><span class="line">    option.Description = <span class="string">&quot;Wall product date&quot;</span>;</span><br><span class="line">    Definition myDefinition_ProductDate = myGroup.Definitions.Create(option);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// create a category set and insert category of wall to it</span></span><br><span class="line">    CategorySet myCategories = app.Application.Create.NewCategorySet();</span><br><span class="line">    <span class="comment">// use BuiltInCategory to get category of wall</span></span><br><span class="line">    Category myCategory = Category.GetCategory(app.ActiveUIDocument.Document, BuiltInCategory.OST_Walls);</span><br><span class="line"></span><br><span class="line">    myCategories.Insert(myCategory);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Create an instance of InstanceBinding</span></span><br><span class="line">    InstanceBinding instanceBinding = app.Application.Create.NewInstanceBinding(myCategories);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get the BingdingMap of current document.</span></span><br><span class="line">    BindingMap bindingMap = app.ActiveUIDocument.Document.ParameterBindings;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Bind the definitions to the document</span></span><br><span class="line">    <span class="built_in">bool</span> instanceBindOK = bindingMap.Insert(myDefinition_ProductDate,</span><br><span class="line">                                    instanceBinding, BuiltInParameterGroup.PG_TEXT);</span><br><span class="line">    <span class="keyword">return</span> instanceBindOK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="SharedParameterElement"><a href="#SharedParameterElement" class="headerlink" title="SharedParameterElement"></a>SharedParameterElement</h3><p>SharedParameterElements存储有关文档中特定用户定义的共享参数的信息</p>
+<p>用户定义的参数存储在文档中，并由ParameterElement类表示。子类SharedParameterElement表示加载到文档中的共享参数。ParemeterElement也是GlobalParameter的基类。</p>
+<p>一旦共享参数被加载到文档中，就可以从SharedParameterElement类中检索有关它的信息。SharedParameterElement从父ParameterElement类继承GetDefinition()方法。GetDefinition()返回表示文档中参数定义的InternalDefinition，而不是存储在共享参数文件中的共享参数的ExternalDefinition。SharedParameterElement还通过GuidValue属性提供对标识共享参数的Guid的访问。</p>
+<p>该类的静态Create()方法可以从ExternalDefinition在文档中创建一个新的SharedParameterElement。</p>
+<p>静态函数可以从给定的Guid中检索SharedParameterElement。</p>
+<p>在下面的示例中，明细表包含一个表示共享参数值的字段。从SharedParameterElement检索共享参数的定义。</p>
+<p>代码区域：获取共享参数的定义</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Check if a given shared parameter in a schedule can vary across groups</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">CanParamVaryAcrossGroups</span>(<span class="params">ViewSchedule schedule, <span class="built_in">string</span> sharedParamName</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">bool</span> variesAcrossGroups = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">int</span> numFields =  schedule.Definition.GetFieldCount();</span><br><span class="line">    <span class="comment">// Find the field with the given name</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; numFields; i++)</span><br><span class="line">       &#123;</span><br><span class="line">              ScheduleField field = schedule.Definition.GetField(i);</span><br><span class="line">        <span class="keyword">if</span> (field.GetName().Contains(sharedParamName))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// Get the SharedParameterElement from the field&#x27;s parameter id</span></span><br><span class="line">            SharedParameterElement spe = schedule.Document.GetElement(field.ParameterId) <span class="keyword">as</span> SharedParameterElement;</span><br><span class="line">            <span class="keyword">if</span> (spe != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                InternalDefinition definition = spe.GetDefinition();</span><br><span class="line">                variesAcrossGroups = definition.VariesAcrossGroups;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> variesAcrossGroups;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>SharedParameterElements在使用RebarContainers时特别有用。可以将共享参数作为覆盖添加到RebarContainer的参数管理器中。shared参数不需要绑定到要作为覆盖添加的任何类别。下面的示例将给定的共享参数作为重写添加到RebarContainer。</p>
+<p>代码区域：使用SharedParameterElement重写RebarContainer</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Find the named shared parameter and add it as an override to the parameter manger for the given RebarContainer</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">AddSharedParameterOverride</span>(<span class="params">RebarContainer container, <span class="built_in">string</span> sharedParamName</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// find the shared parameter guid</span></span><br><span class="line">    FilteredElementCollector collector = <span class="keyword">new</span> FilteredElementCollector(container.Document);</span><br><span class="line">    collector.OfClass(<span class="keyword">typeof</span>(SharedParameterElement));</span><br><span class="line">    IEnumerable paramCollector = collector.Cast();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">foreach</span> (SharedParameterElement spe <span class="keyword">in</span> paramCollector)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (spe.Name.CompareTo(sharedParamName) == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            RebarContainerParameterManager paramManager = container.GetParametersManager();</span><br><span class="line">            paramManager.AddSharedParameterAsOverride(spe.Id);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="全局参数"><a href="#全局参数" class="headerlink" title="全局参数"></a>全局参数</h2><p>全局参数支持通过项目文档中定义的特殊参数控制几何约束。</p>
+<p>全局参数可用于标注和报告至&#x2F;自标注，以及设置实例参数的值。它们可用于驱动尺寸或其他元素参数的值，也可由选定尺寸驱动，选定尺寸的值将确定全局参数的值。</p>
+<p>本节中的页面</p>
+<ul>
+<li>管理全局参数</li>
+<li>全局参数基础</li>
+<li>报告与非报告参数</li>
+<li>公式和全局参数</li>
+<li>使用全局参数标注标注</li>
+</ul>
+<h3 id="管理全局参数"><a href="#管理全局参数" class="headerlink" title="管理全局参数"></a>管理全局参数</h3><p>GlobalParametersManager类提供对特定模型中的全局参数元素的常规信息和数据的访问。</p>
+<p>GlobalParametersManager提供了管理项目文档中全局参数的主要访问点。它提供了静态方法来访问和重新排序全局参数，并测试名称的唯一性和ID的有效性。</p>
+<h4 id="全局参数-1"><a href="#全局参数-1" class="headerlink" title="全局参数"></a>全局参数</h4><p>仅在项目文档中支持全局参数，而在族文档中不支持全局参数。然而，即使有项目文件，在某些情况下也可能暂时或永久地不允许使用全局参数。AreGlobalParametersAllowed()方法将指示在指定文档中是否允许全局参数。</p>
+<p>如果允许在项目文档中使用全局参数，请使用方法GetAllGlobalParameters()获取指定文档中的所有全局参数，或使用GetGlobalParametersOrdered()获取全局参数的有序列表。检索有序列表时，项目的顺序与Revit用户界面中标准“全局参数”对话框中全局参数的显示顺序相对应。</p>
+<p>要按名称获取全局参数，请调用FindByName()，它将返回命名的全局参数的ElementId，如果没有找到具有给定名称的全局参数，则返回ElementId.InvalidElementId。由于全局参数名称必须是唯一的，因此应在创建新的GlobalParameter之前调用IsUniqueName()方法来检查名称。</p>
+<p>给定全局参数的ElementId，IsValidGlobalParameter()将确认给定的ElementId是有效的全局参数id。</p>
+<p>下面的示例演示如何获取所有全局参数（如果文档中允许全局参数）。</p>
+<p>代码区域：获取全局参数</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> Returns all global parameter elements defined in the given document. </span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> </span></span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="doctag">///</span> Revit project document.</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> A set of ElementIds of global parameter elements</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ISet <span class="title">GetAllGlobalParameters</span>(<span class="params">Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Global parameters are not available in all documents.</span></span><br><span class="line">    <span class="comment">// They are available in projects, but not in families.</span></span><br><span class="line">    <span class="keyword">if</span> (GlobalParametersManager.AreGlobalParametersAllowed(document))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> GlobalParametersManager.GetAllGlobalParameters(document);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// return an empty set if global parameters are not available in the document</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> HashSet();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="重新排序全局参数"><a href="#重新排序全局参数" class="headerlink" title="重新排序全局参数"></a>重新排序全局参数</h4><p>GlobalParametersManager提供了更改项目文档中全局参数的给定顺序的方法。这些操作对全局参数本身没有影响。重新排列的顺序仅在Revit的标准“全局参数”对话框中可见，并反映在GetGlobalParametersOrdered()方法中。</p>
+<ul>
+<li>SortParameters()-按字母顺序的升序或降序对全局参数进行排序，但仅在其各自的参数组范围内。</li>
+<li>MoveParameterDownOrder()-按当前顺序向下移动给定参数。</li>
+<li>MoveParameterUpOrder()-将给定参数按当前顺序上移。一个参数只能在其参数组内移动，所以如果一个参数因为位于其组的边界而不能再移动，MoveParameter方法将返回False。</li>
+</ul>
+<h3 id="全局参数基础"><a href="#全局参数基础" class="headerlink" title="全局参数基础"></a>全局参数基础</h3><p>GlobalParameter类表示项目文档中的全局参数，可用于创建和修改全局参数。</p>
+<h4 id="创建全局参数"><a href="#创建全局参数" class="headerlink" title="创建全局参数"></a>创建全局参数</h4><p>全局参数只能在项目文档中创建，而不能在族中创建。全局参数通过静态Create()方法在给定文档中创建，具有给定的名称和参数类型。每个新参数在文档中必须有一个唯一的名称，可以使用静态GlobalParametersManager.IsUniqueName()方法确定该名称。全局参数几乎可以使用任何类型的数据创建，但有几种类型目前不受支持，例如ElementId类型。使用静态GlobalParameter.IsValidDataType()方法测试特定数据类型是否适合全局参数。</p>
+<p>代码区域：创建新的全局参数</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> </span></span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="doctag">///</span> Creates a new Global Parameter of type Length, assigns it an initial value,</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> and uses it to label a set of input dimension elements.</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> </span></span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="doctag">///</span> Revit project document in which to create the parameter.</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> Name of the global parameter to create.</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> A value the new global parameter is to have.</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> A set of dimension to labe by the new global parameter.</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> ElementId of the new GlobalParameter</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ElementId <span class="title">CreateNewGlobalParameter</span>(<span class="params">Document document, String name, <span class="built_in">double</span> <span class="keyword">value</span>, ISet dimensionsToLabel</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (!GlobalParametersManager.AreGlobalParametersAllowed(document))</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> System.InvalidOperationException(<span class="string">&quot;Global parameters are not permitted in the given document&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!GlobalParametersManager.IsUniqueName(document, name))</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> System.ArgumentException(<span class="string">&quot;Global parameter with such name already exists in the document&quot;</span>, <span class="string">&quot;name&quot;</span>);</span><br><span class="line"></span><br><span class="line">    ElementId gpid = ElementId.InvalidElementId;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// creation of any element must be in a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction trans = <span class="keyword">new</span> Transaction(document, <span class="string">&quot;Create Global Parameter&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        trans.Start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// create a GP with the given name and type Length</span></span><br><span class="line">        GlobalParameter gp = GlobalParameter.Create(document, name, ParameterType.Length);</span><br><span class="line">        <span class="keyword">if</span> (gp != <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// if created successfully, assign it a value</span></span><br><span class="line">            <span class="comment">// note: parameters of type Length accept Double values</span></span><br><span class="line">            gp.SetValue(<span class="keyword">new</span> DoubleParameterValue(<span class="keyword">value</span>));</span><br><span class="line"></span><br><span class="line">            <span class="comment">// if a collection of dimensions was given, label them with this new parameter</span></span><br><span class="line">            <span class="keyword">foreach</span> (ElementId elemid <span class="keyword">in</span> dimensionsToLabel)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// not just any dimension is allowed to be labeled</span></span><br><span class="line">                <span class="comment">// check first to avoid exceptions</span></span><br><span class="line">                <span class="keyword">if</span> (gp.CanLabelDimension(elemid))</span><br><span class="line">                &#123;</span><br><span class="line">                    gp.LabelDimension(elemid);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            gpid = gp.Id;</span><br><span class="line">        &#125;</span><br><span class="line">        trans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> gpid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="获取和设置全局参数的值"><a href="#获取和设置全局参数的值" class="headerlink" title="获取和设置全局参数的值"></a>获取和设置全局参数的值</h4><p>所有全局参数，无论是公式驱动的、尺寸驱动的还是独立的，都有值。可以通过调用GetValue()方法来获取值。该方法返回的对象是从ParameterValue类派生的类之一的实例：</p>
+<ul>
+<li>IntegerParameterValue </li>
+<li>DoubleParameterValue</li>
+<li>StringParameterValue</li>
+</ul>
+<p>所有派生类都只有一个属性Value，它获取或设置相应类型的值。</p>
+<p>具体实例由创建时指定的全局参数的类型确定。既不是公式驱动的参数也不是维度驱动的参数（报告）可以被赋值。要使用的方法是SetValue()，它接受GetValue()返回的相同类型的参数值。但是，类型也可以很容易地推导出来：Text参数只接受StringParameterValue。Integer 和 YesNo 参数仅接受IntegerParameterValue。所有其他参数仅接受DoubleParameterValue。</p>
+<h4 id="受全局参数影响的元素"><a href="#受全局参数影响的元素" class="headerlink" title="受全局参数影响的元素"></a>受全局参数影响的元素</h4><p>全局参数可以与其他全局参数以及常规族实例参数相关联（常规族实例参数可以通过指定公式将全局参数报告为它们的值）。有两种方法可用于查找参数之间的关系：GlobalParameter.GetAffectedGlobalParameters()和GlobalParameter.GetAffectedElements()。前者返回在其各自的公式中引用特定全局参数的所有其他全局参数。后一个方法返回一组所有元素，其中一些参数由全局参数控制。这两个方法与GlobalParameter.GetLabeledDimensions()一起可以帮助确定模型元素如何通过全局参数相互关联。</p>
+<p>可以在Parameter类中找到用于维护元素属性和全局参数之间的关联的方法。</p>
+<h3 id="报告与非报告参数"><a href="#报告与非报告参数" class="headerlink" title="报告与非报告参数"></a>报告与非报告参数</h3><p>全局参数类型的最大区别是它们是报告参数还是非报告参数。</p>
+<h4 id="什么是报告和非报告参数？"><a href="#什么是报告和非报告参数？" class="headerlink" title="什么是报告和非报告参数？"></a>什么是报告和非报告参数？</h4><p>有几种方法可以对全局参数进行分类，但最重要的分类可能源于GlobalParameter.IsReporting属性，该属性将全局参数分为两组-报告和非报告。报告参数的重要性在于它们的值由报告参数标记的维度驱动。这意味着报告参数的值反映了尺寸（长度或角度）的值，并在尺寸更改时更新。非报告参数的行为方式相反-它们驱动已由其标记的尺寸的值，这导致通过全局参数的值控制模型的几何体。</p>
+<p>报告参数在几个方面受到限制。它们只能是“长度”或“角度”类型，这是因为尺寸必须能够驱动值。出于同样的原因，报告参数可能没有公式。</p>
+<p>另一方面，非报告参数几乎可以是任何类型（长度、宽度、面积等）。ElementId类型除外。此外，非报告参数可能已分配公式，其中其他全局参数可用作参数。这样，一个全局参数的值可以从其他参数（或多个参数）导出，而其他参数可以是报告或非报告的。</p>
+<p>全局参数的其他重要属性是IsDrivenByDimension和IsDrivenByFormula，它们是互斥的-分配了公式的参数不能由维驱动（也不能由报告驱动），反之亦然。</p>
+<h4 id="使全局参数报告或不报告"><a href="#使全局参数报告或不报告" class="headerlink" title="使全局参数报告或不报告"></a>使全局参数报告或不报告</h4><p>全局参数在创建时最初是非报告的，但一旦创建了全局参数并且属于合格类型，就可以使用GlobalParameter.IsReporting属性将其设置为报告。使用GlobalParameter.HasValidTypeForReporting()确保可以使特定数据类型进行报告。请注意，当一个参数标记了多个维度后，该参数可能无法进行报告。这是因为报告参数只能标记一个维度（并由一个维驱动）。</p>
+<p>生成参数报告的另一种方法是通过GlobalParameter.SetDrivingDimension()方法，该方法通过全局参数标记一个维度，如果尚未报告，则也生成参数报告。</p>
+<p>尽管由尺寸驱动的参数会自动生成报告，但由公式驱动的参数则不会。为了设置公式，全局参数必须为非报告参数。因此，在分配公式之前，必须首先将报告参数更改为非报告参数。</p>
+<h3 id="公式和全局参数"><a href="#公式和全局参数" class="headerlink" title="公式和全局参数"></a>公式和全局参数</h3><p>公式可以分配给非报告参数。</p>
+<p>与族参数一样，可以使用GlobalParameter.SetFormula()方法将公式分配给全局参数。由于要设置公式，全局参数必须为非报告参数，因此在分配公式之前，必须将报告参数更改为非报告参数。</p>
+<p>计算公式的值必须与参数的值类型兼容。例如，允许在分配给Double（<strong>Number</strong>）参数的公式中使用<strong>NULL</strong>参数，反之亦然。但是，不允许在公式中的参数类型为<strong>“ether”</strong>或“<strong>Number”</strong>的参数中使用<strong>Length</strong>或<strong>Angle</strong>参数。</p>
+<p>公式可以包括所有标准的算术运算和逻辑运算（如函数<strong>and</strong>，<strong>or</strong>，<strong>not</strong>）。逻辑运算的输入必须是布尔值（YesNo类型的参数）。因此，算术运算只能应用于数值。虽然字符串（文本）参数不支持任何操作，但字符串可以用作逻辑<strong>If</strong>操作的结果。根据其类型（和单位），不同值类型的参数可以组合。但是，无单位值（例如<strong>，“”</strong>和<strong>“Number</strong>（double）”）只能相互组合。</p>
+<p>由于公式可能会变得非常复杂，并且由于某些公式无法分配给某些参数，因此可以使用IsValidFormula()方法来测试公式对于全局参数是否有效。如果调用SetFormula()时全局参数的公式无效，则将引发异常。</p>
+<p>GetFormula()将以字符串的形式返回当前公式。</p>
+<p>下面的代码示例创建四个全局参数，然后将公式设置为1，以便它的值为其他两个参数中的任何一个，具体取决于第四个参数的布尔值。</p>
+<p>代码区域：设置公式</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetCombinationParameters</span>(<span class="params">Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    GlobalParameter gpB = <span class="literal">null</span>;</span><br><span class="line">    GlobalParameter gpT = <span class="literal">null</span>;</span><br><span class="line">    GlobalParameter gpF = <span class="literal">null</span>;</span><br><span class="line">    GlobalParameter gpX = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">int</span> TRUE = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">int</span> FALSE = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// transaction to create global parameters and set their values</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction trans = <span class="keyword">new</span> Transaction(document, <span class="string">&quot;Creating global parameters&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// create 4 new global parameters</span></span><br><span class="line"></span><br><span class="line">        trans.Start();</span><br><span class="line"></span><br><span class="line">        gpB = GlobalParameter.Create(document, <span class="string">&quot;GPB&quot;</span>, ParameterType.YesNo);</span><br><span class="line">        gpT = GlobalParameter.Create(document, <span class="string">&quot;GPT&quot;</span>, ParameterType.Text);</span><br><span class="line">        gpF = GlobalParameter.Create(document, <span class="string">&quot;GPF&quot;</span>, ParameterType.Text);</span><br><span class="line">        gpX = GlobalParameter.Create(document, <span class="string">&quot;GPX&quot;</span>, ParameterType.Text);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// assign initial values and a formula to the global parameters</span></span><br><span class="line"></span><br><span class="line">        gpB.SetValue(<span class="keyword">new</span> IntegerParameterValue(TRUE));</span><br><span class="line">        gpT.SetValue(<span class="keyword">new</span> StringParameterValue(<span class="string">&quot;TypeA&quot;</span>));</span><br><span class="line">        gpF.SetValue(<span class="keyword">new</span> StringParameterValue(<span class="string">&quot;TypeB&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Set the formula to GPX so that its final value is either the value of GPT (TypeA)</span></span><br><span class="line">        <span class="comment">// or GPF (TypeB) depending on whether the value of GPB is True or False.</span></span><br><span class="line">        <span class="comment">// Note: in this particular case we are certain the formula is valid, but if weren&#x27;t </span></span><br><span class="line">        <span class="comment">// certain, we could use a validation method as we are now going to illustrate here:</span></span><br><span class="line">        <span class="built_in">string</span> expression = <span class="string">&quot;if(GPB,GPT,GPF)&quot;</span>; <span class="comment">// XPX &lt;== if (GPB == TRUE) then GPT else GPF</span></span><br><span class="line">        <span class="keyword">if</span> (gpX.IsValidFormula(expression))</span><br><span class="line">        &#123;</span><br><span class="line">            gpX.SetFormula(expression);        &#125;</span><br><span class="line"></span><br><span class="line">        trans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// we can test that the formula works</span></span><br><span class="line">    <span class="comment">// since the boolean value is TRUE, the value of the GPX parameter</span></span><br><span class="line">    <span class="comment">// should be the same as the value of the GPT parameters</span></span><br><span class="line"></span><br><span class="line">    StringParameterValue sTrue = gpT.GetValue() <span class="keyword">as</span> StringParameterValue;</span><br><span class="line">    StringParameterValue sFalse = gpF.GetValue() <span class="keyword">as</span> StringParameterValue;</span><br><span class="line">    StringParameterValue sValue = gpX.GetValue() <span class="keyword">as</span> StringParameterValue;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (sValue.Value != sTrue.Value)</span><br><span class="line">    &#123;</span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Error&quot;</span>, <span class="string">&quot;Unexpected value of a global parameter&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// we can also test that evaluation of the formula is affected by changes</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">using</span> (Transaction trans = <span class="keyword">new</span> Transaction(document, <span class="string">&quot;Change value of a YesNo parameter&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        trans.Start();</span><br><span class="line">        gpB.SetValue(<span class="keyword">new</span> IntegerParameterValue(FALSE));</span><br><span class="line">        trans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    sValue = gpX.GetValue() <span class="keyword">as</span> StringParameterValue;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (sValue.Value != sFalse.Value)</span><br><span class="line">    &#123;</span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Error&quot;</span>, <span class="string">&quot;Unexpected value of a global parameter&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用全局参数标注标注"><a href="#使用全局参数标注标注" class="headerlink" title="使用全局参数标注标注"></a>使用全局参数标注标注</h3><p>全局参数的一个关键特性是它们能够“标记”尺寸。</p>
+<p>当维度由全局参数标记时，其值要么由参数控制（非报告），要么驱动参数的值（报告）。需要注意的是，报告参数最多只能标记一个维对象，这意味着参数只能由一个维驱动。如果尺寸标注有多个线段，并且由非报告参数标记，则每个线段的值将由该参数驱动。多段维不能用报告参数标记。</p>
+<p>如果该维度已被另一个全局参数标记，则再次标记它将自动将其与该参数分离。</p>
+<p>目前，只能标记单个<strong>线性</strong>和<strong>角度</strong>尺寸，但也有其他限制。使用CanLabelDimension()方法来确定是否可以标记特定的维度元素。此外，由于参数的值和由其标记的尺寸相互依赖，因此全局参数的数据类型必须是<strong>Length</strong>或<strong>Angle</strong>，因为这是尺寸可以表示的唯一单位。</p>
+<p>下面的示例创建一个全局参数，并使用它来标记给定维度元素集。</p>
+<p>代码区域：标签尺寸</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">int</span> <span class="title">DriveSelectedDimensions</span>(<span class="params">Document document, <span class="built_in">string</span> name, <span class="built_in">double</span> <span class="keyword">value</span>, ISet dimset</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (!GlobalParametersManager.AreGlobalParametersAllowed(document))</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> System.InvalidOperationException(<span class="string">&quot;Global parameters are not permitted in the given document&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!GlobalParametersManager.IsUniqueName(document, name))</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> System.ArgumentException(<span class="string">&quot;Global parameter with such name already exists in the document&quot;</span>, <span class="string">&quot;name&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">value</span> &lt;= <span class="number">0.0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> System.ArgumentException(<span class="string">&quot;Value of a global parameter that drives dimension must be a positive number&quot;</span>, <span class="string">&quot;value&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">int</span> nLabeledDims = <span class="number">0</span>;   <span class="comment">// number of labeled dimensions (for testing)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// creation of any element must be in a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction trans = <span class="keyword">new</span> Transaction(document, <span class="string">&quot;Create Global Parameter&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        trans.Start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// create a GP with the given name and type Length</span></span><br><span class="line">        <span class="comment">// Note: Length (or Angle) is required type of global parameters that are to label a dimension</span></span><br><span class="line">        GlobalParameter newgp = GlobalParameter.Create(document, name, ParameterType.Length);</span><br><span class="line">        <span class="keyword">if</span> (newgp != <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            newgp.SetValue(<span class="keyword">new</span> DoubleParameterValue(<span class="keyword">value</span>));</span><br><span class="line"></span><br><span class="line">            <span class="comment">// use the parameter to label the given dimensions</span></span><br><span class="line">            <span class="keyword">foreach</span> (ElementId elemid <span class="keyword">in</span> dimset)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// not just any dimension is allowed to be labeled</span></span><br><span class="line">                <span class="comment">// check first to avoid exceptions</span></span><br><span class="line">                <span class="keyword">if</span> (newgp.CanLabelDimension(elemid))</span><br><span class="line">                &#123;</span><br><span class="line">                    newgp.LabelDimension(elemid);</span><br><span class="line">                    nLabeledDims += <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            trans.Commit();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// for illustration purposes only, we&#x27;ll test the results of our modifications </span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1.) Check the new parameter can be found</span></span><br><span class="line"></span><br><span class="line">    ElementId gpid = GlobalParametersManager.FindByName(document,name);</span><br><span class="line">    <span class="keyword">if</span> (gpid == ElementId.InvalidElementId)</span><br><span class="line">    &#123;</span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Error&quot;</span>, <span class="string">&quot;Failed to find a newly created global parameter&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    GlobalParameter gp = document.GetElement(gpid) <span class="keyword">as</span> GlobalParameter;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. Check the number of labeled dimension is as expected</span></span><br><span class="line"></span><br><span class="line">    ISet labeledSet = gp.GetLabeledDimensions();</span><br><span class="line">    <span class="keyword">if</span> (labeledSet.Count != nLabeledDims)</span><br><span class="line">    &#123;</span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Error&quot;</span>, <span class="string">&quot;Have not found all the dimension that were labeled.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> labeledSet.Count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>SetDrivingDimension()方法结合了两个操作：a）如果参数尚未报告，则进行参数报告，以及B）使用它标记给定维。因此，全局参数必须符合报告条件，并且不得用于标记多个维。有关报告参数的详细信息，请参阅报告参数与非报告参数页面 如果此参数已由另一个维度驱动，则在标记给定的维度之前，将首先取消标记另一个维度。这是因为报告参数一次只能标记一个维度（即，它只能由一个维度驱动）。 下一个示例创建由尺寸值驱动的全局参数。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">AssignDrivingDimension</span>(<span class="params">Document document, ElementId gpid, ElementId dimid</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// we expect to find the global parameter in the document</span></span><br><span class="line">    GlobalParameter gp = document.GetElement(gpid) <span class="keyword">as</span> GlobalParameter;</span><br><span class="line">    <span class="keyword">if</span> (gp == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// we expect to find the given dimension in the document</span></span><br><span class="line">    Dimension dim = document.GetElement(dimid) <span class="keyword">as</span> Dimension;</span><br><span class="line">    <span class="keyword">if</span> (dim == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// not every global parameter can label</span></span><br><span class="line">    <span class="comment">// and not every dimension can be labeled</span></span><br><span class="line">    <span class="keyword">if</span> (!gp.CanLabelDimension(dimid))</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// we need a transaction to modify the model</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction trans = <span class="keyword">new</span> Transaction(document,<span class="string">&quot;Assign a driving dimension&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        trans.Start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// we cannot assign a driving dimension to a global</span></span><br><span class="line">        <span class="comment">// parameter that is already used to label other dimensions</span></span><br><span class="line">        ISet dimset = gp.GetLabeledDimensions();</span><br><span class="line">        <span class="keyword">foreach</span> (ElementId elemid <span class="keyword">in</span> dimset)</span><br><span class="line">        &#123;</span><br><span class="line">            gp.UnlabelDimension(elemid);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// with the GP free of all previously labels (if there were any)</span></span><br><span class="line">        gp.SetDrivingDimension(dimid);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// we should be able to commit, but we test the result anyway</span></span><br><span class="line">        <span class="keyword">if</span> (trans.Commit() != TransactionStatus.Committed)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h2><p>Parameter类包含给定参数的值。</p>
+<p>Autodesk Revit中的所有图元都包含参数，这些参数可以作为一个集合或单独检索。可以使用BuiltInParameter枚举、Definition对象或Shared Parameter对象从任何Element中获取单个参数对象。参数中包含的数据可以是Double、String、String或ElementId，如其String Type属性所示。对于值类型，DisplayUnitType属性将指示用于参数值的显示单位。Parameter对象还包含一个Definition对象，用于描述参数的数据类型、名称和其他详细信息。</p>
+<h3 id="StorageType"><a href="#StorageType" class="headerlink" title="StorageType"></a>StorageType</h3><p>储存类型描述内部存储的参数值的类型。</p>
+<p>根据属性值，使用相应的get和set方法来检索和设置参数数据值。</p>
+<p>“储存类型”是一种枚举类型，列出了Revit支持的所有内部参数数据存储类型：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Member Name 成员名称</strong></th>
+<th><strong>Description 描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>String</em></td>
+<td>内部数据存储为字符串。</td>
+</tr>
+<tr>
+<td><em>ElementId</em></td>
+<td>数据类型表示一个元素，并存储为元素ID。</td>
+</tr>
+<tr>
+<td><em>Double</em></td>
+<td>数据在内部存储为8字节浮点数。</td>
+</tr>
+<tr>
+<td><em>Integer</em></td>
+<td>内部数据存储为有符号的32位整数。</td>
+</tr>
+<tr>
+<td><em>None</em></td>
+<td>无表示无效的存储类型。仅供内部使用。</td>
+</tr>
+</tbody></table>
+<p>在大多数情况下，ElementId值为正数。但是，它可以是负数。当ElementId值为负时，它不表示元素，而是具有另一种含义。例如，梁的垂直投影的存储类型参数为ElementId。当参数值为Level 1或Level 2时，ElementId值为正，并与该级别的ElementId相对应。但是，当参数值设置为“自动检测”、“梁中心”或“梁顶部”时，ElementId值为负值。 下面的代码示例显示如何根据参数的类型检查参数的值是否可以设置为double值：</p>
+<p>代码区域：检查参数的类型</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">SetParameter</span>(<span class="params">Parameter parameter, <span class="built_in">double</span> <span class="keyword">value</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">bool</span> result = <span class="literal">false</span>;</span><br><span class="line">    <span class="comment">//if the parameter is readonly, you can&#x27;t change the value of it</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> != parameter &amp;&amp; !parameter.IsReadOnly)</span><br><span class="line">    &#123;</span><br><span class="line">        StorageType parameterType = parameter.StorageType;</span><br><span class="line">        <span class="keyword">if</span> (StorageType.Double != parameterType)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">&quot;The storagetypes of value and parameter are different!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//If successful, the result is true</span></span><br><span class="line">        result = parameter.Set(<span class="keyword">value</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Set()方法返回值指示参数值已更改。Set()方法在参数值被更改时返回true，否则返回false。 并非所有参数都是可写的。如果参数为只读，则引发异常。 ## AsValueString()和SetValueString() 这两个Parameter类方法仅适用于值类型参数，这些参数是表示测量量的双精度或整数参数。 使用AsValueString()方法以带有度量单位的字符串形式获取参数值。例如，“底部偏移”值（墙参数）为“双精度”值。通常，该值在“图元属性”中显示为字符串，如-20 ‘0”。使用AsValueString()方法，您可以直接获得-20 ‘0”字符串值。使用AsDouble()方法，可以得到一个不带度量单位的double值，如-20。 使用SetValueString()方法更改值类型参数的值，而不是使用Set()方法。下面的代码示例说明如何使用SetValueString()方法更改参数值：</p>
+<p>使用参数. SetValueString()</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">SetWithValueString</span>(<span class="params">Parameter foundParameter</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">bool</span> result = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (!foundParameter.IsReadOnly)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//If successful, the result is true</span></span><br><span class="line">        result = foundParameter.SetValueString(<span class="string">&quot;-22\&#x27;3\&quot;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="全局参数关联"><a href="#全局参数关联" class="headerlink" title="全局参数关联"></a>全局参数关联</h3><p>Parameter类有几种方法用于维护元素参数和全局参数之间的关联。方法GetAssociatedGlobalParameter()返回当前与参数关联的全局参数的ElementId（如果有）。如果此参数未与任何全局参数关联，则返回InvalidElementId。InvalidElementId也会在为一个甚至不能与全局参数相关联的参数（即一个不可参数化的参数或一个带有公式的参数）调用时返回。</p>
+<p>有两种方法可以确定参数是否可以与全局参数关联。参数.CanBeAssociatedWithGlobalParameters()测试参数是否可以与任何全局参数相关联。只有定义为可参数化的属性才能与全局参数相关联。这不包括任何只读参数和公式驱动参数，以及具有Revit施加的其他显式或隐式限制的参数。若要测试特定全局参数是否可以与此参数关联，请使用Parameter.CanBeAssociatedWithGlobalParameter()。请记住，参数的值类型必须与全局参数的类型匹配，才能创建关联。</p>
+<p>对于可以与全局参数关联的参数，请使用AssociateWithGlobalParameter()创建关联。关联后，可以在以后通过调用DissociateFromGlobalParameter()方法解除参数关联</p>
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2></article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Revit/">Revit</a></div><div class="post-share"><div class="social-share" data-image="/images/4stars.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/11/23/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/01%E5%BC%80%E5%A7%8B/" title="01开始"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">01开始</div></div><div class="info-2"><div class="info-item-1">开始Revit 平台 API 可通过与 Microsoft .NET Framework 4.5.2 或 4.6 兼容的任何语言（如 Visual C# 或 Visual Basic .NET （VB.NET））进行完全访问。Visual C# 和 VB.NET 通常用于开发 Revit 平台 API 应用程序。但是，本手册的重点是使用 Visual C# 开发应用程序。 欢迎使用 Revit Platform API所有基于 Autodesk Revit 的产品都是参数化建筑信息模型 （BIM） 工具。这样的工具可以看作是用于构建 3D 模型的 CAD 程序，而不是一组单独的图纸文件。Autodesk Revit 建模是通过柱、墙、门和窗等真实世界的元素完成的。用户可以创建模型的视图，包括平面图、剖面图和详图索引。所有这些视图都是直接从 3D 物理模型生成的，因此在一个视图中所做的更改将自动传播到所有其他视图。此过程几乎消除了在模型中进行更改时更新多个图纸和细节的需要。 Autodesk Revit API 旨在反映与程序的图形用户界面相同的用户交互范例。因此，了解 API...</div></div></div></a><a class="pagination-related" href="/2024/11/23/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/13%E6%97%8F%E5%AE%9E%E4%BE%8B/" title="13族实例"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">13族实例</div></div><div class="info-2"><div class="info-item-1">族实例在本节中，您将了解以下内容：  族与族实例的关系 族和族实例特征 如何载入或创建族和族实例特征 族实例与族符号的关系   本节中的页面  Identifying Elements 识别元素 FamilyInstances 族实例 Code Samples 代码示例 FamilySymbol 族符号 Family 族  识别元素在Revit中，判断元素是否为FamilyInstance的最简单方法是使用属性对话框。  如果族名称以“系统族”开头，并且禁用了“载入”按钮，则该族属于“系统族”。   图41：系统族  属于构件族的常规FamilyInstance不以System Family开头。 例如，在下图中，桌子家具的族名为Desk。此外，还启用了“加载”按钮。   图42：组件族 有一些例外，例如：体量和内建成员。“族”和“类型”字段为空。  图43：体量或内建构件示例 Revit Platform API中的族由三个对象表示：  Family...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/11/23/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/33%E5%91%BD%E4%BB%A4/" title="33命令"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-23</div><div class="info-item-2">33命令</div></div><div class="info-2"><div class="info-item-1">命令Revit API 提供对现有 Revit 命令的访问，这些命令位于选项卡、应用程序菜单或右键单击菜单中。使用 API 处理 Revit 命令的主要方法是替换现有命令实现或发布命令。 替代 Revit 命令AddInCommandBinding 类可用于替代 Revit 中的现有命令。它有三个与替换现有命令实现相关的事件。  BeforeExecuted - 此只读事件在关联命令执行之前发生。应用程序可以对此事件做出反应，但不能更改文档或影响命令的调用。 CanExecute - 当关联的命令启动检查以确定是否可以在命令目标上执行命令时出现。 Executed - 当执行关联的命令时，将发生此事件，并且应在此处执行任何覆盖实现。  要创建 commandbinding，请调用 UIApplication.CreateAddInCommandBinding（） 或 UIControlledApplication.CreateAddInCommandBinding（）。这两种方法都需要 RevitCommandId ID 来标识要替换的命令处理程序。RevitCommandId...</div></div></div></a><a class="pagination-related" href="/2024/11/29/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/32%E5%8A%A8%E6%80%81%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0/" title="32动态模型更新"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-29</div><div class="info-item-2">32动态模型更新</div></div><div class="info-2"><div class="info-item-1">动态模型更新动态模型更新为Revit API应用程序提供了修改Revit模型的能力，作为对模型中发生的更改（当这些更改即将在事务结束时提交时）的反应。Revit API应用程序可以通过实现IUpdater接口并将其注册到UpdaterRegistry类来创建更新程序。注册包括指定模型中的哪些更改应该触发更新程序。 Pages in this section 本节中的页面  实现IUpdater Execute方法 注册更新程序 Exposure to...</div></div></div></a><a class="pagination-related" href="/2024/11/29/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/31%E5%8F%AF%E5%81%9C%E9%9D%A0%E5%AF%B9%E8%AF%9D%E6%A1%86%E7%AA%97%E6%A0%BC/" title="31可停靠对话框窗格"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-29</div><div class="info-item-2">31可停靠对话框窗格</div></div><div class="info-2"><div class="info-item-1">可停靠对话框窗格自Revit 2013以来，应用程序可以通过利用Revit API中的Idling事件（用户界面事件和外部事件）类来使用无模式对话框。需要非模态对话框的加载项也可以选择使用可停靠的非模态对话框。与标准的无模式对话框类似，可停靠对话框是注册的Windows Presentation...</div></div></div></a><a class="pagination-related" href="/2024/11/29/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/30%E5%A4%96%E9%83%A8%E4%BA%8B%E4%BB%B6/" title="30外部事件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-29</div><div class="info-item-2">30外部事件</div></div><div class="info-2"><div class="info-item-1">外部事件Revit API提供了一个外部事件框架，以适应非模态对话框的使用。它是为异步处理量身定制的，其操作类似于具有默认频率的Idling事件。 要使用外部事件框架实现无模式对话框，请执行以下步骤：  通过从IExternalEventException接口派生来实现外部事件处理程序 使用静态ExternalEvent.Create（）方法创建ExternalEvent 当需要执行Revit操作的无模式对话框中发生事件时，调用ExternalEvent.Raise（） 当存在可用的空闲时间周期时，Revit将调用IExternalEvents.Execute（）方法的实现。  IExternalEventHandler这是要为外部事件实现的接口。实现此接口的类的实例注册到Revit中，每次引发相应的外部事件时，都会调用此接口的Execute方法。 IExternalEventHandler...</div></div></div></a><a class="pagination-related" href="/2024/11/29/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/29%E4%BA%8B%E4%BB%B6/" title="29事件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-29</div><div class="info-item-2">29事件</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2024/11/29/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/28%E5%8F%AF%E6%89%A9%E5%B1%95%E5%82%A8%E5%AD%98/" title="28可扩展储存"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-29</div><div class="info-item-2">28可扩展储存</div></div><div class="info-2"><div class="info-item-1">在Revit模型中存储数据使用共享参数或可扩展存储在Revit模型中存储数据。 Revit API提供了两种在Revit模型中存储数据的方法。第一种是使用共享参数。通过Revit API，可以通过编程方式访问通过Revit UI提供的相同共享参数功能。如果共享参数被定义为可见，则用户可以在元素的属性窗口中查看这些参数。可以将共享参数指定给许多（但不是所有）类别的图元。有关详细信息，请参阅共享参数。 另一个选项是可扩展存储，它允许您创建自定义数据结构，然后将该数据的实例分配给模型中的元素。用户在Revit UI中永远看不到这些数据，但其他第三方应用程序可以通过Revit...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/4stars.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">funtim41@gmail.com</div><div class="author-info-description">实践-认识-再实践-再认识</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/FunTim41"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/FunTim41" target="_blank" title="Github"><i class="fab fa-github" style="color: #FFFFFF;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E6%95%B0"><span class="toc-number">1.</span> <span class="toc-text">参数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%94%E7%BB%83%EF%BC%9A%E8%8E%B7%E5%8F%96%E9%80%89%E5%AE%9A%E7%9A%84%E5%85%83%E7%B4%A0%E5%8F%82%E6%95%B0"><span class="toc-number">1.1.</span> <span class="toc-text">演练：获取选定的元素参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E5%85%B3%E7%B3%BB"><span class="toc-number">1.2.</span> <span class="toc-text">参数关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">1.3.</span> <span class="toc-text">定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">参数类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E5%AE%9A%E4%B9%89"><span class="toc-number">1.4.</span> <span class="toc-text">内部定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BuiltInParameter-%E5%86%85%E7%BD%AE%E5%8F%82%E6%95%B0"><span class="toc-number">1.4.1.</span> <span class="toc-text">BuiltInParameter 内置参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Id"><span class="toc-number">1.4.2.</span> <span class="toc-text">Id</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VariesAcrossGroups"><span class="toc-number">1.4.3.</span> <span class="toc-text">VariesAcrossGroups</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Visible-%E5%8F%AF%E8%A7%81"><span class="toc-number">1.4.4.</span> <span class="toc-text">Visible 可见</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%AE%E5%8F%82%E6%95%B0"><span class="toc-number">1.5.</span> <span class="toc-text">内置参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E5%8F%82%E6%95%B0"><span class="toc-number">1.6.</span> <span class="toc-text">共享参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Definition-File"><span class="toc-number">1.6.1.</span> <span class="toc-text">Definition File</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Format-%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.6.1.1.</span> <span class="toc-text">Format 格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Working-with-the-Definition-File"><span class="toc-number">1.6.2.</span> <span class="toc-text">Working with the Definition File</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E5%AE%9A%E4%B9%89%E6%96%87%E4%BB%B6%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%8F%82%E6%95%B0"><span class="toc-number">1.6.2.1.</span> <span class="toc-text">在定义文件中设置参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%85%B1%E4%BA%AB%E5%8F%82%E6%95%B0%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.2.2.</span> <span class="toc-text">创建共享参数文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E7%8E%B0%E6%9C%89%E5%85%B1%E4%BA%AB%E5%8F%82%E6%95%B0%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.2.3.</span> <span class="toc-text">访问现有共享参数文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%81%8D%E5%8E%86%E6%89%80%E6%9C%89%E5%8F%82%E6%95%B0"><span class="toc-number">1.6.2.4.</span> <span class="toc-text">遍历所有参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E5%8F%82%E6%95%B0%E5%AE%9A%E4%B9%89%E6%89%80%E6%9C%89%E8%80%85%E7%BB%84"><span class="toc-number">1.6.2.5.</span> <span class="toc-text">更改参数定义所有者组</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Binding"><span class="toc-number">1.6.3.</span> <span class="toc-text">Binding</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Type-Binding"><span class="toc-number">1.6.3.1.</span> <span class="toc-text">Type Binding</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Instance-Binding"><span class="toc-number">1.6.3.2.</span> <span class="toc-text">Instance Binding</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SharedParameterElement"><span class="toc-number">1.6.4.</span> <span class="toc-text">SharedParameterElement</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0"><span class="toc-number">1.7.</span> <span class="toc-text">全局参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0"><span class="toc-number">1.7.1.</span> <span class="toc-text">管理全局参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0-1"><span class="toc-number">1.7.1.1.</span> <span class="toc-text">全局参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E6%8E%92%E5%BA%8F%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0"><span class="toc-number">1.7.1.2.</span> <span class="toc-text">重新排序全局参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0%E5%9F%BA%E7%A1%80"><span class="toc-number">1.7.2.</span> <span class="toc-text">全局参数基础</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0"><span class="toc-number">1.7.2.1.</span> <span class="toc-text">创建全局参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%92%8C%E8%AE%BE%E7%BD%AE%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0%E7%9A%84%E5%80%BC"><span class="toc-number">1.7.2.2.</span> <span class="toc-text">获取和设置全局参数的值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%97%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0%E5%BD%B1%E5%93%8D%E7%9A%84%E5%85%83%E7%B4%A0"><span class="toc-number">1.7.2.3.</span> <span class="toc-text">受全局参数影响的元素</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%A5%E5%91%8A%E4%B8%8E%E9%9D%9E%E6%8A%A5%E5%91%8A%E5%8F%82%E6%95%B0"><span class="toc-number">1.7.3.</span> <span class="toc-text">报告与非报告参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%8A%A5%E5%91%8A%E5%92%8C%E9%9D%9E%E6%8A%A5%E5%91%8A%E5%8F%82%E6%95%B0%EF%BC%9F"><span class="toc-number">1.7.3.1.</span> <span class="toc-text">什么是报告和非报告参数？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0%E6%8A%A5%E5%91%8A%E6%88%96%E4%B8%8D%E6%8A%A5%E5%91%8A"><span class="toc-number">1.7.3.2.</span> <span class="toc-text">使全局参数报告或不报告</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AC%E5%BC%8F%E5%92%8C%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0"><span class="toc-number">1.7.4.</span> <span class="toc-text">公式和全局参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0%E6%A0%87%E6%B3%A8%E6%A0%87%E6%B3%A8"><span class="toc-number">1.7.5.</span> <span class="toc-text">使用全局参数标注标注</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E6%95%B0-1"><span class="toc-number">1.8.</span> <span class="toc-text">参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#StorageType"><span class="toc-number">1.8.1.</span> <span class="toc-text">StorageType</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0%E5%85%B3%E8%81%94"><span class="toc-number">1.8.2.</span> <span class="toc-text">全局参数关联</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%EF%BC%9A%E7%BF%BB%E8%AF%91%E8%87%AARevit-API-Developers-Guide"><span class="toc-number">1.9.</span> <span class="toc-text">注：翻译自Revit API Developers Guide</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/23/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/33%E5%91%BD%E4%BB%A4/" title="33命令">33命令</a><time datetime="2024-12-29T07:31:06.970Z" title="更新于 2024-12-29 15:31:06">2024-12-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/29/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/32%E5%8A%A8%E6%80%81%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0/" title="32动态模型更新">32动态模型更新</a><time datetime="2024-12-29T07:31:06.967Z" title="更新于 2024-12-29 15:31:06">2024-12-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/29/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/31%E5%8F%AF%E5%81%9C%E9%9D%A0%E5%AF%B9%E8%AF%9D%E6%A1%86%E7%AA%97%E6%A0%BC/" title="31可停靠对话框窗格">31可停靠对话框窗格</a><time datetime="2024-12-29T07:31:06.962Z" title="更新于 2024-12-29 15:31:06">2024-12-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/29/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/30%E5%A4%96%E9%83%A8%E4%BA%8B%E4%BB%B6/" title="30外部事件">30外部事件</a><time datetime="2024-12-29T07:31:06.959Z" title="更新于 2024-12-29 15:31:06">2024-12-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/29/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/29%E4%BA%8B%E4%BB%B6/" title="29事件">29事件</a><time datetime="2024-12-29T07:31:06.955Z" title="更新于 2024-12-29 15:31:06">2024-12-29</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/images/topback.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2024 By funtim41@gmail.com</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">学而不思则罔，思而不学则殆。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>(() => {
+  const panguFn = () => {
+    if (typeof pangu === 'object') pangu.autoSpacingPage()
+    else {
+      btf.getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+        .then(() => {
+          pangu.autoSpacingPage()
+        })
+    }
+  }
+
+  const panguInit = () => {
+    if (false){
+      GLOBAL_CONFIG_SITE.isPost && panguFn()
+    } else {
+      panguFn()
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', panguInit, 'pangu')
+  document.addEventListener('DOMContentLoaded', panguInit)
+})()</script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'FunTim41/funtim41.github.io',
+      'data-repo-id': 'R_kgDONjG8ww',
+      'data-category-id': 'DIC_kwDONjG8w84Cllg2',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
