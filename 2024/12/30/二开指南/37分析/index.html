@@ -1,0 +1,444 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>37分析 | funtim的博客</title><meta name="author" content="funtim41@gmail.com"><meta name="copyright" content="funtim41@gmail.com"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="分析相关信息  绿色建筑工作室API  Pages in this section  本节中的页面  能量数据 分析可视化 概念能量分析 详细的能源分析模型  能量数据EnergyDataSettings对象包含gbXML导出和热负荷和冷负荷计算的设置以及概念能量分析的项目级别设置。 EnergyDataSettings对象是从Element基对象派生的。它在每个项目中都是唯一的，类似于Proje">
+<meta property="og:type" content="article">
+<meta property="og:title" content="37分析">
+<meta property="og:url" content="https://funtim41.github.io/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/37%E5%88%86%E6%9E%90/">
+<meta property="og:site_name" content="funtim的博客">
+<meta property="og:description" content="分析相关信息  绿色建筑工作室API  Pages in this section  本节中的页面  能量数据 分析可视化 概念能量分析 详细的能源分析模型  能量数据EnergyDataSettings对象包含gbXML导出和热负荷和冷负荷计算的设置以及概念能量分析的项目级别设置。 EnergyDataSettings对象是从Element基对象派生的。它在每个项目中都是唯一的，类似于Proje">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://funtim41.github.io/images/4stars.png">
+<meta property="article:published_time" content="2024-12-30T05:44:29.000Z">
+<meta property="article:modified_time" content="2024-12-30T05:47:23.577Z">
+<meta property="article:author" content="funtim41@gmail.com">
+<meta property="article:tag" content="Revit">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://funtim41.github.io/images/4stars.png"><link rel="shortcut icon" href="/images/OIP.jfif"><link rel="canonical" href="https://funtim41.github.io/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/37%E5%88%86%E6%9E%90/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: funtim41@gmail.com","link":"链接: ","source":"来源: funtim的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '37分析',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background: Color(#995a82);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/4stars.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">42</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/images/topback.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/OIP.jfif" alt="Logo"><span class="site-name">funtim的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">37分析</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">37分析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-30T05:44:29.000Z" title="发表于 2024-12-30 13:44:29">2024-12-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-30T05:47:23.577Z" title="更新于 2024-12-30 13:47:23">2024-12-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Revit%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/">Revit二次开发人员指南</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>相关信息</p>
+<ul>
+<li>绿色建筑工作室API</li>
+</ul>
+<p>Pages in this section  本节中的页面</p>
+<ul>
+<li>能量数据</li>
+<li>分析可视化</li>
+<li>概念能量分析</li>
+<li>详细的能源分析模型</li>
+</ul>
+<h2 id="能量数据"><a href="#能量数据" class="headerlink" title="能量数据"></a>能量数据</h2><p>EnergyDataSettings对象包含gbXML导出和热负荷和冷负荷计算的设置以及概念能量分析的项目级别设置。</p>
+<p>EnergyDataSettings对象是从Element基对象派生的。它在每个项目中都是唯一的，类似于ProjectInformation。虽然EnergyDataSettings是Element类的子类，但从Element继承的大多数成员都返回null或空集，但Name、Id、UniqueId和Parameters除外。</p>
+<p>下面的代码示例使用EnergyDataSettings类。调用命令后，结果将显示在TaskDialog中。</p>
+<p>代码区域28-7：使用EnergyDataSettings类</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GetInfo_EnergyData</span>(<span class="params">Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        EnergyDataSettings energyData = EnergyDataSettings.GetFromDocument(document);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> != energyData)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="built_in">string</span> message = <span class="string">&quot;energyData : &quot;</span>;</span><br><span class="line">                message += <span class="string">&quot;\nBuildingType : &quot;</span> + energyData.BuildingType;</span><br><span class="line">                TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>, message);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="分析可视化"><a href="#分析可视化" class="headerlink" title="分析可视化"></a>分析可视化</h2><p>Revit API提供了一种机制，使外部分析应用程序可以在Revit模型中轻松显示其计算结果。SpatialFieldManager类是将分析结果传回Revit的主要类。它用于创建、删除和修改存储分析结果的“容器”。AnalysisResultSchema类包含有关一个分析结果的所有信息，例如用于结果可视化的所有单位的描述和名称及乘数。可以向SpatialFieldManager注册多个AnalysisResultSchemas。</p>
+<p>然后可以使用AnalysisDisplayStyle类控制结果的外观。从插件创建和修改AnalysisDisplayStyle是可选的;最终用户可以通过Revit UI对分析结果的显示进行相同的控制。</p>
+<p>Revit API支持的数据模型要求在某组点处指定分析结果，并且在每个点处计算一个或多个不同的数字（“测量值”）。所有模型点的测量次数必须相同。结果数据是暂时的;它只存储在模型中，直到文档关闭。如果模型已保存、关闭并重新打开，则分析结果将不显示。</p>
+<p>本节中的页面</p>
+<ul>
+<li>分析结果管理</li>
+<li>创建分析结果数据</li>
+<li>分析结果显示</li>
+<li>更新分析结果</li>
+</ul>
+<h3 id="分析结果管理"><a href="#分析结果管理" class="headerlink" title="分析结果管理"></a>分析结果管理</h3><p>新的SpatialFieldManager可以使用静态SpatialFieldManager. stateSpatialFieldManager（）方法添加到视图中。一个视图只能关联一个管理器。如果视图已经有SpatialFieldManager，则可以使用静态方法GetSpatialFieldManager（）检索它。</p>
+<p>SpatialFieldManager（）接受一个参数，表示将为每个点计算的测量数。此数字定义了与计算结果的每个点相关联的结果值的数量。例如，如果计算一年中每个月的平均太阳辐射，则每个点将有12个相应的值。</p>
+<p>要将分析结果添加到视图中，请调用AddSpatialFieldPrimitive（）以创建新的分析结果容器。存在此方法的四个重载以创建与以下项关联的基元：</p>
+<ul>
+<li>引用（曲线或面）</li>
+<li>曲线与变换</li>
+<li>一个面和一个变换</li>
+<li>无Revit几何图形-为了在创建与Revit几何图形无关的多个数据点时提高性能，建议创建多个基本体，每个基本体的点不超过500个，而不是创建一个包含所有点的大型基本体。</li>
+</ul>
+<p>变换重载的一个典型用途是定位结果数据与Revit模型中几何图形的偏移，例如，楼板上方3英尺。</p>
+<p>AddSpatialFieldPrimitive（）方法返回SpatialFieldManager中图元的唯一整数标识符，该标识符稍后可用于标识图元以将其移除（RemoveSpatialFieldPrimitive（））或修改图元（UpdateSpatialFieldPrimitive（））。</p>
+<p>注意，AddSpatialFieldPrimitive（）方法创建了一个空的分析结果原语。必须调用UpdateSpatialFieldPrimitive（）才能使用点和值填充分析结果数据，如创建分析结果数据部分所示。</p>
+<p>UpdateSpatialFieldPrimitive（）方法需要已向SpatialFieldManager注册的AnalysisResultSchema的唯一索引。AnalysisResultSchema保存有关分析结果的信息，例如名称、描述以及用于结果可视化的所有单元的名称和乘数。下面的示例演示如何创建新的AnalysisResultSchema并设置其单位。</p>
+<p>代码区域：分析结果架构</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">IList unitNames = <span class="keyword">new</span> List();</span><br><span class="line">unitNames.Add(<span class="string">&quot;Feet&quot;</span>);</span><br><span class="line">unitNames.Add(<span class="string">&quot;Inches&quot;</span>);</span><br><span class="line">IList multipliers = <span class="keyword">new</span> List();</span><br><span class="line">multipliers.Add(<span class="number">1</span>);</span><br><span class="line">multipliers.Add(<span class="number">12</span>);</span><br><span class="line"></span><br><span class="line">AnalysisResultSchema resultSchema = <span class="keyword">new</span> AnalysisResultSchema(<span class="string">&quot;Schema Name&quot;</span>, <span class="string">&quot;Description&quot;</span>);</span><br><span class="line"></span><br><span class="line">resultSchema.SetUnits(unitNames, multipliers);</span><br></pre></td></tr></table></figure>
+
+<p>一旦配置了AnalysisResultschema，就需要使用SpatialFieldManager.RegisterResult（）方法注册它，该方法将返回结果的唯一索引。使用此唯一索引的GetResultSchema（）和SetResultSchema（）可在注册结果后获取和更改结果。</p>
+<h3 id="创建分析结果数据"><a href="#创建分析结果数据" class="headerlink" title="创建分析结果数据"></a>创建分析结果数据</h3><p>将基元添加到SpatialFieldManager后，可以使用UpdateSpatialFieldPrimitive（）方法创建分析结果并将其添加到分析结果容器。此方法采用一组计算结果的域点（FieldDomainPoints）和每个点的一组值（FieldValues）。FieldValues的数量必须与域点的数量相对应。然而，每个域点可以具有值阵列，每个值用于该点处的单独测量。</p>
+<p>下面的示例在用户选择的元素面上创建一组简单的分析结果。SDK示例SpatialFieldGradient演示了一个更复杂的用例，其中每个点都有多个关联值。</p>
+<p>代码区域27-1：创建分析结果</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Document doc = commandData.Application.ActiveUIDocument.Document;</span><br><span class="line">UIDocument uiDoc = commandData.Application.ActiveUIDocument;</span><br><span class="line"></span><br><span class="line">SpatialFieldManager sfm = SpatialFieldManager.GetSpatialFieldManager(doc.ActiveView);</span><br><span class="line"><span class="keyword">if</span> (<span class="literal">null</span> == sfm)</span><br><span class="line">&#123;</span><br><span class="line">        sfm = SpatialFieldManager.CreateSpatialFieldManager(doc.ActiveView, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Reference reference = uiDoc.Selection.PickObject(ObjectType.Face, <span class="string">&quot;Select a face&quot;</span>);</span><br><span class="line"><span class="built_in">int</span> idx = sfm.AddSpatialFieldPrimitive(reference);</span><br><span class="line"></span><br><span class="line">Face face = doc.GetElement(reference).GetGeometryObjectFromReference(reference) <span class="keyword">as</span> Face;</span><br><span class="line"></span><br><span class="line">IList uvPts = <span class="keyword">new</span> List();</span><br><span class="line">BoundingBoxUV bb = face.GetBoundingBox();</span><br><span class="line">UV min = bb.Min;</span><br><span class="line">UV max = bb.Max;</span><br><span class="line">uvPts.Add(<span class="keyword">new</span> UV(min.U,min.V));</span><br><span class="line">uvPts.Add(<span class="keyword">new</span> UV(max.U,max.V));</span><br><span class="line"></span><br><span class="line">FieldDomainPointsByUV pnts = <span class="keyword">new</span> FieldDomainPointsByUV(uvPts);</span><br><span class="line"></span><br><span class="line">List doubleList = <span class="keyword">new</span> List();</span><br><span class="line">IList valList = <span class="keyword">new</span> List();</span><br><span class="line">doubleList.Add(<span class="number">0</span>);</span><br><span class="line">valList.Add(<span class="keyword">new</span> ValueAtPoint(doubleList));</span><br><span class="line">doubleList.Clear();</span><br><span class="line">doubleList.Add(<span class="number">10</span>);</span><br><span class="line">valList.Add(<span class="keyword">new</span> ValueAtPoint(doubleList));</span><br><span class="line"></span><br><span class="line">FieldValues vals = <span class="keyword">new</span> FieldValues(valList);</span><br><span class="line"></span><br><span class="line">AnalysisResultSchema resultSchema = <span class="keyword">new</span> AnalysisResultSchema(<span class="string">&quot;Schema Name&quot;</span>, <span class="string">&quot;Description&quot;</span>);</span><br><span class="line"><span class="built_in">int</span> schemaIndex = sfm.RegisterResult(resultSchema);</span><br><span class="line">sfm.UpdateSpatialFieldPrimitive(idx, pnts, vals, schemaIndex);</span><br></pre></td></tr></table></figure>
+
+<h3 id="分析结果显示"><a href="#分析结果显示" class="headerlink" title="分析结果显示"></a>分析结果显示</h3><p>AnalysisDisplayStyle类可用于控制分析结果在视图中的显示方式。这个静态的函数AnalysisDisplayStyle（）方法可以创建一个彩色的表面显示样式，一个带有文本样式的标记，一个变形的形状样式，图表样式或者矢量样式。对于任何样式，也可以设置颜色和图例设置。</p>
+<p>创建新的AnalysisDisplayStyle后，使用View.AnalysisDisplayStyleId将样式指定给视图。虽然分析结果不与文档一起保存，但分析显示样式及其对视图的指定与模型一起保存。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-5AC1C63F-A94F-4BEC-AE0D-6EB1898F0C97-low.png"></p>
+<p>下面的示例创建一个新的彩色曲面分析显示样式（如果在文档中尚未找到），然后将其指定给当前视图。</p>
+<p>代码区域27-2：设置视图的分析显示样式</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">Document doc = commandData.Application.ActiveUIDocument.Document;</span><br><span class="line"></span><br><span class="line">AnalysisDisplayStyle analysisDisplayStyle = <span class="literal">null</span>;</span><br><span class="line"><span class="comment">// Look for an existing analysis display style with a specific name</span></span><br><span class="line">FilteredElementCollector collector1 = <span class="keyword">new</span> FilteredElementCollector(doc);</span><br><span class="line">ICollection collection =        collector1.OfClass(<span class="keyword">typeof</span>(AnalysisDisplayStyle)).ToElements();</span><br><span class="line"><span class="keyword">var</span> displayStyle = <span class="keyword">from</span> element <span class="keyword">in</span> collection </span><br><span class="line">                                        <span class="keyword">where</span> element.Name == <span class="string">&quot;Display Style 1&quot;</span> </span><br><span class="line">                                        <span class="keyword">select</span> element;</span><br><span class="line"></span><br><span class="line">                                        <span class="comment">// If display style does not already exist in the document, create it</span></span><br><span class="line"><span class="keyword">if</span> (displayStyle.Count() == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">        AnalysisDisplayColoredSurfaceSettings coloredSurfaceSettings = <span class="keyword">new</span> AnalysisDisplayColoredSurfaceSettings();</span><br><span class="line">        coloredSurfaceSettings.ShowGridLines = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        AnalysisDisplayColorSettings colorSettings = <span class="keyword">new</span> AnalysisDisplayColorSettings();</span><br><span class="line">        Color orange = <span class="keyword">new</span> Color(<span class="number">255</span>, <span class="number">205</span>, <span class="number">0</span>);</span><br><span class="line">        Color purple = <span class="keyword">new</span> Color(<span class="number">200</span>, <span class="number">0</span>, <span class="number">200</span>);</span><br><span class="line">        colorSettings.MaxColor = orange;</span><br><span class="line">        colorSettings.MinColor = purple;</span><br><span class="line"></span><br><span class="line">        AnalysisDisplayLegendSettings legendSettings = <span class="keyword">new</span> AnalysisDisplayLegendSettings();</span><br><span class="line">        legendSettings.NumberOfSteps = <span class="number">10</span>;</span><br><span class="line">        legendSettings.Rounding = <span class="number">0.05</span>;</span><br><span class="line">        legendSettings.ShowDataDescription = <span class="literal">false</span>;</span><br><span class="line">        legendSettings.ShowLegend = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        FilteredElementCollector collector2 = <span class="keyword">new</span> FilteredElementCollector(doc);</span><br><span class="line">        ICollection elementCollection = collector2.OfClass(<span class="keyword">typeof</span>(TextNoteType)).ToElements();</span><br><span class="line">        <span class="keyword">var</span> textElements = <span class="keyword">from</span> element <span class="keyword">in</span> collector2 </span><br><span class="line">                                                <span class="keyword">where</span> element.Name == <span class="string">&quot;LegendText&quot;</span> </span><br><span class="line">                                                <span class="keyword">select</span> element;</span><br><span class="line">        <span class="comment">// if LegendText exists, use it for this Display Style</span></span><br><span class="line">        <span class="keyword">if</span> (textElements.Count() &gt; <span class="number">0</span>) </span><br><span class="line">        &#123;</span><br><span class="line">                TextNoteType textType = </span><br><span class="line">                        textElements.Cast().ElementAt(<span class="number">0</span>);</span><br><span class="line">                legendSettings.SetTextTypeId(textType.Id, doc);</span><br><span class="line">        &#125;</span><br><span class="line">        analysisDisplayStyle = AnalysisDisplayStyle.CreateAnalysisDisplayStyle(doc, <span class="string">&quot;Display Style 1&quot;</span>, coloredSurfaceSettings, colorSettings, legendSettings);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">        analysisDisplayStyle = </span><br><span class="line">                displayStyle.Cast().ElementAt(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// now assign the display style to the view</span></span><br><span class="line">doc.ActiveView.AnalysisDisplayStyleId = analysisDisplayStyle.Id;</span><br></pre></td></tr></table></figure>
+
+<h3 id="更新分析结果"><a href="#更新分析结果" class="headerlink" title="更新分析结果"></a>更新分析结果</h3><p>Revit分析框架不会自动更新结果，对Revit模型的任何更改都可能使结果无效。</p>
+<p>为了使结果保持最新，API开发人员应使用“动态模型更新”触发器或订阅DocumentChanged事件，以便在Revit模型发生更改且以前计算的结果可能无效并需要重新计算时收到通知。有关显示动态模型更新和分析可视化的示例，请参见Revit SDK中的DistanceToSurfaces示例。</p>
+<h2 id="概念能量分析"><a href="#概念能量分析" class="headerlink" title="概念能量分析"></a>概念能量分析</h2><p>通过Revit API可以访问由Revit创建的图元和对象，以便对概念设计模型执行能量分析。以下类允许您使用此数据：</p>
+<ul>
+<li><strong>MassEnergyAnalyticalModel</strong> - 将体量实例与能量分析模型数据和几何图形相关联。</li>
+<li><strong>MassLevelData</strong> - 概念建筑模型中可占用楼层（体量楼层）的概念表示。</li>
+<li><strong>MassSurfaceData</strong> - 在MassEnergyAnalyticalModel元素中保存面的属性和其他数据</li>
+<li><strong>MassZone</strong> - 建筑的单独加热和冷却子体积的概念表达。</li>
+<li><strong>ConceptualConstructionType</strong> - 以Revit BIM模型和绿色Building Studio&#x2F;绿色Building XML都能理解的方式描述概念物理、构造和能量属性。</li>
+<li><strong>ConceptualSurfaceType</strong> -表示要指定给体量几何图形中的面的概念BIM对象类别。</li>
+</ul>
+<p>除了这些类之外，还有一个Document.Export（）重载，它采用MassGBXMLExportOptions参数，该参数导出仅包含概念能量分析元素（体量元素）的gBXML文件。</p>
+<p><strong>质量能量分析模型</strong></p>
+<p>与概念能量分析关联的主类是MassEnergyAnalyticalModel。此类将体量实例与能量分析模型数据和几何图形相关联。几何图形开始时是其关联体量实例几何图形的副本，并根据能量分析模型的要求进行修改。静态方法MassEnergyAnalyticalModel。GetMassEnergyAnalyticalModelIdForMassInstance（）将返回给定体量实例的MassEnergyAnalyticalModel的ElementId。</p>
+<p><strong>MassLevelData</strong></p>
+<p>MassLevelData是通过将特定标高与Revit项目中的特定体量元素相关联来定义的。这可以使用MassInstanceUtils.AddMassLevelDataToMassInstance（）方法完成。MassLevelData报告与概念空间规划相关的度量，如楼层面积。MassLevelData包含用作“概念能量分析”模型一部分的信息，例如ConceptualConstructionType。通过将体量的所有几何图形合并为单个几何图形，然后获取与MassLevelData的标高相交的区域，可以确定MassLevel数据几何图形。</p>
+<p><strong>Masszone</strong></p>
+<p>通过将与体量族实例关联的体量级别数据与和同一体量族实例关联的体量能量分析模型的几何图形相交，将体量能量分析模型分割为多个部分，从而创建体量分区。可以使用GetMassZoneIds（）方法检索与MassEnergyAnalyticalModel关联的MassZones的ElementIds。</p>
+<p><strong>MassSurfaceData</strong></p>
+<p>从MassEnergyAnalyticalModel中，可以获取对其有意义的所有面的引用。使用这些引用，可以使用GetMassSurfaceDataIdForReference（）方法获取与每个面关联的MassSurfaceData。MassSurfaceData保存有关MassEnergyAnalyticalModel元素中的面的属性和其他数据，例如材质值和自动生成的元素的尺寸（例如窗台高度和天窗宽度）。</p>
+<p>MassSurfaceData还保存与参考曲面关联的ConceptualConstructionType的ID。ConceptualConstructionType以Revit BIM模型和绿色Building Studio&#x2F;绿色Building XML都能理解的方式描述概念物理、构造和能量属性。这个类有许多静态方法来获取给定文档中建筑物不同方面（如墙和窗）的ConceptualConstructionType的ElementId。</p>
+<p>MassSurfaceData的另一个属性是CategoryIdForConceptualSurfaceType，它提供用于其ConceptualSurfaceType的体量子类别ElementId。ConceptualSurfaceType表示要分配给体量几何图形中的面的概念性BIM对象类别。每个体量曲面子类别都有一个ConceptualSurfaceType元素。使用静态方法ConceptualSurfaceType.GetByMassSubCategoryId（），可以从体量子类别ID中获取MassSurfaceData的ConceptualSurfaceType。</p>
+<p>在Revit项目中启用“概念能量分析”后，体量面将指定给与这些ConceptualSurfaceType关联的Mass类别的子类别。默认的ConceptualConstructionType与ConceptualSurfaceType相关联。此默认ConceptualConstructionType指定给具有相应子类别的体量面。更改与ConceptualSurfaceType关联的默认ConceptualConstructionType将更新该子类别的所有体量面的ConceptualConstruction类型，用户尚未为其专门提供替代值。</p>
+<p><strong>MassInstanceUtils</strong></p>
+<p>MassInstancesUtils实用程序类提供静态方法来获取有关体量实例的信息（例如体量实例表示的总可占用楼层面积或总建筑体积），以及创建MassLevelData（体量楼层）以将标高与体量实例关联（如上所述）。</p>
+<h2 id="详细的能源分析模型"><a href="#详细的能源分析模型" class="headerlink" title="详细的能源分析模型"></a>详细的能源分析模型</h2><p>Autodesk.Revit.DB.Analysis命名空间包含多个类，用于获取和分析项目详细能量分析模型的内容。</p>
+<p>The Export to gbXML and the Heating and Cooling Loads features produce an analytical thermal model from the physical model of a building. The analytical thermal model is composed of spaces, zones and planar surfaces that represent the actual volumetric elements of the building.<br>“导出到gbXML”和“热负荷和冷负荷”功能可从建筑的物理模型生成分析热模型。分析热模型由空间、分区和平面组成，它们表示建筑的实际体积元素。</p>
+<p>与详细能量分析模型相关的类包括：</p>
+<ul>
+<li>EnergyAnalysisDetailModel</li>
+<li>EnergyAnalysisDetailModelOptions</li>
+<li>EnergyAnalysisOpening </li>
+<li>EnergyAnalysisSpace</li>
+<li>EnergyAnalysisSurface </li>
+<li>Polyloop</li>
+</ul>
+<p><strong>能量分析模型创建</strong></p>
+<p>使用静态方法EnergyAnalysisDetailModel.Create（）创建并填充能量分析模型。EnergyAnalysisDetailModel作为图元存储在Revit模型中，因此EnergyAnalysisDetailModel.Create（）方法要求存在打开的事务。生成的模型总是以世界坐标返回，但方法TransformModel（）根据地平面、共享坐标和真北变换模型中的所有曲面。</p>
+<p>如果已创建能量分析模型，则静态方法EnergyAnalysisDetailModel.GetMainEnergyAnalysisDetailModel（）返回给定文档中包含的主EnergyAnalysisDetailModel（如果尚未创建任何模型，则返回null）。能量分析详图模型可以显示在关联视图中。</p>
+<p>使用EnergyAnalysisDetailModelOptions类设置适当的选项。</p>
+<p>创建能量分析详图模型时可用的选项包括：</p>
+<ul>
+<li>能量分析模型的计算级别- NotComputed、FirstLevelBoundary（表示分析空间和分区）、SecondLevelBoundary（表示分析表面）或Final（表示构造、明细表和非图形数据</li>
+<li>能源模型是否基于房间&#x2F;空间或建筑元素</li>
+<li>竖梃是否应导出为着色表面</li>
+<li>是否包括遮光表面</li>
+<li>是否简化幕墙系统-为true时，将为幕墙&#x2F;系统导出单个大窗&#x2F;洞口，而不考虑系统中的嵌板数量</li>
+</ul>
+<p>EnergyAnalysisDetailModelOptions.EnergyModelType属性可以设置为SpatialElement（其中能量模型基于房间或空间）或BuildingElement（其中能量模型基于建筑图元体积的分析）。但是，请注意，生成的能量模型还受EnergyDataSettings中的设置（包括EnergyDataSettings.AnalysisType属性）的影响。如果将此属性设置为AnalysisMode.ConceptualMassesAndBuildingElements，则EnergyAnalysisDetailModel将使用概念体量和建筑图元的组合。</p>
+<p>以下示例从物理模型创建新的能量分析详细模型，然后显示模型中每个空间的每个曲面的原始图元。</p>
+<p>代码区域：能量分析详图模型</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Collect space and surface data from the building&#x27;s analytical thermal model</span></span><br><span class="line">EnergyAnalysisDetailModelOptions options = <span class="keyword">new</span> EnergyAnalysisDetailModelOptions();</span><br><span class="line">options.Tier = EnergyAnalysisDetailModelTier.Final; <span class="comment">// include constructions, schedules, and non-graphical data in the computation of the energy analysis model</span></span><br><span class="line">options.EnergyModelType = EnergyModelType.SpatialElement;   <span class="comment">// Energy model based on rooms or spaces</span></span><br><span class="line"></span><br><span class="line">EnergyAnalysisDetailModel eadm = EnergyAnalysisDetailModel.Create(doc, options); <span class="comment">// Create a new energy analysis detailed model from the physical model</span></span><br><span class="line">IList spaces = eadm.GetAnalyticalSpaces();</span><br><span class="line">StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">builder.AppendLine(<span class="string">&quot;Spaces: &quot;</span> + spaces.Count);</span><br><span class="line"><span class="keyword">foreach</span> (EnergyAnalysisSpace space <span class="keyword">in</span> spaces)</span><br><span class="line">&#123;</span><br><span class="line">    SpatialElement spatialElement = doc.GetElement(space.CADObjectUniqueId) <span class="keyword">as</span> SpatialElement;</span><br><span class="line">    ElementId spatialElementId = spatialElement == <span class="literal">null</span> ? ElementId.InvalidElementId : spatialElement.Id;</span><br><span class="line">    builder.AppendLine(<span class="string">&quot;   &gt;&gt;&gt; &quot;</span> + space.SpaceName + <span class="string">&quot; related to &quot;</span> + spatialElementId);</span><br><span class="line">    IList surfaces = space.GetAnalyticalSurfaces();</span><br><span class="line">    builder.AppendLine(<span class="string">&quot;       has &quot;</span> + surfaces.Count + <span class="string">&quot; surfaces.&quot;</span>);</span><br><span class="line">    <span class="keyword">foreach</span> (EnergyAnalysisSurface surface <span class="keyword">in</span> surfaces)</span><br><span class="line">    &#123;</span><br><span class="line">        builder.AppendLine(<span class="string">&quot;            +++ Surface from &quot;</span> + surface.OriginatingElementDescription);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">TaskDialog.Show(<span class="string">&quot;EAM&quot;</span>, builder.ToString());</span><br></pre></td></tr></table></figure>
+
+<p>创建EnergyAnalysisDetailModel后，可以使用GetAnalyticalOpenings（）、GetAnalyticalSpaces（）、GetAnalyticalShadingSurfaces（）和GetAnalyticalSurfaces（）方法检索与其关联的空间、洞口和曲面。 建议应用程序在访问完数据后创建的EnergyAnalysisDetailModel元素上调用Document.Delete（），但在保存或同步文档之前，将自动删除在主能源模型之后创建的任何能源模型。 </p>
+<p> <strong>EnergyAnalysisSpace</strong> </p>
+<p>从EnergyAnalysisSpace中，可以检索EnergyAnalysisSurfaces的集合，这些曲面定义由墙的中心平面以及屋顶和楼板的顶平面限定边界的封闭体积。或者，GetClosedShell（）检索Polyloops（平面多边形）的集合，这些多边形定义由内部边界曲面测量的封闭体积。对于二维，请使用GetBoundary（），它返回表示空间的2D边界的多边形环集合，该空间定义了由内部边界曲面测量的封闭区域。 EnergyAnalysisSpace类还具有许多用于访问有关分析空间的信息的属性，例如AnalyticalVolume、SpaceName和Area。 #能量分析Surface 从EnergyAnalysisSpace中，可以检索与曲面关联的主分析空间以及次相邻分析空间。GetAnalyticalOpenings（）方法将检索曲面中所有分析洞口的集合。GetPolyloop（）方法获取描述gbXML中描述的曲面几何的平面多边形。 EnergyAnalysisSurface类具有许多属性，可提供有关分析曲面的更多信息，例如“高度”、“宽度”、“角点”（从外部查看的分析矩形几何图形的左下坐标）和原始图元描述。 曲面类型可以作为EnergyAnalysisSurfaceType或gbXMLSurfaceType提供。gbXML表面类型属性由源元素和空间邻接数确定。可能的类型有：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Type 类型</strong></th>
+<th><strong>Source element and space adjacencies 源元素和空间邻接</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>Shade</em></td>
+<td>没有关联的源元素和空间邻接关系</td>
+</tr>
+<tr>
+<td><em>Air</em></td>
+<td>没有关联的源元素且至少有一个空间邻接</td>
+</tr>
+<tr>
+<td><em>ExteriorWall</em></td>
+<td>源图元是一面墙或一面幕墙，有一个空间相邻</td>
+</tr>
+<tr>
+<td><em>InteriorWall</em></td>
+<td>源图元是墙或幕墙，并且：存在两个空间邻接关系，或者类型函数参数设置为“Interior”或“CoreShaft”</td>
+</tr>
+<tr>
+<td><em>UndergroundWall</em></td>
+<td>源图元是墙或幕墙，并且存在一个空间邻接关系，如果该空间邻接关系低于坡率</td>
+</tr>
+<tr>
+<td><em>SlabOnGrade</em></td>
+<td>源元素是一个Floor，并且存在一个空间邻接</td>
+</tr>
+<tr>
+<td><em>RaisedFloor</em></td>
+<td>源元素是一个地板，有一个空间邻接，并且位于地面上方</td>
+</tr>
+<tr>
+<td><em>UndergroundSlab</em></td>
+<td>源元素是一个地板，有一个空间邻接，并且它位于地面以下</td>
+</tr>
+<tr>
+<td><em>InteriorFloor</em></td>
+<td>源图元为楼板，并且：存在两个空间邻接关系或类型函数参数设置为“Interior</td>
+</tr>
+<tr>
+<td><em>Roof</em></td>
+<td>源元素是屋顶或天花板，并且有一个空间相邻关系</td>
+</tr>
+<tr>
+<td><em>UndergroundCeiling</em></td>
+<td>源图元是屋顶或天花板，并且存在一个空间邻接关系，且该空间邻接关系位于地面以下</td>
+</tr>
+<tr>
+<td><em>Ceiling</em></td>
+<td>源图元是Roof或Ceiling，并且存在两个空间邻接关系</td>
+</tr>
+</tbody></table>
+<p><strong>EnergyAnalysisOpening</strong> </p>
+<p>从EnergyAnalysisOpening可以检索关联的父分析曲面元素。GetPolyloop（）方法将洞口几何图形作为平面多边形返回。</p>
+<p>有许多特性可用于获取有关分析洞口的信息，例如“高度”、“宽度”、“角点”和“洞口名称”。与分析曲面类似，分析洞口类型可以作为简单的EnergyAnalysisOpeningType枚举或gbXMLOpeningType属性获得。洞口的类型取决于洞口的族类别及其包含的图元，如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Type 类型</strong></th>
+<th><strong>Family Category or containing element 家庭类别或包含元素</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>OperableWindow</em></td>
+<td>窗口</td>
+</tr>
+<tr>
+<td><em>NonSlidingDoor</em></td>
+<td>门</td>
+</tr>
+<tr>
+<td><em>FixedSkylight</em></td>
+<td>屋顶中包含的洞口</td>
+</tr>
+<tr>
+<td><em>FixedWindow</em></td>
+<td>幕墙嵌板中包含的洞口</td>
+</tr>
+<tr>
+<td><em>Air</em></td>
+<td>Opening of the category Openings</td>
+</tr>
+</tbody></table>
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2></article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Revit/">Revit</a></div><div class="post-share"><div class="social-share" data-image="/images/4stars.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/38%E5%9C%B0%E7%82%B9%E5%92%8C%E4%BD%8D%E7%BD%AE/" title="38地点和位置"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">38地点和位置</div></div><div class="info-2"><div class="info-item-1">地点和位置每个建筑物在世界上都有一个独特的位置，因为纬度和经度是独一无二的。此外，一个建筑物相对于其他建筑物可以有许多位置。Revit Platform API Site命名空间使用某些类来保存Revit项目的地理位置信息。 注意：Revit Platform API不显示“场地”菜单功能。只有“site”命名空间提供与“管理”选项卡上的“项目位置”面板上的“位置”选项对应的功能。 本节中的页面  Place  地点 City  城市 ProjectLocation  项目地点 Project Position  项目位置  地点在Revit Platform...</div></div></div></a><a class="pagination-related" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/36%E7%82%B9%E4%BA%91/" title="36点云"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">36点云</div></div><div class="info-2"><div class="info-item-1">点云Revit API提供了两种处理点云的方法。第一种方法允许您创建新的点云实例，读取和过滤点，选择整体点的子集，以及选择要高亮显示或隔离的点。第二种方法允许您使用自己的点云引擎并处理不支持的文件格式（即.pcg、.rcp或.rcs以外的格式），从而向Revit提供点以供用户查看。  客户端API 创建新的点云实例 读取和过滤点 点集选择 控制点云高亮显示 引擎API 注册点云文件扩展名 向Revit提供点以进行渲染     本节中的页面  点云客户端 点云引擎  点云客户端点云客户端API支持在Revit中读取和修改点云实例。 点云实例提供的点来自点云引擎，该引擎可以是Revit中的内置引擎，也可以是作为应用程序加载的第三方引擎。客户端点云API应用程序不需要关心引擎如何存储点并将点提供给Revit的详细信息。相反，客户端API可用于创建点云、操作其属性以及读取找到的与给定过滤器匹配的点。 与点云相关的主要类有：  PointCloudType -...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/42%E5%AF%BC%E5%87%BA/" title="42导出"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-30</div><div class="info-item-2">42导出</div></div><div class="info-2"><div class="info-item-1">导出Revit API允许将Revit文档或其中的一部分导出为各种格式，以便与其他软件一起使用。Document类具有重载的Export（）方法，该方法将使用Revit中的内置导出器（如果可用）启动文档的导出。对于更高级的需求，可以使用Revit附加模块自定义某些类型的导出，例如导出到IFC和导出到Navisworks。(Note，Navisworks导出仅作为附加模块导出器提供）。 下表概述了Document.Export（）方法重载。 表：Document.Export（）方法    格式 Export() parameters Comments    gbXML String, String, MassGBXMLExportOptions 从体量模型文档导出gbXML文件   gbXML String, String, GBXMLExportOptions 以Green-Building XML格式导出文档。如果将EnergyDataSettings设置为使用概念模型，则无法使用此函数：请改用上述方法。   IFC String, String,...</div></div></div></a><a class="pagination-related" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/41%E9%93%BE%E6%8E%A5%E6%96%87%E4%BB%B6/" title="41链接文件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-30</div><div class="info-item-2">41链接文件</div></div><div class="info-2"><div class="info-item-1">链接文件Revit API可以确定Revit中的哪些图元是对外部文件（“链接文件”）的引用，并可以对Revit加载外部文件的方式进行一些修改。 包含ExternalFileReference的元素是引用基.rvt文件之外的某个文件的元素。示例包括Revit链接、CAD链接、存储注释记号文件位置的图元和渲染贴花。IsExternalFileReference（）返回元素是否表示外部文件。GetExternalFileReference（）返回给定Element的ExternalFileReference，其中包含与该元素引用的外部文件有关的信息。 以下类与Revit API中的链接文件关联：  ExternalFileReference - 非Element类，包含Revit项目引用的单个外部文件的路径和类型信息。 ExternalFileUtils -一个实用程序类，允许用户查找所有外部文件引用，从元素中获取外部文件引用，或者告诉元素是否是外部文件引用。 RevitLinkType -表示链接到Revit项目的Revit文件的图元。 ModelPath -...</div></div></div></a><a class="pagination-related" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/40%E6%96%BD%E5%B7%A5%E5%BB%BA%E6%A8%A1/" title="40施工建模"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-30</div><div class="info-item-2">40施工建模</div></div><div class="info-2"><div class="info-item-1">施工建模Revit API允许将图元划分为子零件或收集到程序集中，以支持构造建模工作流，这与使用Revit用户界面的方法大致相同。零件和程序集都可以独立地进行明细表、标记、过滤和导出。您也可以将零件分割成更小的零件。创建程序集类型后，可以在项目中放置其他实例并生成独立的程序集视图。 与构造建模相关的主要类有：  AssemblyInstance -这个类结合了多个元素，用于标记、过滤、调度和创建隔离的装配视图。 AssemblyType - 表示构造程序集元素的类型。在项目中创建的每个新的唯一程序集都会自动创建一个相应的AssemblyType。可以从现有AssemblyType将新AssemblyInstance放置到文档中。 PartUtils - 这个实用程序类包含通用的程序集实用程序方法，包括创建程序集、划分程序集和获取程序集信息的能力。 AssemblyViewUtils - 用于创建各种类型的装配视图的实用程序类。  ...</div></div></div></a><a class="pagination-related" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/39%E5%B7%A5%E4%BD%9C%E5%85%B1%E4%BA%AB/" title="39工作共享"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-30</div><div class="info-item-2">39工作共享</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/38%E5%9C%B0%E7%82%B9%E5%92%8C%E4%BD%8D%E7%BD%AE/" title="38地点和位置"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-30</div><div class="info-item-2">38地点和位置</div></div><div class="info-2"><div class="info-item-1">地点和位置每个建筑物在世界上都有一个独特的位置，因为纬度和经度是独一无二的。此外，一个建筑物相对于其他建筑物可以有许多位置。Revit Platform API Site命名空间使用某些类来保存Revit项目的地理位置信息。 注意：Revit Platform API不显示“场地”菜单功能。只有“site”命名空间提供与“管理”选项卡上的“项目位置”面板上的“位置”选项对应的功能。 本节中的页面  Place  地点 City  城市 ProjectLocation  项目地点 Project Position  项目位置  地点在Revit Platform...</div></div></div></a><a class="pagination-related" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/36%E7%82%B9%E4%BA%91/" title="36点云"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-30</div><div class="info-item-2">36点云</div></div><div class="info-2"><div class="info-item-1">点云Revit API提供了两种处理点云的方法。第一种方法允许您创建新的点云实例，读取和过滤点，选择整体点的子集，以及选择要高亮显示或隔离的点。第二种方法允许您使用自己的点云引擎并处理不支持的文件格式（即.pcg、.rcp或.rcs以外的格式），从而向Revit提供点以供用户查看。  客户端API 创建新的点云实例 读取和过滤点 点集选择 控制点云高亮显示 引擎API 注册点云文件扩展名 向Revit提供点以进行渲染     本节中的页面  点云客户端 点云引擎  点云客户端点云客户端API支持在Revit中读取和修改点云实例。 点云实例提供的点来自点云引擎，该引擎可以是Revit中的内置引擎，也可以是作为应用程序加载的第三方引擎。客户端点云API应用程序不需要关心引擎如何存储点并将点提供给Revit的详细信息。相反，客户端API可用于创建点云、操作其属性以及读取找到的与给定过滤器匹配的点。 与点云相关的主要类有：  PointCloudType -...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/4stars.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">funtim41@gmail.com</div><div class="author-info-description">实践-认识-再实践-再认识</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">42</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/FunTim41"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/FunTim41" target="_blank" title="Github"><i class="fab fa-github" style="color: #FFFFFF;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%BD%E9%87%8F%E6%95%B0%E6%8D%AE"><span class="toc-number">1.1.</span> <span class="toc-text">能量数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="toc-number">1.2.</span> <span class="toc-text">分析可视化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E7%BB%93%E6%9E%9C%E7%AE%A1%E7%90%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">分析结果管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%88%86%E6%9E%90%E7%BB%93%E6%9E%9C%E6%95%B0%E6%8D%AE"><span class="toc-number">1.2.2.</span> <span class="toc-text">创建分析结果数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E7%BB%93%E6%9E%9C%E6%98%BE%E7%A4%BA"><span class="toc-number">1.2.3.</span> <span class="toc-text">分析结果显示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E5%88%86%E6%9E%90%E7%BB%93%E6%9E%9C"><span class="toc-number">1.2.4.</span> <span class="toc-text">更新分析结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5%E8%83%BD%E9%87%8F%E5%88%86%E6%9E%90"><span class="toc-number">1.3.</span> <span class="toc-text">概念能量分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%A6%E7%BB%86%E7%9A%84%E8%83%BD%E6%BA%90%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.4.</span> <span class="toc-text">详细的能源分析模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%EF%BC%9A%E7%BF%BB%E8%AF%91%E8%87%AARevit-API-Developers-Guide"><span class="toc-number">1.5.</span> <span class="toc-text">注：翻译自Revit API Developers Guide</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/42%E5%AF%BC%E5%87%BA/" title="42导出">42导出</a><time datetime="2024-12-30T08:19:39.643Z" title="更新于 2024-12-30 16:19:39">2024-12-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/41%E9%93%BE%E6%8E%A5%E6%96%87%E4%BB%B6/" title="41链接文件">41链接文件</a><time datetime="2024-12-30T08:06:42.788Z" title="更新于 2024-12-30 16:06:42">2024-12-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/40%E6%96%BD%E5%B7%A5%E5%BB%BA%E6%A8%A1/" title="40施工建模">40施工建模</a><time datetime="2024-12-30T07:46:35.853Z" title="更新于 2024-12-30 15:46:35">2024-12-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/39%E5%B7%A5%E4%BD%9C%E5%85%B1%E4%BA%AB/" title="39工作共享">39工作共享</a><time datetime="2024-12-30T07:34:51.897Z" title="更新于 2024-12-30 15:34:51">2024-12-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/30/%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/38%E5%9C%B0%E7%82%B9%E5%92%8C%E4%BD%8D%E7%BD%AE/" title="38地点和位置">38地点和位置</a><time datetime="2024-12-30T07:08:45.800Z" title="更新于 2024-12-30 15:08:45">2024-12-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/images/topback.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2024 By funtim41@gmail.com</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">学而不思则罔，思而不学则殆。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>(() => {
+  const panguFn = () => {
+    if (typeof pangu === 'object') pangu.autoSpacingPage()
+    else {
+      btf.getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+        .then(() => {
+          pangu.autoSpacingPage()
+        })
+    }
+  }
+
+  const panguInit = () => {
+    if (false){
+      GLOBAL_CONFIG_SITE.isPost && panguFn()
+    } else {
+      panguFn()
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', panguInit, 'pangu')
+  document.addEventListener('DOMContentLoaded', panguInit)
+})()</script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'FunTim41/funtim41.github.io',
+      'data-repo-id': 'R_kgDONjG8ww',
+      'data-category-id': 'DIC_kwDONjG8w84Cllg2',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
