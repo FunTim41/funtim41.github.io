@@ -1,0 +1,661 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Autodesk.RevitAddIns Namespace | funtim的博客</title><meta name="author" content="funtim41@gmail.com"><meta name="copyright" content="funtim41@gmail.com"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Autodesk.RevitAddIns Namespace类AddInManifestUtility此静态类提供从 Revit .addin 文件中读取清单内容的访问。   方法  GetRevitAddInBundleManifests  GetRevitAddInManifest  GetRevitAddInManifests     RevitAddInApplication表示 Revi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Autodesk.RevitAddIns Namespace">
+<meta property="og:url" content="https://funtim41.github.io/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.RevitAddIns%20Namespace/">
+<meta property="og:site_name" content="funtim的博客">
+<meta property="og:description" content="Autodesk.RevitAddIns Namespace类AddInManifestUtility此静态类提供从 Revit .addin 文件中读取清单内容的访问。   方法  GetRevitAddInBundleManifests  GetRevitAddInManifest  GetRevitAddInManifests     RevitAddInApplication表示 Revi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://funtim41.github.io/images/4stars.png">
+<meta property="article:published_time" content="2024-11-18T05:44:29.000Z">
+<meta property="article:modified_time" content="2025-01-05T09:13:27.547Z">
+<meta property="article:author" content="funtim41@gmail.com">
+<meta property="article:tag" content="Revit">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://funtim41.github.io/images/4stars.png"><link rel="shortcut icon" href="/images/OIP.jfif"><link rel="canonical" href="https://funtim41.github.io/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.RevitAddIns%20Namespace/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: funtim41@gmail.com","link":"链接: ","source":"来源: funtim的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Autodesk.RevitAddIns Namespace',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background: Color(#995a82);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/4stars.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/images/topback.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/OIP.jfif" alt="Logo"><span class="site-name">funtim的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Autodesk.RevitAddIns Namespace</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Autodesk.RevitAddIns Namespace</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-18T05:44:29.000Z" title="发表于 2024-11-18 13:44:29">2024-11-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-01-05T09:13:27.547Z" title="更新于 2025-01-05 17:13:27">2025-01-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/RevitApi/">RevitApi</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Autodesk-RevitAddIns-Namespace"><a href="#Autodesk-RevitAddIns-Namespace" class="headerlink" title="Autodesk.RevitAddIns Namespace"></a>Autodesk.RevitAddIns Namespace</h1><h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><h3 id="AddInManifestUtility"><a href="#AddInManifestUtility" class="headerlink" title="AddInManifestUtility"></a>AddInManifestUtility</h3><p>此静态类提供从 Revit .addin 文件中读取清单内容的访问。 </p>
+<ul>
+<li><p>方法</p>
+<ul>
+<li><p>GetRevitAddInBundleManifests</p>
+</li>
+<li><p>GetRevitAddInManifest</p>
+</li>
+<li><p>GetRevitAddInManifests</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="RevitAddInApplication"><a href="#RevitAddInApplication" class="headerlink" title="RevitAddInApplication"></a>RevitAddInApplication</h3><p>表示 Revit 外部应用程序。</p>
+<ul>
+<li><p>构造器</p>
+<ul>
+<li><p>RevitAddInApplication</p>
+<p>创建 external application info 类的新实例。</p>
+</li>
+</ul>
+</li>
+<li><p>属性</p>
+<ul>
+<li><p>Name</p>
+<p> Application name</p>
+</li>
+</ul>
+</li>
+<li><p>继承关系</p>
+<ul>
+<li>System.Object<br>  Autodesk.RevitAddIns.RevitAddInItem<br>  Autodesk.RevitAddIns.RevitAddInApplication</li>
+</ul>
+</li>
+</ul>
+<h3 id="RevitAddInCommand"><a href="#RevitAddInCommand" class="headerlink" title="RevitAddInCommand"></a>RevitAddInCommand</h3><p>表示 Revit 外部命令。</p>
+<ul>
+<li><p>构造器</p>
+<ul>
+<li><p>RevitAddInCommand</p>
+<p>创建 Add-In Command info 类的新实例。</p>
+</li>
+</ul>
+</li>
+<li><p>属性</p>
+<ul>
+<li><p>AvailabilityClassName</p>
+<p>提供决定此命令可用性的入口点的类的完整类名。</p>
+</li>
+<li><p>Description</p>
+<p>命令的简短描述和简短工具提示。 </p>
+</li>
+<li><p>Discipline</p>
+<p>外部命令可见的模式。</p>
+</li>
+<li><p>LanguageType</p>
+<p>语言类型</p>
+</li>
+<li><p>LargeImage</p>
+<p>命令按钮的大图像的路径。</p>
+</li>
+<li><p>LongDescription</p>
+<p>扩展命令工具提示中显示的文本。</p>
+</li>
+<li><p>Text</p>
+<p>外部命令按钮上显示的文本。</p>
+</li>
+<li><p>TooltipImage</p>
+<p>扩展命令 tooltip 中显示的图像。</p>
+</li>
+<li><p>VisibilityMode</p>
+<p>外部命令可见的模式。</p>
+</li>
+</ul>
+</li>
+<li><p>继承关系</p>
+<ul>
+<li>System.Object<br>  Autodesk.RevitAddIns.RevitAddInItem<br>  Autodesk.RevitAddIns.RevitAddInCommand</li>
+</ul>
+</li>
+</ul>
+<h3 id="RevitAddInDBApplication"><a href="#RevitAddInDBApplication" class="headerlink" title="RevitAddInDBApplication"></a>RevitAddInDBApplication</h3><p>表示 Revit DB 外部应用程序。</p>
+<ul>
+<li><p>构造器</p>
+<ul>
+<li><p>RevitAddInDBApplication</p>
+<p>创建外部 DB Application info 类的新实例。</p>
+</li>
+</ul>
+</li>
+<li><p>属性</p>
+<ul>
+<li><p>LoadInRevitWorker</p>
+<p>指示 RevitWorker 进程是否将加载此附加模块。</p>
+</li>
+<li><p>Name</p>
+<p>DB Application名字</p>
+</li>
+</ul>
+</li>
+<li><p>继承关系</p>
+<ul>
+<li>System.Object<br>  Autodesk.RevitAddIns.RevitAddInItem<br>  Autodesk.RevitAddIns.RevitAddInDBApplication</li>
+</ul>
+</li>
+</ul>
+<h3 id="RevitAddInItem"><a href="#RevitAddInItem" class="headerlink" title="RevitAddInItem"></a>RevitAddInItem</h3><p>表示单个 Revit 附加模块。 </p>
+<ul>
+<li><p>属性</p>
+<ul>
+<li><p>AddInId</p>
+<p>加载项的 ID。必须为每个加载项分配一个唯一标识符。</p>
+</li>
+<li><p>AllowLoadingIntoExistingSession</p>
+<p>加载权限的标志。</p>
+</li>
+<li><p>Assembly</p>
+<p>定义加载项的程序集的文件路径。 </p>
+</li>
+<li><p>FullClassName</p>
+<p>提供加载项入口点的类的完整类名。</p>
+</li>
+<li><p>ProductDescription</p>
+<p>产品描述。</p>
+</li>
+<li><p>ProductImage</p>
+<p>产品图像。</p>
+</li>
+<li><p>ProductVersion</p>
+<p>产品版本。</p>
+</li>
+<li><p>SuppressedWarning</p>
+<p>启动失败，如果发生启动失败，将禁止用户访问。 </p>
+</li>
+<li><p>VendorDescription</p>
+<p>供应商描述。</p>
+</li>
+<li><p>VendorId</p>
+<p>供应商 ID。</p>
+</li>
+</ul>
+</li>
+<li><p>继承关系</p>
+<ul>
+<li>System.Object<br>  Autodesk.RevitAddIns.RevitAddInItem<br>  Autodesk.RevitAddIns.RevitAddInApplication<br>  Autodesk.RevitAddIns.RevitAddInCommand<br>  Autodesk.RevitAddIns.RevitAddInDBApplication</li>
+</ul>
+</li>
+</ul>
+<h3 id="RevitAddInManifest"><a href="#RevitAddInManifest" class="headerlink" title="RevitAddInManifest"></a>RevitAddInManifest</h3><p> 表示单个 .addin 文件的内容。</p>
+<ul>
+<li><p>构造器</p>
+<ul>
+<li><p>RevitAddInManifest</p>
+<p>构造一个新的空清单。</p>
+</li>
+</ul>
+</li>
+<li><p>方法</p>
+<ul>
+<li><p>Save</p>
+</li>
+<li><p>SaveAs</p>
+</li>
+</ul>
+</li>
+<li><p>属性</p>
+<ul>
+<li><p>AddInApplications</p>
+<p>清单中所有外部应用程序的集合。</p>
+</li>
+<li><p>AddInCommands</p>
+<p>清单中所有外部命令的集合。</p>
+</li>
+<li><p>AddInDBApplications</p>
+<p>清单中所有外部数据库应用程序的集合。</p>
+</li>
+<li><p>FullName</p>
+<p>与清单关联的完整路径和文件名。</p>
+</li>
+<li><p>Name</p>
+<p>与清单关联的文件名。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="RevitProduct"><a href="#RevitProduct" class="headerlink" title="RevitProduct"></a>RevitProduct</h3><p>表示本地计算机上已安装的 Revit 实例。 </p>
+<ul>
+<li><p>方法</p>
+<ul>
+<li><p>GetInstalledLanguages</p>
+<p>获取已安装的语言类型。</p>
+</li>
+</ul>
+</li>
+<li><p>属性</p>
+<ul>
+<li><p>AllUsersAddInFolder</p>
+<p>此产品与所有用户关联的 .addin 文件所在的文件夹路径。</p>
+</li>
+<li><p>Architecture</p>
+<p>此 Revit 产品安装的系统建筑</p>
+</li>
+<li><p>CurrentUserAddInFolder</p>
+<p>此产品与当前用户关联的 .addin 文件所在的文件夹路径。</p>
+</li>
+<li><p>InstallLocation</p>
+<p>安装此 Revit 产品的文件夹路径。</p>
+</li>
+<li><p>IsSubscriptionUpdate</p>
+<p>Obsolete。<br>如果此版本的 Revit 是固定期限的使用许可更新，则为 True。</p>
+</li>
+<li><p>Name</p>
+<p>此 Revit 产品的用户可见名称。例如：“Autodesk Revit Architecture 2010”</p>
+</li>
+<li><p>Product</p>
+<p>产品类型。 </p>
+</li>
+<li><p>ProductCode</p>
+<p>用于从注册表中查找和标识 Revit 产品的 ID。</p>
+</li>
+<li><p>ReleaseSubVersion</p>
+<p>发布子版本的字符串。</p>
+</li>
+<li><p>Subversion</p>
+<p>发布版本</p>
+</li>
+<li><p>Version</p>
+<p>此 Revit 产品的版本。例如：’2010’。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="RevitProductUtility"><a href="#RevitProductUtility" class="headerlink" title="RevitProductUtility"></a>RevitProductUtility</h3><p>提供对本地计算机上已安装的 Revit 版本的访问权限。 </p>
+<ul>
+<li><p>方法</p>
+<ul>
+<li><p>GetAllInstalledRevitProducts</p>
+<p>获取此计算机上安装的 Revit 产品的列表。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><h3 id="AddInArchitecture"><a href="#AddInArchitecture" class="headerlink" title="AddInArchitecture"></a>AddInArchitecture</h3><p>定义 Add-In 实用程序识别的操作系统体系结构。 </p>
+<ul>
+<li><p>OS32bit  </p>
+<p>32位操作系统</p>
+</li>
+<li><p>OS64bit </p>
+<p>64位操作系统</p>
+</li>
+</ul>
+<h3 id="Discipline"><a href="#Discipline" class="headerlink" title="Discipline"></a>Discipline</h3><p>描述特定外部命令在 Revit UI 中可见的条件。 </p>
+<ul>
+<li><p>Any</p>
+<p>命令在所有可能的学科中都可用。</p>
+</li>
+<li><p>Architecture</p>
+<p>该命令在建筑领域中可用。</p>
+</li>
+<li><p>Structure</p>
+<p>该命令在结构领域中可用。</p>
+</li>
+<li><p>StructuralAnalysis</p>
+<p>该命令在结构分析领域中可用。</p>
+</li>
+<li><p>MassingAndSite</p>
+<p>该命令在体量与场地领域中可用。</p>
+</li>
+<li><p>EnergyAnalysis</p>
+<p>该命令在能量分析领域中可用。</p>
+</li>
+<li><p>Mechanical</p>
+<p>该命令在机械领域中可用。 </p>
+</li>
+<li><p>Electrical</p>
+<p>该命令在电力领域中可用。 </p>
+</li>
+<li><p>Piping</p>
+<p>该命令在管道设计领域中可用。</p>
+</li>
+<li><p>MechanicalAnalysis</p>
+<p>该命令在 机械分析领域中可用。 </p>
+</li>
+<li><p>PipingAnalysis</p>
+<p>该命令在管道分析领域中可用。 </p>
+</li>
+<li><p>ElectricalAnalysis</p>
+<p>该命令在 电力分析领域中可用。</p>
+</li>
+</ul>
+<h3 id="LanguageType"><a href="#LanguageType" class="headerlink" title="LanguageType"></a>LanguageType</h3><p>定义 Revit 附加模块的语言类型。</p>
+<ul>
+<li><p>Unknown</p>
+</li>
+<li><p>English_USA</p>
+</li>
+<li><p>German</p>
+</li>
+<li><p>Spanish</p>
+</li>
+<li><p>French</p>
+</li>
+<li><p>Italian</p>
+</li>
+<li><p>Dutch</p>
+</li>
+<li><p>Chinese_Simplified</p>
+</li>
+<li><p>Chinese_Traditional</p>
+</li>
+<li><p>Japanese</p>
+</li>
+<li><p>Korean</p>
+</li>
+<li><p>Russian</p>
+</li>
+<li><p>Czech</p>
+</li>
+<li><p>Polish</p>
+</li>
+<li><p>Hungarian</p>
+</li>
+<li><p>Brazilian_Portuguese</p>
+</li>
+<li><p>English_GB</p>
+</li>
+</ul>
+<h3 id="ProductType"><a href="#ProductType" class="headerlink" title="ProductType"></a>ProductType</h3><p>包含可能的 Revit 产品类型的枚举类型。</p>
+<ul>
+<li><p>Architecture</p>
+</li>
+<li><p>Structure</p>
+</li>
+<li><p>MEP</p>
+</li>
+<li><p>Revit</p>
+</li>
+<li><p>Unknown</p>
+</li>
+</ul>
+<h3 id="RevitVersion"><a href="#RevitVersion" class="headerlink" title="RevitVersion"></a>RevitVersion</h3><p>定义附加模块实用程序支持的 Revit 版本。 </p>
+<ul>
+<li><p>Unknown</p>
+</li>
+<li><p>……</p>
+</li>
+<li><p>Revit2016</p>
+</li>
+<li><p>Revit2018</p>
+</li>
+<li><p>……</p>
+</li>
+</ul>
+<h3 id="VisibilityMode"><a href="#VisibilityMode" class="headerlink" title="VisibilityMode"></a>VisibilityMode</h3><p>描述特定外部命令在 Revit UI 中可见的条件。 </p>
+<ul>
+<li><p>AlwaysVisible</p>
+<p>该命令在 Revit API 支持的所有可能模式下都可用。</p>
+</li>
+<li><p>NotVisibleInProject</p>
+<p>当项目文档处于活动状态时，该命令是不可见的。</p>
+</li>
+<li><p>NotVisibleInFamily</p>
+<p>当有活动的族文档时，该命令是不可见的。</p>
+</li>
+<li><p>NotVisibleWhenNoActiveDocument</p>
+<p>当没有活动文档时，该命令不可见。</p>
+</li>
+</ul>
+<h3 id="WarningType"><a href="#WarningType" class="headerlink" title="WarningType"></a>WarningType</h3><p>发出的与附加模块失败相关的警告类型。</p>
+<ul>
+<li><p>NoWarning</p>
+<p>此插件中没有警告。</p>
+</li>
+<li><p>ClassNotFound</p>
+<p>在程序集文件中找不到指示的类。</p>
+</li>
+<li><p>WrongAssemblyPath</p>
+<p>找不到程序集文件。</p>
+</li>
+<li><p>UncaughtException</p>
+<p>执行 AddIn 时捕获到未经处理的异常。</p>
+</li>
+<li><p>GUIDConflict</p>
+<p>还有另一个注册了相同 ID （GUID） 的加载项。</p>
+</li>
+<li><p>NoFullClassName</p>
+<p>缺少 FullClassName 节点的必需值。</p>
+</li>
+<li><p>NoClientId</p>
+<p>缺少 ClientId 节点的必需值。</p>
+</li>
+<li><p>NoAssembly</p>
+<p>缺少 Assembly 节点的必需值。</p>
+</li>
+<li><p>NoApplicationName</p>
+<p>缺少应用程序加载项的 Name 节点的必需值。</p>
+</li>
+<li><p>InvalidFormatClientId</p>
+<p>无法交互</p>
+</li>
+<li><p>WrongAvailabilityClass</p>
+<p>无法正确调用 IExternalCommandAvailability。</p>
+</li>
+<li><p>UncaughtExceptionInAvailabilityClass</p>
+<p>在执行可用性命令时捕获到未经处理的异常。</p>
+</li>
+<li><p>InvalidTransactionAttributeError</p>
+<p>不是有效的事务属性。</p>
+</li>
+<li><p>InvalidRegenerationAttributeError</p>
+<p>不是有效的重新生成属性。 </p>
+</li>
+<li><p>NoVendorId</p>
+<p>缺少 VendorId 节点的必需值。</p>
+</li>
+</ul>
+<h2 id="注：翻译自RevitAddInUtility-2018"><a href="#注：翻译自RevitAddInUtility-2018" class="headerlink" title="注：翻译自RevitAddInUtility 2018"></a><em><strong>注：</strong></em>翻译自RevitAddInUtility 2018</h2></article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Revit/">Revit</a></div><div class="post-share"><div class="social-share" data-image="/images/4stars.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20CurveArray/" title="Autodesk.Revit.DB CurveArray"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Autodesk.Revit.DB CurveArray</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB CurveArray可以包含曲线的数组。 语法1public class CurveArray : APIObject, IEnumerable  继承层次结构System Object ​	Autodesk.Revit.DB APIObject ​		Autodesk.Revit.DB CurveArray 另见CurveArray Members Autodesk.Revit.DB Namespace 构造函数CurveArray创建CurveArray类的新实例 方法Append将曲线添加到数组的末尾。 Clear从数组中删除每条曲线，使其为空。 ForwardIterator将一个向前移动的迭代器添加到数组中。 GetEnumerator将一个向前移动的迭代器添加到数组中。 Insert将指定的曲线插入数组。 ReverseIterator返回一个向后移动的迭代器到数组。 属性IsEmpty测试数组是否为空。 Item获取或设置数组中指定索引处的曲线。 Size返回数组中的曲线数。 注：翻译自Revit Api docs 2018</div></div></div></a><a class="pagination-related" href="/2024/10/30/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20Document/" title="Autodesk.Revit.DB Document"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Autodesk.Revit.DB Document</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB Document表示打开的 Autodesk Revit 项目的对象。 语法1public class Document : IDisposable    附注Document 对象表示 Autodesk Revit 项目。Revit 可以打开多个项目，并打开这些项目的多个视图。活动视图或最顶层视图将是活动项目，因此是可从 Application 对象获得的活动文档。 继承层次结构 System Object Autodesk.Revit.DB Document Autodesk.Revit.DB.Macros DocumentEntryPoint  方法AcquireCoordinates 不知道是啥，API没给描述  AutoJoinElements 强制 Revit...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20CurveArray/" title="Autodesk.Revit.DB CurveArray"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-18</div><div class="info-item-2">Autodesk.Revit.DB CurveArray</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB CurveArray可以包含曲线的数组。 语法1public class CurveArray : APIObject, IEnumerable  继承层次结构System Object ​	Autodesk.Revit.DB APIObject ​		Autodesk.Revit.DB CurveArray 另见CurveArray Members Autodesk.Revit.DB Namespace 构造函数CurveArray创建CurveArray类的新实例 方法Append将曲线添加到数组的末尾。 Clear从数组中删除每条曲线，使其为空。 ForwardIterator将一个向前移动的迭代器添加到数组中。 GetEnumerator将一个向前移动的迭代器添加到数组中。 Insert将指定的曲线插入数组。 ReverseIterator返回一个向后移动的迭代器到数组。 属性IsEmpty测试数组是否为空。 Item获取或设置数组中指定索引处的曲线。 Size返回数组中的曲线数。 注：翻译自Revit Api docs 2018</div></div></div></a><a class="pagination-related" href="/2024/12/10/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20Opening/" title="Autodesk.Revit.DB Opening"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Autodesk.Revit.DB Opening</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB OpeningAutodesk Revit项目或族文档中的洞口。 语法1public class Opening : Element  附注该对象表示各种不同类型的洞口：  墙中由修订项目中的两个边界点创建的矩形洞口。 由应用于屋顶、楼板、天花板、梁、支撑或柱的一组曲线创建的洞口。 一个垂直的竖井开口延伸到一个或多个水平。 在族文档中的墙或天花板上创建的简单洞口。  根据打开的类型，此类的某些属性将不可用。 这个对象派生自Element基对象，并且支持该对象的所有方法，例如检索该对象的参数的能力。此对象还支持访问结构分析模型，但此功能仅适用于Autodesk Revit Structure。 示例123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051### private void Getinfo_Opening(Opening opening)&#123;    string message =...</div></div></div></a><a class="pagination-related" href="/2024/12/10/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20ReferenceIntersector/" title="Autodesk.Revit.DB ReferenceIntersector"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Autodesk.Revit.DB ReferenceIntersector</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB ReferenceIntersector用于查找和返回与从原点和方向创建的射线相交的元素的类。 语法1public class ReferenceIntersector : IDisposable    附注可以构造此类的实例，以返回与由原点和方向创建的射线，或者基于过滤和标志返回元素的子集。 调用者可以选择使用ElementFilter过滤结果，或者通过应用特定的可接受的元素。 调用方还可以指定要返回的对象的类型， 整个元素、几何体对象或其组合。 在所有情况下，要求调用者提供 用于评估的3D视图;输入视图上的视图和可见性设置将确定 返回特定元素（例如，此工具永远不会返回隐藏元素、 和几何图形位于视图剖面框之外的元素）。 该类配置为可以构建单个实例，并用于对多个不同光线进行多次评估。在同一个 ReferenceIntersector 上的调用之间，评估结果不会被保留。 该类还提供了一个选项，用于返回在Revit链接中遇到的图元结果。 当设置 FindReferencesInRevitLinks 标志...</div></div></div></a><a class="pagination-related" href="/2024/12/19/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.UI.Selection%20Namespace/" title="Autodesk.Revit.UI.Selection"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-19</div><div class="info-item-2">Autodesk.Revit.UI.Selection</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.UI.SelectionClassesPickedBox包含两个 XYZ 点的类，表示屏幕上的选取框。  Properties  Max 最大坐标数（拾取框的右上角）。  Min 最小坐标（拾取框的左下角）。     SelectableInViewFilter一个过滤器，用于传递在给定视图中可选的元素。  Constructors  SelectableInViewFilter  (Document, ElementId) 构造 SelectableInViewFilter 的新实例。  SelectableInViewFilter (Document, ElementId, Boolean) 构造 SelectableInViewFilter 的新实例，并可选择传递所有不可选择的元素。    Methods  PassesFilter(Element) 将筛选器应用于给定元素。  PassesFilter(Document,...</div></div></div></a><a class="pagination-related" href="/2024/12/20/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20Transform/" title="Autodesk.Revit.DB Transform"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-20</div><div class="info-item-2">Autodesk.Revit.DB Transform</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB Transform仿射三维空间的一个变换。 语法public class Transform : APIObject示例12345678910111213141516171819202122### public static XYZ TransformPoint(XYZ point, Transform transform)&#123;    double x = point.X;    double y = point.Y;    double z = point.Z;    //transform basis of the old coordinate system in the new coordinate // system    XYZ b0 = transform.get_Basis(0);    XYZ b1 = transform.get_Basis(1);    XYZ b2 = transform.get_Basis(2);    XYZ origin = transform.Origin;       ...</div></div></div></a><a class="pagination-related" href="/2024/12/20/RevitApi%E5%90%88%E9%9B%86/Autodesk.%20Revit.DB%20ElementTransformUtils/" title="Autodesk.Revit.DB ElementTransformUtils"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-20</div><div class="info-item-2">Autodesk.Revit.DB ElementTransformUtils</div></div><div class="info-2"><div class="info-item-1">Autodesk. Revit.DB ElementTransformUtils允许元素转换的实用程序集合（例如移动，旋转，镜像和复制）。 语法1public static class ElementTransformUtils    继承层次结构 System Object Autodesk.Revit.DB ElementTransformUtils   方法CanMirrorElement确定是否可以镜像元素。 CanMirrorElements确定是否可以镜像元素。 CopyElement复制元素并将副本放置在给定转换指示的位置。 CopyElements(Document, ICollection ElementId , XYZ)复制一组元素，并将副本放置在给定指示的位置。 CopyElements(Document, ICollection ElementId , Document, Transform, CopyPasteOptions)将一组元素从源文档复制到目标文档。 CopyElements(View, ICollection ElementId ,...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/4stars.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">funtim41@gmail.com</div><div class="author-info-description">实践-认识-再实践-再认识</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/FunTim41"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/FunTim41" target="_blank" title="Github"><i class="fab fa-github" style="color: #FFFFFF;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Autodesk-RevitAddIns-Namespace"><span class="toc-number">1.</span> <span class="toc-text">Autodesk.RevitAddIns Namespace</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text">类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AddInManifestUtility"><span class="toc-number">1.1.1.</span> <span class="toc-text">AddInManifestUtility</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RevitAddInApplication"><span class="toc-number">1.1.2.</span> <span class="toc-text">RevitAddInApplication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RevitAddInCommand"><span class="toc-number">1.1.3.</span> <span class="toc-text">RevitAddInCommand</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RevitAddInDBApplication"><span class="toc-number">1.1.4.</span> <span class="toc-text">RevitAddInDBApplication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RevitAddInItem"><span class="toc-number">1.1.5.</span> <span class="toc-text">RevitAddInItem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RevitAddInManifest"><span class="toc-number">1.1.6.</span> <span class="toc-text">RevitAddInManifest</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RevitProduct"><span class="toc-number">1.1.7.</span> <span class="toc-text">RevitProduct</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RevitProductUtility"><span class="toc-number">1.1.8.</span> <span class="toc-text">RevitProductUtility</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%9A%E4%B8%BE"><span class="toc-number">1.2.</span> <span class="toc-text">枚举</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AddInArchitecture"><span class="toc-number">1.2.1.</span> <span class="toc-text">AddInArchitecture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Discipline"><span class="toc-number">1.2.2.</span> <span class="toc-text">Discipline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LanguageType"><span class="toc-number">1.2.3.</span> <span class="toc-text">LanguageType</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ProductType"><span class="toc-number">1.2.4.</span> <span class="toc-text">ProductType</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RevitVersion"><span class="toc-number">1.2.5.</span> <span class="toc-text">RevitVersion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VisibilityMode"><span class="toc-number">1.2.6.</span> <span class="toc-text">VisibilityMode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WarningType"><span class="toc-number">1.2.7.</span> <span class="toc-text">WarningType</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%EF%BC%9A%E7%BF%BB%E8%AF%91%E8%87%AARevitAddInUtility-2018"><span class="toc-number">1.3.</span> <span class="toc-text">注：翻译自RevitAddInUtility 2018</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.RevitAddIns%20Namespace/" title="Autodesk.RevitAddIns Namespace">Autodesk.RevitAddIns Namespace</a><time datetime="2025-01-05T09:13:27.547Z" title="更新于 2025-01-05 17:13:27">2025-01-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20CurveArray/" title="Autodesk.Revit.DB CurveArray">Autodesk.Revit.DB CurveArray</a><time datetime="2025-01-04T02:50:53.238Z" title="更新于 2025-01-04 10:50:53">2025-01-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20Opening/" title="Autodesk.Revit.DB Opening">Autodesk.Revit.DB Opening</a><time datetime="2025-01-04T02:47:58.908Z" title="更新于 2025-01-04 10:47:58">2025-01-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/10/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20ReferenceIntersector/" title="Autodesk.Revit.DB ReferenceIntersector">Autodesk.Revit.DB ReferenceIntersector</a><time datetime="2025-01-04T02:47:17.298Z" title="更新于 2025-01-04 10:47:17">2025-01-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/19/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.UI.Selection%20Namespace/" title="Autodesk.Revit.UI.Selection">Autodesk.Revit.UI.Selection</a><time datetime="2025-01-04T02:46:33.256Z" title="更新于 2025-01-04 10:46:33">2025-01-04</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/images/topback.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By funtim41@gmail.com</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">学而不思则罔，思而不学则殆。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>(() => {
+  const panguFn = () => {
+    if (typeof pangu === 'object') pangu.autoSpacingPage()
+    else {
+      btf.getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+        .then(() => {
+          pangu.autoSpacingPage()
+        })
+    }
+  }
+
+  const panguInit = () => {
+    if (false){
+      GLOBAL_CONFIG_SITE.isPost && panguFn()
+    } else {
+      panguFn()
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', panguInit, 'pangu')
+  document.addEventListener('DOMContentLoaded', panguInit)
+})()</script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'FunTim41/funtim41.github.io',
+      'data-repo-id': 'R_kgDONjG8ww',
+      'data-category-id': 'DIC_kwDONjG8w84Cllg2',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

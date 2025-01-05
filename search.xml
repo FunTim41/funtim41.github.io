@@ -1,37 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Autodesk.Revit.DB CurveArray</title>
-    <url>/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20CurveArray/</url>
-    <content><![CDATA[<h1 id="Autodesk-Revit-DB-CurveArray"><a href="#Autodesk-Revit-DB-CurveArray" class="headerlink" title="Autodesk.Revit.DB CurveArray"></a><a href="https://www.revitapidocs.com/2018/55103aad-38fd-45d2-6bf7-67a5203e99f3.htm">Autodesk.Revit.DB CurveArray</a></h1><p>可以包含曲线的数组。</p>
-<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CurveArray</span> : <span class="title">APIObject</span>, <span class="title">IEnumerable</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="继承层次结构"><a href="#继承层次结构" class="headerlink" title="继承层次结构"></a>继承层次结构</h2><p><a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b">System Object</a></p>
-<p>​	<a href="https://www.revitapidocs.com/2018/beb86ef5-39ad-3f0d-0cd9-0c929387a2bb.htm">Autodesk.Revit.DB APIObject</a></p>
-<p>​		Autodesk.Revit.DB CurveArray</p>
-<h2 id="另见"><a href="#另见" class="headerlink" title="另见"></a>另见</h2><p><a href="https://www.revitapidocs.com/2018/1035487e-6ef9-94b4-ff6d-fb3ae5c14154.htm">CurveArray Members</a></p>
-<p><a href="https://www.revitapidocs.com/2018/87546ba7-461b-c646-cbb1-2cb8f5bff8b2.htm">Autodesk.Revit.DB Namespace</a></p>
-<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><h3 id="CurveArray"><a href="#CurveArray" class="headerlink" title="CurveArray"></a>CurveArray</h3><p>创建CurveArray类的新实例</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="Append"><a href="#Append" class="headerlink" title="Append"></a>Append</h3><p>将曲线添加到数组的末尾。</p>
-<h3 id="Clear"><a href="#Clear" class="headerlink" title="Clear"></a>Clear</h3><p>从数组中删除每条曲线，使其为空。</p>
-<h3 id="ForwardIterator"><a href="#ForwardIterator" class="headerlink" title="ForwardIterator"></a>ForwardIterator</h3><p>将一个向前移动的迭代器添加到数组中。</p>
-<h3 id="GetEnumerator"><a href="#GetEnumerator" class="headerlink" title="GetEnumerator"></a>GetEnumerator</h3><p>将一个向前移动的迭代器添加到数组中。</p>
-<h3 id="Insert"><a href="#Insert" class="headerlink" title="Insert"></a>Insert</h3><p>将指定的曲线插入数组。</p>
-<h3 id="ReverseIterator"><a href="#ReverseIterator" class="headerlink" title="ReverseIterator"></a>ReverseIterator</h3><p>返回一个向后移动的迭代器到数组。</p>
-<h2 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h2><h3 id="IsEmpty"><a href="#IsEmpty" class="headerlink" title="IsEmpty"></a>IsEmpty</h3><p>测试数组是否为空。</p>
-<h3 id="Item"><a href="#Item" class="headerlink" title="Item"></a>Item</h3><p>获取或设置数组中指定索引处的曲线。</p>
-<h3 id="Size"><a href="#Size" class="headerlink" title="Size"></a>Size</h3><p>返回数组中的曲线数。</p>
-<h2 id="注：翻译自Revit-Api-docs-2018"><a href="#注：翻译自Revit-Api-docs-2018" class="headerlink" title="注：翻译自Revit Api docs 2018"></a><em><strong>注：</strong></em>翻译自<a href="https://www.revitapidocs.com/2018">Revit Api docs 2018</a></h2>]]></content>
-      <categories>
-        <category>RevitApi</category>
-      </categories>
-      <tags>
-        <tag>Revit</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Autodesk.RevitAddIns Namespace </title>
-    <url>/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.RevitAddIns%20Namespace%20/</url>
+    <title>Autodesk.RevitAddIns Namespace</title>
+    <url>/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.RevitAddIns%20Namespace/</url>
     <content><![CDATA[<h1 id="Autodesk-RevitAddIns-Namespace"><a href="#Autodesk-RevitAddIns-Namespace" class="headerlink" title="Autodesk.RevitAddIns Namespace"></a>Autodesk.RevitAddIns Namespace</h1><h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><h3 id="AddInManifestUtility"><a href="#AddInManifestUtility" class="headerlink" title="AddInManifestUtility"></a>AddInManifestUtility</h3><p>此静态类提供从 Revit .addin 文件中读取清单内容的访问。 </p>
 <ul>
 <li><p>方法</p>
@@ -449,6 +420,35 @@
 </li>
 </ul>
 <h2 id="注：翻译自RevitAddInUtility-2018"><a href="#注：翻译自RevitAddInUtility-2018" class="headerlink" title="注：翻译自RevitAddInUtility 2018"></a><em><strong>注：</strong></em>翻译自RevitAddInUtility 2018</h2>]]></content>
+      <categories>
+        <category>RevitApi</category>
+      </categories>
+      <tags>
+        <tag>Revit</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Autodesk.Revit.DB CurveArray</title>
+    <url>/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20CurveArray/</url>
+    <content><![CDATA[<h1 id="Autodesk-Revit-DB-CurveArray"><a href="#Autodesk-Revit-DB-CurveArray" class="headerlink" title="Autodesk.Revit.DB CurveArray"></a><a href="https://www.revitapidocs.com/2018/55103aad-38fd-45d2-6bf7-67a5203e99f3.htm">Autodesk.Revit.DB CurveArray</a></h1><p>可以包含曲线的数组。</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CurveArray</span> : <span class="title">APIObject</span>, <span class="title">IEnumerable</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="继承层次结构"><a href="#继承层次结构" class="headerlink" title="继承层次结构"></a>继承层次结构</h2><p><a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b">System Object</a></p>
+<p>​	<a href="https://www.revitapidocs.com/2018/beb86ef5-39ad-3f0d-0cd9-0c929387a2bb.htm">Autodesk.Revit.DB APIObject</a></p>
+<p>​		Autodesk.Revit.DB CurveArray</p>
+<h2 id="另见"><a href="#另见" class="headerlink" title="另见"></a>另见</h2><p><a href="https://www.revitapidocs.com/2018/1035487e-6ef9-94b4-ff6d-fb3ae5c14154.htm">CurveArray Members</a></p>
+<p><a href="https://www.revitapidocs.com/2018/87546ba7-461b-c646-cbb1-2cb8f5bff8b2.htm">Autodesk.Revit.DB Namespace</a></p>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><h3 id="CurveArray"><a href="#CurveArray" class="headerlink" title="CurveArray"></a>CurveArray</h3><p>创建CurveArray类的新实例</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="Append"><a href="#Append" class="headerlink" title="Append"></a>Append</h3><p>将曲线添加到数组的末尾。</p>
+<h3 id="Clear"><a href="#Clear" class="headerlink" title="Clear"></a>Clear</h3><p>从数组中删除每条曲线，使其为空。</p>
+<h3 id="ForwardIterator"><a href="#ForwardIterator" class="headerlink" title="ForwardIterator"></a>ForwardIterator</h3><p>将一个向前移动的迭代器添加到数组中。</p>
+<h3 id="GetEnumerator"><a href="#GetEnumerator" class="headerlink" title="GetEnumerator"></a>GetEnumerator</h3><p>将一个向前移动的迭代器添加到数组中。</p>
+<h3 id="Insert"><a href="#Insert" class="headerlink" title="Insert"></a>Insert</h3><p>将指定的曲线插入数组。</p>
+<h3 id="ReverseIterator"><a href="#ReverseIterator" class="headerlink" title="ReverseIterator"></a>ReverseIterator</h3><p>返回一个向后移动的迭代器到数组。</p>
+<h2 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h2><h3 id="IsEmpty"><a href="#IsEmpty" class="headerlink" title="IsEmpty"></a>IsEmpty</h3><p>测试数组是否为空。</p>
+<h3 id="Item"><a href="#Item" class="headerlink" title="Item"></a>Item</h3><p>获取或设置数组中指定索引处的曲线。</p>
+<h3 id="Size"><a href="#Size" class="headerlink" title="Size"></a>Size</h3><p>返回数组中的曲线数。</p>
+<h2 id="注：翻译自Revit-Api-docs-2018"><a href="#注：翻译自Revit-Api-docs-2018" class="headerlink" title="注：翻译自Revit Api docs 2018"></a><em><strong>注：</strong></em>翻译自<a href="https://www.revitapidocs.com/2018">Revit Api docs 2018</a></h2>]]></content>
       <categories>
         <category>RevitApi</category>
       </categories>
