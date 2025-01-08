@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hexo+Butterfly代码块水平滚动条</title>
+    <url>/2025/01/08/%E5%8D%9A%E5%AE%A2%E9%85%8D%E7%BD%AE/Hexo+Butterfly%E4%BB%A3%E7%A0%81%E5%9D%97%E6%B0%B4%E5%B9%B3%E6%BB%9A%E5%8A%A8%E6%9D%A1/</url>
+    <content><![CDATA[<h1 id="Hexo-Butterfly代码块水平滚动条"><a href="#Hexo-Butterfly代码块水平滚动条" class="headerlink" title="Hexo+Butterfly代码块水平滚动条"></a>Hexo+Butterfly代码块水平滚动条</h1><p>虽然Butterfly主题有滚动条，但是极其不明显。文档里也没找到配置方式，索性自己整一个。</p>
+<p><img src="F:\PixPin\History\recording.gif" alt="recording"></p>
+<p>blog\themes\butterfly\source下新建一个scrollbar.css文件，写入以下内容。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 滚动条 */</span></span><br><span class="line">::-webkit-scrollbar-thumb &#123;</span><br><span class="line">    <span class="attribute">background-color</span>: <span class="number">#ebdccf</span> <span class="meta">!important</span>;  </span><br><span class="line">    <span class="attribute">border-radius</span>: <span class="number">3em</span>;</span><br><span class="line">&#125;</span><br><span class="line">::-webkit-scrollbar-track &#123;</span><br><span class="line">    <span class="attribute">background-color</span>: <span class="number">#292d3e</span>;</span><br><span class="line">    <span class="attribute">border-radius</span>: <span class="number">3em</span>;</span><br><span class="line">&#125;</span><br><span class="line">::-webkit-scrollbar &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">5px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">8px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在_config.butterfly.yml找到</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">inject:</span><br><span class="line">   head:       </span><br><span class="line">      # - &lt;link rel=<span class="string">&quot;stylesheet&quot;</span> href=<span class="string">&quot;/xxx.css&quot;</span>&gt;</span><br><span class="line">   bottom:</span><br><span class="line">     # - &lt;script src=<span class="string">&quot;xxxx&quot;</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在head处加上这个</p>
+<figure class="highlight c#"><table><tr><td class="code"><pre><span class="line">- &lt;link rel=<span class="string">&quot;stylesheet&quot;</span> href=<span class="string">&quot;/css/scrollbar.css&quot;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<p><img src="F:\PixPin\History\recording.gif" alt="recording"></p>
+]]></content>
+      <categories>
+        <category>样式设置</category>
+      </categories>
+      <tags>
+        <tag>博客配置</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Autodesk.RevitAddIns Namespace</title>
     <url>/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.RevitAddIns%20Namespace/</url>
     <content><![CDATA[<h1 id="Autodesk-RevitAddIns-Namespace"><a href="#Autodesk-RevitAddIns-Namespace" class="headerlink" title="Autodesk.RevitAddIns Namespace"></a>Autodesk.RevitAddIns Namespace</h1><h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><h3 id="AddInManifestUtility"><a href="#AddInManifestUtility" class="headerlink" title="AddInManifestUtility"></a>AddInManifestUtility</h3><p>此静态类提供从 Revit .addin 文件中读取清单内容的访问。 </p>
