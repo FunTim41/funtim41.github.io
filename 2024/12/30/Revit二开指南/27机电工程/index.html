@@ -1,0 +1,559 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>27机电工程 | funtim的博客</title><meta name="author" content="funtim41@gmail.com"><meta name="copyright" content="funtim41@gmail.com"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="机电工程为了支持Revit软件的MEP工程功能，API提供了对Revit模型中HVAC和管道数据的读写访问，包括：  在系统中穿过风管、管道、管件和接头 添加、删除和更改风管、管道和其他设备 获取和设置系统属性 确定系统是否连接良好 访问机械设置 管理布管配置  本节中的页面  MEP元素创建 MEP系统 连接器 MEP预制件详述 族创建 机械设置 电气设置 布管系统配置  MEP元素创建可以使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="27机电工程">
+<meta property="og:url" content="https://funtim41.github.io/2024/12/30/Revit%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/27%E6%9C%BA%E7%94%B5%E5%B7%A5%E7%A8%8B/">
+<meta property="og:site_name" content="funtim的博客">
+<meta property="og:description" content="机电工程为了支持Revit软件的MEP工程功能，API提供了对Revit模型中HVAC和管道数据的读写访问，包括：  在系统中穿过风管、管道、管件和接头 添加、删除和更改风管、管道和其他设备 获取和设置系统属性 确定系统是否连接良好 访问机械设置 管理布管配置  本节中的页面  MEP元素创建 MEP系统 连接器 MEP预制件详述 族创建 机械设置 电气设置 布管系统配置  MEP元素创建可以使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://funtim41.github.io/images/4stars.png">
+<meta property="article:published_time" content="2024-12-30T02:37:56.000Z">
+<meta property="article:modified_time" content="2024-12-30T02:51:48.801Z">
+<meta property="article:author" content="funtim41@gmail.com">
+<meta property="article:tag" content="Revit">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://funtim41.github.io/images/4stars.png"><link rel="shortcut icon" href="/images/OIP.jfif"><link rel="canonical" href="https://funtim41.github.io/2024/12/30/Revit%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/27%E6%9C%BA%E7%94%B5%E5%B7%A5%E7%A8%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: funtim41@gmail.com","link":"链接: ","source":"来源: funtim的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '27机电工程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/css/bar.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background: Color(#995a82);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/4stars.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/images/topback.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/OIP.jfif" alt="Logo"><span class="site-name">funtim的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">27机电工程</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">27机电工程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-30T02:37:56.000Z" title="发表于 2024-12-30 10:37:56">2024-12-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-30T02:51:48.801Z" title="更新于 2024-12-30 10:51:48">2024-12-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Revit%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/">Revit二次开发人员指南</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="机电工程"><a href="#机电工程" class="headerlink" title="机电工程"></a>机电工程</h1><p>为了支持Revit软件的MEP工程功能，API提供了对Revit模型中HVAC和管道数据的读写访问，包括：</p>
+<ul>
+<li>在系统中穿过风管、管道、管件和接头</li>
+<li>添加、删除和更改风管、管道和其他设备</li>
+<li>获取和设置系统属性</li>
+<li>确定系统是否连接良好</li>
+<li>访问机械设置</li>
+<li>管理布管配置</li>
+</ul>
+<p>本节中的页面</p>
+<ul>
+<li>MEP元素创建</li>
+<li>MEP系统</li>
+<li>连接器</li>
+<li>MEP预制件详述</li>
+<li>族创建</li>
+<li>机械设置</li>
+<li>电气设置</li>
+<li>布管系统配置</li>
+</ul>
+<h2 id="MEP元素创建"><a href="#MEP元素创建" class="headerlink" title="MEP元素创建"></a>MEP元素创建</h2><p>可以使用Revit API创建MEP图元。</p>
+<p>可以使用Autodesk.Revit.Creation.Document类中提供的以下方法创建与风管、管道和电气系统相关的许多图元：</p>
+<ul>
+<li>NewFlexDuct</li>
+<li>NewFlexPipe</li>
+<li>NewMechanicalSystem </li>
+<li>NewPipingSystem</li>
+<li>NewCrossFitting</li>
+<li>NewElbowFitting </li>
+<li>NewTakeoffFitting </li>
+<li>NewTeeFitting </li>
+<li>NewTransitionFitting </li>
+<li>NewUnionFitting</li>
+</ul>
+<p>其他MEP元素（如管道）只能使用其对应类的静态Create（）方法创建。某些MEP图元（如风管）可以通过相应类（即Duct）的静态方法或Autodesk.Revit.Creation.Document类的方法创建。对于这些元素，静态Create（）方法是首选。</p>
+<p>Duct  管道</p>
+<ul>
+<li>FlexDuct</li>
+<li>Pipe </li>
+<li>FlexPipe  </li>
+<li>PipingSystem </li>
+<li>Wire</li>
+</ul>
+<p>Pages in this section  本节中的页面</p>
+<ul>
+<li>创建管道和风管</li>
+<li>创建导线</li>
+<li>占位符</li>
+<li>创建系统</li>
+</ul>
+<h3 id="创建管道和风管"><a href="#创建管道和风管" class="headerlink" title="创建管道和风管"></a>创建管道和风管</h3><p>有三种方法可以创建新风管：软风管、管道和软管。它们可以在两点之间、两个连接件之间或点与连接件之间创建。</p>
+<p>下面的代码使用Pipe.Create（）方法在两点之间创建一个新管道。新的软管、风管和软风管都可以类似地创建。</p>
+<p>代码区域：使用静态Create（）方法创建新管道</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Pipe <span class="title">CreateNewPipe</span>(<span class="params">Document document, ElementId systemTypeId, ElementId levelId</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// find a pipe type</span></span><br><span class="line"></span><br><span class="line">    FilteredElementCollector collector = <span class="keyword">new</span> FilteredElementCollector(document);</span><br><span class="line">    collector.OfClass(<span class="keyword">typeof</span>(PipeType));</span><br><span class="line">    PipeType pipeType = collector.FirstElement() <span class="keyword">as</span> PipeType;</span><br><span class="line"></span><br><span class="line">    Pipe pipe = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> != pipeType)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// create pipe between 2 points</span></span><br><span class="line">        XYZ p1 = <span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        XYZ p2 = <span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        pipe = Pipe.Create(document, systemTypeId, pipeType.Id, levelId, p1, p2);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> pipe;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面的代码区域演示了如何使用静态FlexPipe.Create（）方法创建FlexPipe。管道、风管和软风管都可以类似地在两点之间创建。</p>
+<p>代码区域：使用静态Create（）方法创建新的FlexPipe</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> FlexPipe <span class="title">CreateFlexPipe</span>(<span class="params">Document document, Level level</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// find a pipe type</span></span><br><span class="line">    FilteredElementCollector collector = <span class="keyword">new</span> FilteredElementCollector(document);</span><br><span class="line">    collector.OfClass(<span class="keyword">typeof</span>(FlexPipeType));</span><br><span class="line">    ElementId pipeTypeId = collector.FirstElementId();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// find a pipe system type</span></span><br><span class="line">    FilteredElementCollector sysCollector = <span class="keyword">new</span> FilteredElementCollector(document);</span><br><span class="line">    sysCollector.OfClass(<span class="keyword">typeof</span>(PipingSystemType));</span><br><span class="line">    ElementId pipeSysTypeId = sysCollector.FirstElementId();</span><br><span class="line"></span><br><span class="line">    FlexPipe pipe = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (pipeTypeId != ElementId.InvalidElementId &amp;&amp; pipeSysTypeId != ElementId.InvalidElementId)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// create flex pipe with 3 points</span></span><br><span class="line">        List points = <span class="keyword">new</span> List();</span><br><span class="line">        points.Add(<span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">        points.Add(<span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">10</span>, <span class="number">0</span>));</span><br><span class="line">        points.Add(<span class="keyword">new</span> XYZ(<span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">        pipe = FlexPipe.Create(document, pipeSysTypeId, pipeTypeId, level.Id, points);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> pipe;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建管道后，可能需要修改直径。“管道”的“直径”属性为只读。要更改直径，请获取RBS_PIPE_DIAMETER_PARAM内置参数。</p>
+<p>代码区域：更改管道直径</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ChangePipeSize</span>(<span class="params">Pipe pipe</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        Parameter parameter = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">string</span> message = <span class="string">&quot;Pipe diameter: &quot;</span> + parameter.AsValueString();</span><br><span class="line"></span><br><span class="line">        parameter.Set(<span class="number">0.5</span>); <span class="comment">// set to 6&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// Regenerate the docucment before trying to read a parameter that has been edited</span></span><br><span class="line">        pipe.Document.Regenerate();</span><br><span class="line"></span><br><span class="line">        message += <span class="string">&quot;\nPipe diameter after set: &quot;</span> + parameter.AsValueString();</span><br><span class="line"></span><br><span class="line">        MessageBox.Show(message, <span class="string">&quot;Revit&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建新风管或管道的另一种常用方法是在两个现有连接件之间创建，如下例所示。在本示例中，假设已在Revit中选择了2个带有接头的图元代码区域：在两个连接件之间添加风管其中一个是机械设备，另一个是风管管件，其接头与设备上的SupplyAir接头对齐。</p>
+<p>代码区域：在两个连接件之间添加风管</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Duct <span class="title">CreateDuctBetweenConnectors</span>(<span class="params">UIDocument uiDocument</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// prior to running this example</span></span><br><span class="line">    <span class="comment">// select some mechanical equipment with a supply air connector</span></span><br><span class="line">    <span class="comment">// and an elbow duct fitting with a connector in line with that connector</span></span><br><span class="line">    ElementId levelId = ElementId.InvalidElementId;</span><br><span class="line">    Connector connector1 = <span class="literal">null</span>, connector2 = <span class="literal">null</span>;</span><br><span class="line">    ConnectorSetIterator csi = <span class="literal">null</span>;</span><br><span class="line">    ICollection selectedIds = uiDocument.Selection.GetElementIds();</span><br><span class="line">    Document document = uiDocument.Document;</span><br><span class="line">    <span class="comment">// First find the selected equipment and get the correct connector</span></span><br><span class="line">    <span class="keyword">foreach</span> (ElementId id <span class="keyword">in</span> selectedIds)</span><br><span class="line">    &#123;</span><br><span class="line">        Element e = document.GetElement(id);</span><br><span class="line">        <span class="keyword">if</span> (e <span class="keyword">is</span> FamilyInstance)</span><br><span class="line">        &#123;</span><br><span class="line">            FamilyInstance fi = e <span class="keyword">as</span> FamilyInstance;</span><br><span class="line">            Family family = fi.Symbol.Family;</span><br><span class="line">            <span class="keyword">if</span> (family.FamilyCategory.Name == <span class="string">&quot;Mechanical Equipment&quot;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                csi = fi.MEPModel.ConnectorManager.Connectors.ForwardIterator();</span><br><span class="line">                <span class="keyword">while</span> (csi.MoveNext())</span><br><span class="line">                &#123;</span><br><span class="line">                    Connector conn = csi.Current <span class="keyword">as</span> Connector;</span><br><span class="line">                    <span class="keyword">if</span> (conn.Direction == FlowDirectionType.Out &amp;&amp; </span><br><span class="line">                        conn.DuctSystemType == DuctSystemType.SupplyAir)</span><br><span class="line">                    &#123;</span><br><span class="line">                        connector1 = conn;</span><br><span class="line">                        levelId = family.LevelId;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// next find the second selected item to connect to</span></span><br><span class="line">    <span class="keyword">foreach</span> (ElementId id <span class="keyword">in</span> selectedIds)</span><br><span class="line">    &#123;</span><br><span class="line">        Element e = document.GetElement(id);</span><br><span class="line">        <span class="keyword">if</span> (e <span class="keyword">is</span> FamilyInstance)</span><br><span class="line">        &#123;</span><br><span class="line">            FamilyInstance fi = e <span class="keyword">as</span> FamilyInstance;</span><br><span class="line">            Family family = fi.Symbol.Family;</span><br><span class="line">            <span class="keyword">if</span> (family.FamilyCategory.Name != <span class="string">&quot;Mechanical Equipment&quot;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                csi = fi.MEPModel.ConnectorManager.Connectors.ForwardIterator();</span><br><span class="line">                <span class="keyword">while</span> (csi.MoveNext())</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">if</span> (<span class="literal">null</span> == connector2)</span><br><span class="line">                    &#123;</span><br><span class="line">                        Connector conn = csi.Current <span class="keyword">as</span> Connector;</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// make sure to choose the connector in line with the first connector</span></span><br><span class="line">                        <span class="keyword">if</span> (Math.Abs(conn.Origin.Y - connector1.Origin.Y) &lt; <span class="number">0.001</span>)</span><br><span class="line">                        &#123;</span><br><span class="line">                            connector2 = conn;</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Duct duct = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> != connector1 &amp;&amp; <span class="literal">null</span> != connector2 &amp;&amp; levelId != ElementId.InvalidElementId)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// find a duct type</span></span><br><span class="line">        FilteredElementCollector collector = <span class="keyword">new</span> FilteredElementCollector(uiDocument.Document);</span><br><span class="line">        collector.OfClass(<span class="keyword">typeof</span>(DuctType));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Use Linq query to make sure it is one of the rectangular duct types</span></span><br><span class="line">        <span class="keyword">var</span> query = <span class="keyword">from</span> element <span class="keyword">in</span> collector</span><br><span class="line">                    <span class="keyword">where</span> element.Name.Contains(<span class="string">&quot;Mitered Elbows&quot;</span>) == <span class="literal">true</span></span><br><span class="line">                    <span class="keyword">select</span> element;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// use extension methods to get first duct type</span></span><br><span class="line">        DuctType ductType = collector.Cast().First();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> != ductType)</span><br><span class="line">        &#123;</span><br><span class="line">            duct = Duct.Create(document, ductType.Id, levelId, connector1, connector2);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> duct;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="衬里和绝缘"><a href="#衬里和绝缘" class="headerlink" title="衬里和绝缘"></a>衬里和绝缘</h4><p>可以将管道和风管保温层和内衬作为与风管和管道关联的单独对象添加。可以使用静态方法InsulationLiningBase.GetInsulationIds（）检索与风管或管道关联的隔热层图元的ID，而可以使用静态方法InsulationLiningBase.GetLiningIds（）检索衬里图元的ID。</p>
+<p>若要创建与给定风管、管道、管件、附件或内容关联的新隔热层，请使用相应的静态方法：DuctInsulation.Create（）或PipeInsulation.Create（）。DuctLining.Create（）可用于创建应用于给定风管、管件或附件内部的衬里的新实例。</p>
+<h3 id="创建导线"><a href="#创建导线" class="headerlink" title="创建导线"></a>创建导线</h3><p>可以使用Revit API创建新的导线。</p>
+<p>静态Wire.Create（）允许在文档中创建新的连接。Create（）方法需要新创建的关联在其中可见的视图的id。它必须是楼层平面或天花板投影平面视图的ID。导线的WiringType可以是Arc（隐藏在墙、天花板或楼板内的布线）或Chamfer（暴露的布线）。</p>
+<p>导线的位置由定义导线顶点的XYZ点列表以及可选的起始和&#x2F;或结束连接器指定。端点连接器可以为空，但是，如果指定了起始连接器，则连接器的原点将作为起点添加到导线的顶点。同样，如果指定了端点连接器，则连接器的原点将作为端点添加到导线的顶点。静态方法Wire.AreVertexPointsValid（）将检查XYZ点以及起始和结束连接器的列表，以确保它们适合于导线。</p>
+<p>导线的形状由导线的布线类型以及通过顶点和端点连接器提供的点的总数确定。如果布线类型为WiringType.Arc：</p>
+<ul>
+<li>如果总共提供了2个点，则导线为直线导线。</li>
+<li>如果总共提供3个点，则导线为圆弧导线。</li>
+<li>如果有4个或更多点，则导线为样条线导线。</li>
+</ul>
+<p>如果布线类型为WiringType.Chamfer，则将创建一条连接所有点的连接线。</p>
+<p>下面的示例在活动视图中创建一条新的直线导线，但未指定任何连接器。</p>
+<p>代码区域：创建新导线</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Wire <span class="title">CreateWire</span>(<span class="params">Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Wire wire = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    FilteredElementCollector collector = <span class="keyword">new</span> FilteredElementCollector(document);</span><br><span class="line">    IList wireTypes = collector.OfCategory(BuiltInCategory.OST_Wire).WhereElementIsElementType().ToElements();</span><br><span class="line">    WireType wireType = wireTypes.First() <span class="keyword">as</span> WireType;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (wireType != <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        IList wireVertices = <span class="keyword">new</span> List();</span><br><span class="line">        wireVertices.Add(<span class="keyword">new</span> XYZ(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">        wireVertices.Add(<span class="keyword">new</span> XYZ(<span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">        wire = Wire.Create(document, wireType.Id, document.ActiveView.Id, WiringType.Arc, wireVertices, <span class="literal">null</span>, <span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> wire;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>连接器</strong></p>
+<p>若要在创建后将关联连接到元素，请调用Wire.ConnectTo（），并传入开始和结束连接器。如果使用此方法时导线已经连接，则旧连接将断开，导线将连接到新目标。</p>
+<p> <strong>顶点</strong></p>
+<p>创建线框后，可以使用Wire.GetVertex（）方法检索顶点。这个方法接受一个请求顶点的索引，这个索引应该在0和Wire.NumberOfVertices（包括线的起点和终点）之间。</p>
+<p>使用Wire. InsertVertex（）将顶点添加到列表的末尾，或使用Wire.InsertVertex（）将顶点添加到列表中的特定点。IsVertexPointValid（）方法检查给定的顶点是否可以添加到该线。如果因为视图平面上的此位置已存在顶点（在公差范围内）而无法添加点，IsVertexPointValid（）将返回false。请注意，如果开始顶点已经连接到元素，则不能在开始顶点之前插入顶点。类似地，如果端点已经连接到元素，则不能将顶点附加到列表的末尾。</p>
+<p>Wire.RemoveVertex（）将从列表中删除顶点。如果导线顶点已连接到元素，则此方法将无法删除该顶点。为了移除此顶点，应先断开连接，然后移除，然后重新连接（如果需要）。</p>
+<h3 id="占位符"><a href="#占位符" class="headerlink" title="占位符"></a>占位符</h3><p>占位符风管和管道</p>
+<p>Revit API提供了在尚不清楚布局的确切设计时将占位符元素放入系统的功能。使用占位符风管和管道可以在设计仍然未知的情况下实现良好的连接系统，然后可以在后期的最终设计中进行详细说明。</p>
+<p>两个静态方法Duct.Placeholder（）和Pipe.Placeholder（）创建占位符元素。风管和管道的IsPlaceholder属性指示它们是否为占位符元素。</p>
+<p>准备从占位符创建实际风管和管道时，请使用Mechanical Utils.ConvertDuctPlaceholders（）和PlumbingUtils.ConvertPipePlaceholders（）方法将一组占位符元素转换为风管和管道。一旦转换成功，占位符元素将被删除。将创建新风管、管道和管件图元，并建立连接。</p>
+<h3 id="创建系统"><a href="#创建系统" class="headerlink" title="创建系统"></a>创建系统</h3><p>创建电气、机械和管道系统。</p>
+<p>Mechanical System和PipingSystem具有静态重载Create（）方法，可用于创建新的机械系统或管道系统。这是创建新MEP系统的首选方法。这两个类的最简单Create（）重载在给定文档中创建一个具有给定类型ID（对于Mechanical System，该ID应为DuctSystemType的ID，对于PipingSystem，该ID应为PipeSystemType的ID）的新系统。这两个类都有第二个Create（）重载，它也接受系统的名称。创建元素后，可以使用MEPSystem.Add（）方法将其添加到系统中。</p>
+<p>还可以使用NewMechanicalSystem（）和NewPipingSystem（）从Creation.Document类创建MechanicalSystem和PipingSystem。NewPipingSystem（）和NewMechanicalSystem（）都采用作为基本设备连接器的连接器，例如管道系统的热水器或机械系统的风扇。它们还采用将添加到系统中的连接件（如管道系统中水槽上的连接件）的ConnectorSet。创建新系统所需的最后一项信息是NewPipingSystem（）的PipeSystemType或NewMechanical System（）的DuctSystemType。</p>
+<p>可以使用ElectricalSystem.Create方法创建电气系统，该方法有两个重载。从一个未使用的Connector创建一个新的ElectricalSystem元素。另一个从一组电气元件创建一个新的ElectricalSystem元素。这两个重载都需要ElectricalSystemType。</p>
+<p>在以下示例中，将从选定的机械设备（如风扇）和所有选定的风道末端创建新的SupplyAir风管系统。</p>
+<p>代码区域：创建新的机械系统</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create a connector set for new mechanical system</span></span><br><span class="line">ConnectorSet connectorSet = <span class="keyword">new</span> ConnectorSet();</span><br><span class="line"><span class="comment">// Base equipment connector</span></span><br><span class="line">Connector baseConnector = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Select a Parallel Fan Powered VAV and some Supply Diffusers</span></span><br><span class="line"><span class="comment">// prior to running this example</span></span><br><span class="line">ConnectorSetIterator csi = <span class="literal">null</span>;</span><br><span class="line">ICollection selectedIds = uiDocument.Selection.GetElementIds();</span><br><span class="line">Document document = uiDocument.Document;</span><br><span class="line"><span class="keyword">foreach</span> (ElementId id <span class="keyword">in</span> selectedIds)</span><br><span class="line">&#123;</span><br><span class="line">    Element e = document.GetElement(id);</span><br><span class="line">    <span class="keyword">if</span> (e <span class="keyword">is</span> FamilyInstance)</span><br><span class="line">    &#123;</span><br><span class="line">        FamilyInstance fi = e <span class="keyword">as</span> FamilyInstance;</span><br><span class="line">        Family family = fi.Symbol.Family;</span><br><span class="line">        <span class="comment">// Assume the selected Mechanical Equipment is the base equipment for new system</span></span><br><span class="line">        <span class="keyword">if</span> (family.FamilyCategory.Name == <span class="string">&quot;Mechanical Equipment&quot;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//Find the &quot;Out&quot; and &quot;SupplyAir&quot; connector on the base equipment</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="literal">null</span> != fi.MEPModel)</span><br><span class="line">            &#123;</span><br><span class="line">                csi = fi.MEPModel.ConnectorManager.Connectors.ForwardIterator();</span><br><span class="line">                <span class="keyword">while</span> (csi.MoveNext())</span><br><span class="line">                &#123;</span><br><span class="line">                    Connector conn = csi.Current <span class="keyword">as</span> Connector;</span><br><span class="line">                    <span class="keyword">if</span> (conn.Direction == FlowDirectionType.Out &amp;&amp; conn.DuctSystemType == DuctSystemType.SupplyAir)</span><br><span class="line">                    &#123;</span><br><span class="line">                        baseConnector = conn;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (family.FamilyCategory.Name == <span class="string">&quot;Air Terminals&quot;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// add selected Air Terminals to connector set for new mechanical system</span></span><br><span class="line">            csi = fi.MEPModel.ConnectorManager.Connectors.ForwardIterator();</span><br><span class="line">            csi.MoveNext();</span><br><span class="line">            connectorSet.Insert(csi.Current <span class="keyword">as</span> Connector);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MechanicalSystem mechanicalSys = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="literal">null</span> != baseConnector &amp;&amp; connectorSet.Size &gt; <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// create a new SupplyAir mechanical system</span></span><br><span class="line">    mechanicalSys = uiDocument.Document.Create.NewMechanicalSystem(baseConnector, connectorSet, DuctSystemType.SupplyAir);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="MEP系统"><a href="#MEP系统" class="headerlink" title="MEP系统"></a>MEP系统</h2><p>MEPSystem是Revit MEP中电气、机械和管道系统的基类。</p>
+<p>ElectricalSystem、MechanicalSystem和PipingSystem都派生自MEP System类。基类具有一些跨系统类型的通用功能，例如向系统添加元素或查找系统的基础面板或设备。基类中的一些方法仅适用于HVAC和管道系统，例如DivideSystem（）方法，它划分系统中的物理网络并为每个网络创建一个新系统。</p>
+<p>派生类具有特定于系统类型的其他方法和属性。</p>
+<p><strong>MEP截面</strong></p>
+<p>MEPSystem类有一个SectionsCount属性，该属性返回系统截面的节数。可以使用GetSectionByIndex（）方法或GetSectionByNumber（）方法获取MEPSection对象。虽然这些方法在MEP System基类中，但MEP Section类表示风管和管道部分，主要用于压力损失计算。它是一系列连接的图元（管段-风管或管道、管件、端子和附件），可以从GetElementIds（）方法获得。所有截面构件应具有相同的流动分析特性：流量、尺寸、速度、摩擦力和粗糙度。</p>
+<p>截面中每个元件的段长度、压降和损失系数可能不同，因此在MEP截面中提供了方法，以获得给定截面中某个元件的特定元件ID的这些值。管道的系数是损失系数。对于管道，这与摩擦系数相同。</p>
+<p><strong>计算</strong></p>
+<p>MEP系统的某些属性是由Revit计算的。Mechanical System和PipingSystem都具有IsWellConnected属性，该属性指示系统是否连接良好。如果系统连接不好，需要计算的参数无效。</p>
+<p>对于机械和管道系统，某些值是根据系统截面的特性计算的。MEPSystem.GetCriticalPathSectionNumbers（）方法按流动方向的顺序返回关键路径部分编号的列表，PressureLossOfCriticalPath（）获取关键路径中部分的总压力损失。</p>
+<p>Mechanical System和PipingSystem中的GetFlow（）和GetStaticPressure（）方法可获取系统的流量和静压。</p>
+<p>PipingSystem具有其他计算属性：GetFixtureUnits（）和GetVolume（）</p>
+<p>注意：由于Revit内部处理这些计算属性的方式，它们不支持动态模型更新。但是，其他未计算的系统属性支持动态模型更新。</p>
+<h2 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h2><p>连接件与域（风管、管道或电气）关联，该域可从连接件的“域”特性中获取。连接器存在于机械设备以及导管和管道上。</p>
+<p>要遍历系统，可以检查系统基本设备上的连接器，并通过检查IsConnected属性和AllRefs属性来确定连接器附着的内容。在查找物理连接时，检查连接器的ConnectionType非常重要。Revit中既有物理连接器，也有逻辑连接器，但在应用程序中仅物理连接器可见。下面的图像显示了两种类型的物理连接器-端点连接和曲线连接器。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-BBDF045B-E39B-4A5A-9D87-8AFCA7E1F5F3-low.png" alt="img"></p>
+<p>图167：物理连接器</p>
+<p>下面的示例说明如何确定连接器的所有者，以及连接器与连接类型沿着的内容（如果有）。</p>
+<p>代码区域30-5：确定连接器连接的内容</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GetElementAtConnector</span>(<span class="params">Autodesk.Revit.DB.Connector connector</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    MEPSystem mepSystem = connector.MEPSystem;</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> != mepSystem)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">string</span> message = <span class="string">&quot;Connector is owned by: &quot;</span> + connector.Owner.Name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (connector.IsConnected == <span class="literal">true</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ConnectorSet connectorSet = connector.AllRefs;</span><br><span class="line">            ConnectorSetIterator csi = connectorSet.ForwardIterator();</span><br><span class="line">            <span class="keyword">while</span> (csi.MoveNext())</span><br><span class="line">            &#123;</span><br><span class="line">                Connector connected = csi.Current <span class="keyword">as</span> Connector;</span><br><span class="line">                <span class="keyword">if</span> (<span class="literal">null</span> != connected)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">// look for physical connections</span></span><br><span class="line">                    <span class="keyword">if</span> (connected.ConnectorType == ConnectorType.End ||</span><br><span class="line">                        connected.ConnectorType == ConnectorType.Curve ||</span><br><span class="line">                        connected.ConnectorType == ConnectorType.Physical)</span><br><span class="line">                    &#123;</span><br><span class="line">                        message += <span class="string">&quot;\nConnector is connected to: &quot;</span> + connected.Owner.Name;</span><br><span class="line">                        message += <span class="string">&quot;\nConnection type is: &quot;</span> + connected.ConnectorType;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            message += <span class="string">&quot;\nConnector is not connected to anything.&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        TaskDialog.Show(<span class="string">&quot;Revit&quot;</span>, message);    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面的对话框是在管道设备的连接器上运行此代码示例的结果。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-938B934C-71EB-42CE-8B02-FE2392B5CC3F-low.png" alt="img"></p>
+<p>图168：连接器信息</p>
+<h2 id="MEP预制件详述"><a href="#MEP预制件详述" class="headerlink" title="MEP预制件详述"></a>MEP预制件详述</h2><p>多个Revit API类共同提供将预制构件添加到Revit文档的功能。</p>
+<p><strong>预制详细类</strong></p>
+<p>在MEP模型中放置预制零件之前，必须指定预制件配置并将预制件服务加载到模型中。Revit API中有许多类可用于简化此过程，其中包括：</p>
+<ul>
+<li><strong>FabricationConfiguration</strong> - 包含有关项目使用的预制件配置设置的信息。</li>
+<li><strong>FabricationConfigurationInfo</strong> - 包含有关FabricationConfiguration属性的信息。</li>
+<li><strong>ConfigurationReloadInfo</strong> - 包含重新加载FabricationConfiguration的结果。</li>
+<li><strong>ConnectionValidationInfo</strong> -包含通过重新加载FabricationConfiguration生成的与连接相关的警告。</li>
+<li><strong>FabricationService</strong> - 预制件配置的一部分，并定义可以使用哪些FabricationService。</li>
+<li><strong>FabricationServiceButton</strong> - 定义在不同条件下使用哪些项。</li>
+<li><strong>FabricationPart</strong> - 表示Revit中的预制构件。</li>
+<li><strong>FabricationPartType</strong> - 定义FabricationPart的类型。</li>
+<li><strong>FabricationRodInfo</strong> - 提供FabricationPart的杆信息。</li>
+<li><strong>FabricationHostedInfo</strong> - 包含FabricationPart的主机信息，并提供从主机断开连接的功能。</li>
+<li><strong>FabricationConnectorInfo</strong> - 包含有关FabricationPart的连接器的信息。</li>
+<li><strong>FabricationUtils</strong> - Autodesk Revit产品中用于预制件的常规实用程序方法。</li>
+<li><strong>FabricationDimensionDefinition</strong> - 包含有关预制件尺寸的信息。</li>
+</ul>
+<p>MEP预制件中涉及的主要类别将在下文中详细介绍。可以在Revit SDK的FabricationPartLayout示例中找到示例代码。</p>
+<p><strong>预制件配置</strong></p>
+<p>使用FabricationConfiguration类，用户可以获取和设置文档的装配配置设置。他们还可以加载和卸载服务、重新加载预制件配置、获取加载的服务、获取预制件规范、从配置中获取材料和绝缘信息以及获取连接器信息。</p>
+<p>文档只有一个装配配置，您可以使用静态FabricationConfiguration.GetFabricationConfiguration（）方法获取它。要更改配置，请调用重载的SetConfiguration（）方法，传入包含有关FabricationConfiguration的信息的FabricationConfiguration Info对象。SetConfiguration（）方法的一个重载将使用全局概要文件设置配置，另一个重载接受概要文件名称并使用该特定概要文件设置配置。(The FabricationConfiguration.GetProfile（）方法和FabricationConfigurationInfo.GetProfiles（）方法分别返回与加载的配置或所有配置关联的配置文件。）</p>
+<p>方法的作用是：从源加工配置中重新加载加工配置。这必须在加载预制件服务之前完成。</p>
+<p>使用GetAllLoadedServices（）方法获取所有加载的服务，或使用GetAllUsedServices（）方法仅获取使用的预制件服务。如果服务中的任何预制件部件是由用户创建的，则服务正在使用中。这两个方法都返回FabricationService对象的列表。</p>
+<p>LoadServices（）和UnloadServices（）可分别用于加载和卸载预制件服务列表。</p>
+<p>FabricationConfiguration类还具有获取配置数据缩写的方法。GetMaterialAbbreviation（）返回材质或隔热层或双层壁材质的缩写。GetSpecificationAbbreviation（）返回给定规范的规范缩写，GetInsulationSpecificationAbbreviation（）将返回给定绝缘规范的缩写。</p>
+<p><strong>预制件服务</strong></p>
+<p>预制零件服务是预制零件配置的一部分，定义可以使用哪些预制零件服务按钮。GroupCount属性返回服务中的组数。使用组的索引，可以调用GetGroupName（）来获取组的名称。方法GetButtonCount（）将返回指定组中的按钮数量，实际按钮可以通过调用GetButton（）与指定的组索引和按钮索引来检索。</p>
+<p><strong>预制件服务按钮</strong></p>
+<p>FabricationServiceButton类包含有关预制件按钮的信息。预制件服务按钮定义可用于定义FabricationPart的项目，可能受特定条件列表的约束。预制零件服务按钮是预制件服务的一部分。</p>
+<p><strong>预制零件</strong></p>
+<p>使用FabricationPart类，用户可以在Revit模型中创建、放置、移动和对齐预制零件。用户还可以获取或设置预制零件的尺寸，并获取预制托管信息和杆信息。</p>
+<p>重载的静态FabricationPart.Create（）方法基于预制服务按钮创建一个新的预制零件。重载的静态Hanger（）方法在另一个预制零件上创建一个悬挂件。静态AlignPartByConnectors（）方法将移动预制零件，并通过其中一个连接器将其与另一个连接器对齐。</p>
+<p>也可以使用DesignToFabricationConverter类从设计元素创建FabricationParts。Convert（）方法将一组MEP设计元素转换为预制零件。可以使用GetConvertedFabricationParts（）方法获取成功创建的FabricationParts。如果Convert（）方法指示部分失败，则GetPartialConvertFailureResults（）方法将返回可能失败的列表。对于部分故障类型（例如InvalidConnections），DesignToFabricationConverter类有一个对应的方法来检索具有该错误类型的FabricationParts的ElementId列表（例如GetConvertedFabricationPartsWithInvalidConnections（））。</p>
+<p>还存在获得和设置预制尺寸的值、获得主元件信息和获得预制杆信息的方法。</p>
+<p>连接和位置</p>
+<p>FabricationPart有许多方法可以附加到连接器或更改FabricationPart的位置。静态StretchAndFit（）方法支持从指定的连接器拉伸加工零件并装配到目标布线端的操作。路由端表示为FabricationPartRouteEnd对象，该对象可以从静态FabricationPartRouteEnd. fromConnector（）或FabricationPartRouteEnd. fromCenterline（）方法中获取。如果StretchAndFit（）方法失败，它将返回一个FabricationPartFitResult枚举，该枚举提供有关失败的更多详细信息。</p>
+<p>修改FabricationPart的其他方法包括Reposition（）、RotateConnectedPartByConnector（）和PlaceAsTap（）。</p>
+<p>产品清单</p>
+<p>某些FabricationPart图元（如购买的风管和管件）具有“产品列表”。产品列表条目表示选定零件的可用尺寸的目录。ProductListEntry属性指定FabricationPart的产品列表项。如果IsProductList（）方法返回false，ProductListEntry将为-1。</p>
+<p>要获取FabricationPart的产品条目列表，请使用GetProductListEntryCount（）和GetProductListEntryName（）方法。在更改FabricationPart的ProductListEntry之前，请调用IsProductListEntryEntrySize（）以检查是否可以将此Part更改为指定的产品列表条目而不更改任何连接的尺寸。</p>
+<h2 id="族创建"><a href="#族创建" class="headerlink" title="族创建"></a>族创建</h2><p>在Revit族文档中创建机械设备时，需要添加接头以允许设备连接到系统。风管、电气和管道连接件都可以类似的方式添加，方法是使用将放置连接件的参照平面和连接件的系统类型。</p>
+<p>ConnectorElement类提供的重载静态方法有：</p>
+<ul>
+<li>CreateCableTrayConnector </li>
+<li>CreateConduitConnector </li>
+<li>CreateDuctConnector </li>
+<li>CreateElectricalConnector </li>
+<li>CreatePipeConnector</li>
+</ul>
+<p>上面的每个方法都有第二个重载，该重载接受一个附加的Edge参数，该参数允许创建以给定面的内部循环为中心的连接器元素。下面的代码演示如何将两个管道连接件添加到拉伸上的面，并设置它们的一些属性。</p>
+<p>代码区域30 - 6：添加管道连接件</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CreatePipeConnectors</span>(<span class="params">UIDocument uiDocument, Extrusion extrusion</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">// get the faces of the extrusion</span></span><br><span class="line">        Options geoOptions = uiDocument.Document.Application.Create.NewGeometryOptions();</span><br><span class="line">        geoOptions.View = uiDocument.Document.ActiveView;</span><br><span class="line">        geoOptions.ComputeReferences = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        List planarFaces = <span class="keyword">new</span> List();</span><br><span class="line">        Autodesk.Revit.DB.GeometryElement geoElement = extrusion.get_Geometry(geoOptions);</span><br><span class="line">        <span class="keyword">foreach</span> (GeometryObject geoObject <span class="keyword">in</span> geoElement)</span><br><span class="line">        &#123;</span><br><span class="line">                Solid geoSolid = geoObject <span class="keyword">as</span> Solid;</span><br><span class="line">                <span class="keyword">if</span> (<span class="literal">null</span> != geoSolid)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="keyword">foreach</span> (Face geoFace <span class="keyword">in</span> geoSolid.Faces)</span><br><span class="line">                        &#123;</span><br><span class="line">                                <span class="keyword">if</span> (geoFace <span class="keyword">is</span> PlanarFace)</span><br><span class="line">                                &#123;</span><br><span class="line">                                        planarFaces.Add(geoFace <span class="keyword">as</span> PlanarFace);</span><br><span class="line">                                &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (planarFaces.Count &gt; <span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="comment">// Create the Supply Hydronic pipe connector</span></span><br><span class="line">                ConnectorElement connSupply = ConnectorElement.CreatePipeConnector(uiDocument.Document,</span><br><span class="line">                                                                                   PipeSystemType.SupplyHydronic,</span><br><span class="line">                                                                                   planarFaces[<span class="number">0</span>].Reference);</span><br><span class="line">                Parameter param = connSupply.get_Parameter(BuiltInParameter.CONNECTOR_RADIUS);</span><br><span class="line">                param.Set(<span class="number">1.0</span>); <span class="comment">// 1&#x27; radius</span></span><br><span class="line">                param = connSupply.get_Parameter(BuiltInParameter.RBS_PIPE_FLOW_DIRECTION_PARAM);</span><br><span class="line">                param.Set(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Create the Return Hydronic pipe connector</span></span><br><span class="line">                ConnectorElement connReturn =  ConnectorElement.CreatePipeConnector(uiDocument.Document,</span><br><span class="line">                                                                                    PipeSystemType.ReturnHydronic,</span><br><span class="line">                                                                                    planarFaces[<span class="number">1</span>].Reference);</span><br><span class="line">                param = connReturn.get_Parameter(BuiltInParameter.CONNECTOR_RADIUS);</span><br><span class="line">                param.Set(<span class="number">0.5</span>); <span class="comment">// 6&quot; radius</span></span><br><span class="line">                param = connReturn.get_Parameter(BuiltInParameter.RBS_PIPE_FLOW_DIRECTION_PARAM);</span><br><span class="line">                param.Set(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下图说明了在使用“机械设备”样板创建的新族文档中运行此示例并传入拉伸2’×2’× 1 ‘的结果。请注意，连接件放置在平面的质心处。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/GUID-9971E21F-AE7B-4FF3-9251-A91C6DEAA663-low.png"></p>
+<p>图169：在拉伸上创建的两个连接器</p>
+<h2 id="机械设置"><a href="#机械设置" class="headerlink" title="机械设置"></a>机械设置</h2><p>“MEP设置-机械设置”下的“管理”选项卡上提供的许多设置也可通过Revit API使用。</p>
+<p><strong>管道设置</strong></p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/MechPipeSettings.png"></p>
+<p>管道设置</p>
+<p>PipeSettings类提供对上面显示的设置的访问，例如“管道尺寸后缀”和“管道接头公差”。每个文档都有一个PipeSettings对象，可以通过静态方法PipeSettings.GetPipeSettings（）访问该对象。</p>
+<p>拟合角度</p>
+<p>管道的管件角度使用设置可从PipeSettings类的以下属性和方法中获得：</p>
+<ul>
+<li>PipeSettings.FittingAngleUsage</li>
+<li>PipeSettings.GetSpecificFittingAngles()</li>
+<li>PipeSettings.GetSpecificFittingAngleStatus()</li>
+<li>PipeSettings.SetSpecificFittingAngleStatus()</li>
+</ul>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/MechPipeAngleSettings.png" alt="img"></p>
+<p><strong>管件角度</strong></p>
+<p>分段和尺寸</p>
+<p>UI中的“管道设置-分段和尺寸”下的设置也可用。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/MechPipeSizesSettings.png" alt="img"></p>
+<p>分段和尺寸</p>
+<p>此信息可通过Segment和MEPSize类获得。段表示包含材质和一组可用尺寸的MEPCurve的长度。管道尺寸由MEPSize类表示。可用的段可以使用过滤器找到。下面的例子演示了如何在上面的对话框中获取一些信息。</p>
+<p>代码区域：管道设置中的导线测量管道尺寸</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">FilteredElementCollector collectorPipeType = <span class="keyword">new</span> FilteredElementCollector(document);</span><br><span class="line">collectorPipeType.OfClass(<span class="keyword">typeof</span>(Segment));</span><br><span class="line"></span><br><span class="line">IEnumerable segments = collectorPipeType.ToElements().Cast();</span><br><span class="line"><span class="keyword">foreach</span> (Segment segment <span class="keyword">in</span> segments)</span><br><span class="line">&#123;</span><br><span class="line">    StringBuilder strPipeInfo = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    strPipeInfo.AppendLine(<span class="string">&quot;Segment: &quot;</span> + segment.Name);</span><br><span class="line"></span><br><span class="line">    strPipeInfo.AppendLine(<span class="string">&quot;Roughness: &quot;</span> + segment.Roughness);</span><br><span class="line"></span><br><span class="line">    strPipeInfo.AppendLine(<span class="string">&quot;Pipe Sizes:&quot;</span>);</span><br><span class="line">    <span class="built_in">double</span> dLengthFac = <span class="number">304.8</span>;  <span class="comment">// used to convert stored units from ft to mm for display</span></span><br><span class="line">    <span class="keyword">foreach</span> (MEPSize size <span class="keyword">in</span> segment.GetSizes())</span><br><span class="line">    &#123;</span><br><span class="line">        strPipeInfo.AppendLine(<span class="built_in">string</span>.Format(<span class="string">&quot;Nominal: &#123;0:F3&#125;, ID: &#123;1:F3&#125;, OD: &#123;2:F3&#125;&quot;</span>,</span><br><span class="line">                                    size.NominalDiameter  dLengthFac, size.InnerDiameter  dLengthFac, size.OuterDiameter * dLengthFac));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    TaskDialog.Show(<span class="string">&quot;PipeSetting Data&quot;</span>, strPipeInfo.ToString());</span><br><span class="line">    <span class="keyword">break</span>;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/PipeSettingsExample.jpg"></p>
+<p>上一个示例的输出</p>
+<p>若要向列表中添加新大小，请使用Segment.AddSize（）方法。使用Segment.RemoveSize（）按公称直径删除尺寸。</p>
+<p>坡度</p>
+<p>PipeSettings类还提供对UI中“管道设置-坡度”下可用坡度值的访问。使用GetPipeSlopes（）检索坡度值列表。PipeSettings.SetPipeSlopes（）提供一次设置所有坡度值的功能，而PipeSettings.AddPipeSlope（）添加单个管道坡度。Revit将坡度值存储为百分比（0-100）。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/MechPipeSlopeSettings.png" alt="img"></p>
+<p>管道坡度值</p>
+<p><strong>风管设置</strong></p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/MechDuctSettings.png"></p>
+<p>风管设置</p>
+<p>通过DuctSettings类可以访问上面显示的设置，例如“风管管件注释尺寸”和“空气密度”。每个文档都有一个DuctSettings对象，可以通过静态方法DuctSettings.GetDuctSettings（）访问该对象。</p>
+<p>风管管件角度</p>
+<p>风管的管件角度使用设置可从DuctSettings类的以下特性和方法中获得：</p>
+<ul>
+<li>DuctSettings.FittingAngleUsage</li>
+<li>DuctSettings.GetSpecificFittingAngles()</li>
+<li>DuctSettings.GetSpecificFittingAngleStatus()</li>
+<li>DuctSettings.SetSpecificFittingAngleStatus()</li>
+</ul>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/MechDuctAngleSettings.png" alt="img"></p>
+<p>风管管件角度</p>
+<h2 id="电气设置"><a href="#电气设置" class="headerlink" title="电气设置"></a>电气设置</h2><p>在“MEP设置-电气设置”下的“管理”选项卡上提供的某些设置也可通过Revit API使用。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/ElectricalSettings.png"></p>
+<p>电气设置</p>
+<p>ElectricalSettings类提供对不同电气设置的访问，例如管件角度、导线类型和电压类型。每个文档都有一个ElectricalSettings对象，可以通过静态方法ElectricalSetting.GetElectricalSettings（）访问该对象。</p>
+<p> 常规设置</p>
+<p>以下常规设置可用作ElectricalSetting类的属性：</p>
+<ul>
+<li>CircuitSequence - 访问回路序列编号模式</li>
+<li>CircuitNamePhaseA - 按相位访问回路命名（相位A标签）。</li>
+<li>CircuitNamePhaseB -按相位访问回路命名（相位B标签）。</li>
+<li>CircuitNamePhaseC - 按相位访问回路命名（相位C标签）。</li>
+</ul>
+<p>拟合角度</p>
+<p>电缆桥架和套管的装配角度设置可通过以下ElectricalSettings类的方法获得：</p>
+<ul>
+<li>GetSpecificFittingAngles()</li>
+<li>GetSpecificFittingAngleStatus()</li>
+<li>SetSpecificFittingAngleStatus()</li>
+</ul>
+<p><img src="https://help.autodesk.com/cloudhelp/2018/ENU/Revit-API/images/ElectricalAnglesSettings.png" alt="img"></p>
+<p>拟合角度</p>
+<p>其他电气设置</p>
+<p>ElectricalSetting类的属性提供对以下内容的访问：</p>
+<ul>
+<li>Distribution System Types 配电系统类型</li>
+<li>Voltage Types 电压类型</li>
+<li>Wire Conduit Types 导线管类型</li>
+<li>Wire Material Types 线材类型</li>
+<li>Wire Types 导线类型</li>
+</ul>
+<p>还可以使用方法在项目中添加或删除配电系统类型、电压类型、导线材质类型和导线类型。</p>
+<h2 id="布管系统配置"><a href="#布管系统配置" class="headerlink" title="布管系统配置"></a>布管系统配置</h2><p>布管系统配置可以通过RollingPreferenceManager类访问。此类的实例可从MEPCurveType类的属性中获得。目前，只有PipeType和DuctType支持布管系统配置。</p>
+<p>ChalleningPreferenceManager管理用于选择段类型和尺寸以及基于用户选择标准的管接头类型的所有规则。ExcluingPreferenceRule类管理一个管段或管接头首选项，该类的实例可以添加到ExcluingPreferenceManager中。每个工艺路线首选项规则根据管理的工艺路线物料类型进行分组。该类型由PreferenceRuleGroupType表示，并包括以下选项：</p>
+<table>
+<thead>
+<tr>
+<th>**Member name **</th>
+<th>**Description **</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Undefined</td>
+<td>未定义的组类型（默认初始值）</td>
+</tr>
+<tr>
+<td>Segments</td>
+<td>分段类型（例如：管材）</td>
+</tr>
+<tr>
+<td>Elbows</td>
+<td>弯头类型</td>
+</tr>
+<tr>
+<td>Junctions</td>
+<td>接头类型（例如接头、T形接头、Y形接头、分接头）</td>
+</tr>
+<tr>
+<td>Crosses</td>
+<td>交叉类型</td>
+</tr>
+<tr>
+<td>Transitions</td>
+<td>过渡类型（请注意，多形状过渡可能有自己的组）</td>
+</tr>
+<tr>
+<td>Unions</td>
+<td>将两个段连接在一起的联合类型</td>
+</tr>
+<tr>
+<td>MechanicalJoints</td>
+<td>将管接头连接到管接头、管段连接到管接头或管段连接到管段的机械联接类型</td>
+</tr>
+<tr>
+<td>TransitionsRectangularToRound</td>
+<td>从矩形型材到圆形型材的多形状过渡</td>
+</tr>
+<tr>
+<td>TransitionsRectangularToOval</td>
+<td>从矩形型材到椭圆形型材的多种形状过渡</td>
+</tr>
+<tr>
+<td>TransitionsOvalToRound</td>
+<td>从椭圆形轮廓到圆形轮廓的多种形状过渡</td>
+</tr>
+</tbody></table>
+<p>每个布管系统配置规则都可以具有一个或多个选择条件（由PrimaryCriterionBase类和派生类型PrimarySizeCriterion表示）。PrimarySizeCriterion基于最小和最大尺寸约束选择管件和管段。 BullingConditions类保存BullingCondition实例的集合。BullingCondition类表示在确定是否满足布线条件（如最小或最大直径）时用作输入的布线信息。GetMEPPartId（）方法基于一个PreferenceRuleGroupType和PreferenceConditions获取一个管接头或管段ID。 以下示例获取文档中的所有管道类型，获取每种管道类型的布管系统配置管理器，然后根据布管系统配置管理器中的规则获取每个管段的尺寸。</p>
+<p>代码区域：使用布管系统配置</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> List <span class="title">GetAvailablePipeSegmentSizesFromDocument</span>(<span class="params">Document document</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    System.Collections.Generic.HashSet sizes = <span class="keyword">new</span> HashSet();</span><br><span class="line"></span><br><span class="line">    FilteredElementCollector collectorPipeType = <span class="keyword">new</span> FilteredElementCollector(document);</span><br><span class="line">    collectorPipeType.OfClass(<span class="keyword">typeof</span>(PipeType));</span><br><span class="line"></span><br><span class="line">    IEnumerable pipeTypes = collectorPipeType.ToElements().Cast();</span><br><span class="line">    <span class="keyword">foreach</span> (PipeType pipeType <span class="keyword">in</span> pipeTypes)</span><br><span class="line">    &#123;</span><br><span class="line">        RoutingPreferenceManager rpm = pipeType.RoutingPreferenceManager;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">int</span> segmentCount = rpm.GetNumberOfRules(RoutingPreferenceRuleGroupType.Segments);</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> index = <span class="number">0</span>; index != segmentCount; ++index)</span><br><span class="line">        &#123;</span><br><span class="line">            RoutingPreferenceRule segmentRule = rpm.GetRule(RoutingPreferenceRuleGroupType.Segments, index);</span><br><span class="line">            Segment segment = document.GetElement(segmentRule.MEPPartId) <span class="keyword">as</span> Segment;</span><br><span class="line">            <span class="keyword">foreach</span> (MEPSize size <span class="keyword">in</span> segment.GetSizes())</span><br><span class="line">            &#123;</span><br><span class="line">                sizes.Add(size.NominalDiameter);  <span class="comment">//Use a hash-set to remove duplicate sizes among Segments and PipeTypes.</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    List sizesSorted = sizes.ToList();</span><br><span class="line">    sizesSorted.Sort();</span><br><span class="line">    <span class="keyword">return</span> sizesSorted;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2></article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Revit/">Revit</a></div><div class="post-share"><div class="social-share" data-image="/images/4stars.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/30/Revit%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/34%E6%95%85%E9%9A%9C%E5%8F%91%E5%B8%83%E5%92%8C%E5%A4%84%E7%90%86/" title="34故障发布和处理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">34故障发布和处理</div></div><div class="info-2"><div class="info-item-1">故障发布和处理Revit...</div></div></div></a><a class="pagination-related" href="/2024/12/24/Revit%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/26%E7%BB%93%E6%9E%84%E5%B7%A5%E7%A8%8B/" title="26结构工程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">26结构工程</div></div><div class="info-2"><div class="info-item-1">结构工程以下各节介绍了仅与Revit的结构工程功能相关的API功能：  结构模型元素-讨论仅与Revit的结构工程功能相关的特定元素及其属性。  AnalyticalModel -讨论与分析模型相关的类，如AnalyticalModel、RigidLink和AnalyticalModelSupport。  AnalyticalLink -讨论在分析梁和柱之间创建新的分析链接。  荷载-讨论荷载设置和三种荷载。   您的分析链接-为希望将Revit链接到某些Structural Analysis应用程序的API用户提供建议。 本章包含一些高级主题。如果您不熟悉Revit Platform API，请先阅读基本部分，如“入门”、“元素要素”、“参数”等。  本节中的主题 结构模型元素 分析模型在结构工程中，分析模型是结构物理模型的工程描述。 荷载以下部分确定荷载设置并讨论荷载限制指南。 Analysis Link分析链接 Analytical...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.RevitAddIns%20Namespace/" title="Autodesk.RevitAddIns Namespace"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-18</div><div class="info-item-2">Autodesk.RevitAddIns Namespace</div></div><div class="info-2"><div class="info-item-1">Autodesk.RevitAddIns Namespace类AddInManifestUtility此静态类提供从 Revit .addin 文件中读取清单内容的访问。   方法  GetRevitAddInBundleManifests  GetRevitAddInManifest  GetRevitAddInManifests     RevitAddInApplication表示 Revit 外部应用程序。  构造器  RevitAddInApplication 创建 external application info 类的新实例。    属性  Name  Application name    继承关系  System.Object  Autodesk.RevitAddIns.RevitAddInItem  Autodesk.RevitAddIns.RevitAddInApplication    RevitAddInCommand表示 Revit 外部命令。  构造器  RevitAddInCommand 创建 Add-In Command info...</div></div></div></a><a class="pagination-related" href="/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20CurveArray/" title="Autodesk.Revit.DB CurveArray"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-18</div><div class="info-item-2">Autodesk.Revit.DB CurveArray</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB CurveArray可以包含曲线的数组。 语法1public class CurveArray : APIObject, IEnumerable  继承层次结构System Object ​	Autodesk.Revit.DB APIObject ​		Autodesk.Revit.DB CurveArray 另见CurveArray Members Autodesk.Revit.DB Namespace 构造函数CurveArray创建CurveArray类的新实例 方法Append将曲线添加到数组的末尾。 Clear从数组中删除每条曲线，使其为空。 ForwardIterator将一个向前移动的迭代器添加到数组中。 GetEnumerator将一个向前移动的迭代器添加到数组中。 Insert将指定的曲线插入数组。 ReverseIterator返回一个向后移动的迭代器到数组。 属性IsEmpty测试数组是否为空。 Item获取或设置数组中指定索引处的曲线。 Size返回数组中的曲线数。 注：翻译自Revit Api docs 2018</div></div></div></a><a class="pagination-related" href="/2024/12/10/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20Opening/" title="Autodesk.Revit.DB Opening"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Autodesk.Revit.DB Opening</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB OpeningAutodesk Revit项目或族文档中的洞口。 语法1public class Opening : Element  附注该对象表示各种不同类型的洞口：  墙中由修订项目中的两个边界点创建的矩形洞口。 由应用于屋顶、楼板、天花板、梁、支撑或柱的一组曲线创建的洞口。 一个垂直的竖井开口延伸到一个或多个水平。 在族文档中的墙或天花板上创建的简单洞口。  根据打开的类型，此类的某些属性将不可用。 这个对象派生自Element基对象，并且支持该对象的所有方法，例如检索该对象的参数的能力。此对象还支持访问结构分析模型，但此功能仅适用于Autodesk Revit Structure。 示例123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051### private void Getinfo_Opening(Opening opening)&#123;    string message =...</div></div></div></a><a class="pagination-related" href="/2024/12/10/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20ReferenceIntersector/" title="Autodesk.Revit.DB ReferenceIntersector"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Autodesk.Revit.DB ReferenceIntersector</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB ReferenceIntersector用于查找和返回与从原点和方向创建的射线相交的元素的类。 语法1public class ReferenceIntersector : IDisposable    附注可以构造此类的实例，以返回与由原点和方向创建的射线，或者基于过滤和标志返回元素的子集。 调用者可以选择使用ElementFilter过滤结果，或者通过应用特定的可接受的元素。 调用方还可以指定要返回的对象的类型， 整个元素、几何体对象或其组合。 在所有情况下，要求调用者提供 用于评估的3D视图;输入视图上的视图和可见性设置将确定 返回特定元素（例如，此工具永远不会返回隐藏元素、 和几何图形位于视图剖面框之外的元素）。 该类配置为可以构建单个实例，并用于对多个不同光线进行多次评估。在同一个 ReferenceIntersector 上的调用之间，评估结果不会被保留。 该类还提供了一个选项，用于返回在Revit链接中遇到的图元结果。 当设置 FindReferencesInRevitLinks 标志...</div></div></div></a><a class="pagination-related" href="/2024/12/19/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.UI.Selection%20Namespace/" title="Autodesk.Revit.UI.Selection"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-19</div><div class="info-item-2">Autodesk.Revit.UI.Selection</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.UI.SelectionClassesPickedBox包含两个 XYZ 点的类，表示屏幕上的选取框。  Properties  Max 最大坐标数（拾取框的右上角）。  Min 最小坐标（拾取框的左下角）。     SelectableInViewFilter一个过滤器，用于传递在给定视图中可选的元素。  Constructors  SelectableInViewFilter  (Document, ElementId) 构造 SelectableInViewFilter 的新实例。  SelectableInViewFilter (Document, ElementId, Boolean) 构造 SelectableInViewFilter 的新实例，并可选择传递所有不可选择的元素。    Methods  PassesFilter(Element) 将筛选器应用于给定元素。  PassesFilter(Document,...</div></div></div></a><a class="pagination-related" href="/2024/12/20/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20Transform/" title="Autodesk.Revit.DB Transform"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-20</div><div class="info-item-2">Autodesk.Revit.DB Transform</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB Transform仿射三维空间的一个变换。 语法public class Transform : APIObject示例12345678910111213141516171819202122### public static XYZ TransformPoint(XYZ point, Transform transform)&#123;    double x = point.X;    double y = point.Y;    double z = point.Z;    //transform basis of the old coordinate system in the new coordinate // system    XYZ b0 = transform.get_Basis(0);    XYZ b1 = transform.get_Basis(1);    XYZ b2 = transform.get_Basis(2);    XYZ origin = transform.Origin;       ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/4stars.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">funtim41@gmail.com</div><div class="author-info-description">实践-认识-再实践-再认识</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/FunTim41"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/FunTim41" target="_blank" title="Github"><i class="fab fa-github" style="color: #FFFFFF;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%BA%E7%94%B5%E5%B7%A5%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">机电工程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MEP%E5%85%83%E7%B4%A0%E5%88%9B%E5%BB%BA"><span class="toc-number">1.1.</span> <span class="toc-text">MEP元素创建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%AE%A1%E9%81%93%E5%92%8C%E9%A3%8E%E7%AE%A1"><span class="toc-number">1.1.1.</span> <span class="toc-text">创建管道和风管</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%AC%E9%87%8C%E5%92%8C%E7%BB%9D%E7%BC%98"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">衬里和绝缘</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%AF%BC%E7%BA%BF"><span class="toc-number">1.1.2.</span> <span class="toc-text">创建导线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%A0%E4%BD%8D%E7%AC%A6"><span class="toc-number">1.1.3.</span> <span class="toc-text">占位符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.1.4.</span> <span class="toc-text">创建系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MEP%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.2.</span> <span class="toc-text">MEP系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%99%A8"><span class="toc-number">1.3.</span> <span class="toc-text">连接器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MEP%E9%A2%84%E5%88%B6%E4%BB%B6%E8%AF%A6%E8%BF%B0"><span class="toc-number">1.4.</span> <span class="toc-text">MEP预制件详述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%8F%E5%88%9B%E5%BB%BA"><span class="toc-number">1.5.</span> <span class="toc-text">族创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%BA%E6%A2%B0%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.6.</span> <span class="toc-text">机械设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B5%E6%B0%94%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.7.</span> <span class="toc-text">电气设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%83%E7%AE%A1%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE"><span class="toc-number">1.8.</span> <span class="toc-text">布管系统配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%EF%BC%9A%E7%BF%BB%E8%AF%91%E8%87%AARevit-API-Developers-Guide"><span class="toc-number">1.9.</span> <span class="toc-text">注：翻译自Revit API Developers Guide</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/30/CAD%E4%BA%8C%E5%BC%80/AddInManager/" title="AddInManager">AddInManager</a><time datetime="2025-01-08T13:10:14.606Z" title="更新于 2025-01-08 21:10:14">2025-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/08/%E5%8D%9A%E5%AE%A2%E9%85%8D%E7%BD%AE/Hexo+Butterfly%E4%BB%A3%E7%A0%81%E5%9D%97%E6%B0%B4%E5%B9%B3%E6%BB%9A%E5%8A%A8%E6%9D%A1/" title="Hexo+Butterfly代码块水平滚动条">Hexo+Butterfly代码块水平滚动条</a><time datetime="2025-01-08T04:24:42.742Z" title="更新于 2025-01-08 12:24:42">2025-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/05/CAD%E4%BA%8C%E5%BC%80/01%E5%9B%BE%E5%B1%82%E7%9A%84%E5%A2%9E%E5%88%A0%E6%9F%A5/" title="01图层的增删查">01图层的增删查</a><time datetime="2025-01-06T02:26:57.051Z" title="更新于 2025-01-06 10:26:57">2025-01-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.RevitAddIns%20Namespace/" title="Autodesk.RevitAddIns Namespace">Autodesk.RevitAddIns Namespace</a><time datetime="2025-01-05T09:13:27.547Z" title="更新于 2025-01-05 17:13:27">2025-01-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20CurveArray/" title="Autodesk.Revit.DB CurveArray">Autodesk.Revit.DB CurveArray</a><time datetime="2025-01-04T02:50:53.238Z" title="更新于 2025-01-04 10:50:53">2025-01-04</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/images/topback.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By funtim41@gmail.com</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">学而不思则罔，思而不学则殆。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>(() => {
+  const panguFn = () => {
+    if (typeof pangu === 'object') pangu.autoSpacingPage()
+    else {
+      btf.getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+        .then(() => {
+          pangu.autoSpacingPage()
+        })
+    }
+  }
+
+  const panguInit = () => {
+    if (false){
+      GLOBAL_CONFIG_SITE.isPost && panguFn()
+    } else {
+      panguFn()
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', panguInit, 'pangu')
+  document.addEventListener('DOMContentLoaded', panguInit)
+})()</script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'FunTim41/funtim41.github.io',
+      'data-repo-id': 'R_kgDONjG8ww',
+      'data-category-id': 'DIC_kwDONjG8w84Cllg2',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

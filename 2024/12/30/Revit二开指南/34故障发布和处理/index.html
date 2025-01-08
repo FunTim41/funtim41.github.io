@@ -1,0 +1,361 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>34故障发布和处理 | funtim的博客</title><meta name="author" content="funtim41@gmail.com"><meta name="copyright" content="funtim41@gmail.com"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="故障发布和处理Revit API提供了在发生用户可见的问题时发布故障以及响应由Revit或Revit附加模块发布的故障的功能。 本节中的页面  发布故障 处理故障  发布故障要使用故障发布机制报告问题，需要执行以下步骤：  在ExternalApplication的OnStartup（）调用过程中，必须在FailureValidationRegistry中定义并注册Revit中尚未定义的新故障。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="34故障发布和处理">
+<meta property="og:url" content="https://funtim41.github.io/2024/12/30/Revit%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/34%E6%95%85%E9%9A%9C%E5%8F%91%E5%B8%83%E5%92%8C%E5%A4%84%E7%90%86/">
+<meta property="og:site_name" content="funtim的博客">
+<meta property="og:description" content="故障发布和处理Revit API提供了在发生用户可见的问题时发布故障以及响应由Revit或Revit附加模块发布的故障的功能。 本节中的页面  发布故障 处理故障  发布故障要使用故障发布机制报告问题，需要执行以下步骤：  在ExternalApplication的OnStartup（）调用过程中，必须在FailureValidationRegistry中定义并注册Revit中尚未定义的新故障。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://funtim41.github.io/images/4stars.png">
+<meta property="article:published_time" content="2024-12-30T03:37:56.000Z">
+<meta property="article:modified_time" content="2024-12-30T03:40:15.557Z">
+<meta property="article:author" content="funtim41@gmail.com">
+<meta property="article:tag" content="Revit">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://funtim41.github.io/images/4stars.png"><link rel="shortcut icon" href="/images/OIP.jfif"><link rel="canonical" href="https://funtim41.github.io/2024/12/30/Revit%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/34%E6%95%85%E9%9A%9C%E5%8F%91%E5%B8%83%E5%92%8C%E5%A4%84%E7%90%86/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: funtim41@gmail.com","link":"链接: ","source":"来源: funtim的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '34故障发布和处理',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/css/bar.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background: Color(#995a82);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/4stars.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/images/topback.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/OIP.jfif" alt="Logo"><span class="site-name">funtim的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">34故障发布和处理</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">34故障发布和处理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-30T03:37:56.000Z" title="发表于 2024-12-30 11:37:56">2024-12-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-30T03:40:15.557Z" title="更新于 2024-12-30 11:40:15">2024-12-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Revit%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/">Revit二次开发人员指南</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="故障发布和处理"><a href="#故障发布和处理" class="headerlink" title="故障发布和处理"></a>故障发布和处理</h1><p>Revit API提供了在发生用户可见的问题时发布故障以及响应由Revit或Revit附加模块发布的故障的功能。</p>
+<p>本节中的页面</p>
+<ul>
+<li>发布故障</li>
+<li>处理故障</li>
+</ul>
+<h2 id="发布故障"><a href="#发布故障" class="headerlink" title="发布故障"></a>发布故障</h2><p>要使用故障发布机制报告问题，需要执行以下步骤：</p>
+<ol>
+<li>在ExternalApplication的OnStartup（）调用过程中，必须在FailureValidationRegistry中定义并注册Revit中尚未定义的新故障。</li>
+<li>从BuiltInFailures类或使用与FailureDefinition相关的类从预注册的自定义故障中查找故障定义ID。</li>
+<li>使用与FailureMessage相关的类设置与失败相关的选项和详细信息，将失败发布到有问题的文档。</li>
+</ol>
+<p><strong>定义和注册故障</strong></p>
+<p>在Revit应用程序启动期间，必须通过创建一个FailureDefinition对象来定义和注册Revit中的每个可能的故障，该对象包含有关故障的一些永久性信息，例如标识、严重性、基本描述、解决方法类型和默认解决方法。</p>
+<p>下面的示例创建了两个新的故障，一个警告和一个错误，可用于太高的墙。在这个例子中，它们与一个更新程序一起使用，后者将执行失败发布（在本章后续的代码示例中）。FailureFailitionIds保存在Updater类中，因为在发布失败时需要它们。以下各节将更详细地解释FailureDefinition. conf FailureDefinition（）方法参数。</p>
+<p>代码区域26-1：定义和注册故障</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">WallWarnUpdater wallUpdater = <span class="keyword">new</span> WallWarnUpdater();</span><br><span class="line">UpdaterRegistry.RegisterUpdater(wallUpdater);</span><br><span class="line">ElementClassFilter filter = <span class="keyword">new</span> ElementClassFilter(<span class="keyword">typeof</span>(Wall));</span><br><span class="line">UpdaterRegistry.AddTrigger(wallUpdater.GetUpdaterId(), filter, Element.GetChangeTypeGeometry());</span><br><span class="line"></span><br><span class="line"><span class="comment">// define a new failure id for a warning about walls</span></span><br><span class="line">FailureDefinitionId warnId = <span class="keyword">new</span> FailureDefinitionId(<span class="keyword">new</span> Guid(<span class="string">&quot;FB4F5AF3-42BB-4371-B559-FB1648D5B4D1&quot;</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// register the new warning using FailureDefinition</span></span><br><span class="line">FailureDefinition failDef = FailureDefinition.CreateFailureDefinition(warnId, FailureSeverity.Warning, <span class="string">&quot;Wall is too big (&gt;100&#x27;). Performance problems may result.&quot;</span>);</span><br><span class="line"></span><br><span class="line">FailureDefinitionId failId = <span class="keyword">new</span> FailureDefinitionId(<span class="keyword">new</span> Guid(<span class="string">&quot;691E5825-93DC-4f5c-9290-8072A4B631BC&quot;</span>));</span><br><span class="line"></span><br><span class="line">FailureDefinition failDefError = FailureDefinition.CreateFailureDefinition(failId, FailureSeverity.Error, <span class="string">&quot;Wall is WAY too big (&gt;200&#x27;). Performance problems may result.&quot;</span>);</span><br><span class="line"><span class="comment">// save ids for later reference</span></span><br><span class="line">wallUpdater.WarnId = warnId;</span><br><span class="line">wallUpdater.FailureId = failId;</span><br></pre></td></tr></table></figure>
+
+<p><strong>故障排除Id</strong></p>
+<p>必须使用唯一的FailureDefinition Id作为注册FailureDefinition的键。应使用故障诊断生成工具创建每个唯一的故障诊断ID。稍后，可以使用FailureDefinition Id在FailureDefinition Registry中查找FailureDefinition，并创建和发布FailureMessages。</p>
+<p><strong>严重程度</strong></p>
+<p>注册新故障时，将指定严重性，沿着指定FailureValidationId和可向用户显示的故障文本描述。严重性决定了文档中允许的操作以及是否可以提交事务。严重性选项包括：</p>
+<ul>
+<li><em><strong>Warning</strong></em> - 最终用户可以忽略的故障。此严重性的故障不会阻止提交事务。当Revit需要向用户传达问题，但该问题不会阻止用户继续处理文档时，应使用此严重性</li>
+<li><em><strong>Error</strong></em> - 无法忽略的故障。如果发布了此严重性的FailureMeassage，则无法提交当前事务，除非通过适当的FailureResolution解决故障。如果问题未解决，则文档上的工作无法继续，则应使用此严重性。如果故障没有可用的预定义解决方案或这些解决方案无法解决问题，则必须中止事务以继续处理文档。强烈建议在此严重性的每个故障中至少有一个解决方案。</li>
+<li><em><strong>DocumentCorruption</strong></em> - 由于已知的文档损坏而强制事务尽快回滚的失败。当发布此严重性的故障时，不允许从文档中阅读信息。必须先回滚当前事务才能处理文档。仅当文档中存在已知的数据损坏时才使用此严重性。通常应避免这种类型的故障，除非无法防止损坏或在本地进行恢复。</li>
+</ul>
+<p>定义新的FailureDefinition时，不能指定第四个严重性None。</p>
+<p><strong>故障解决方案</strong></p>
+<p>当故障可以解决时，所有可能的解决方案都应该在FailureDefinition类中预定义。这将通知Revit针对给定故障可能使用的故障解决方案。FailureDefinition包含适用于故障的解决方案类型的完整列表，包括用户可见的解决方案标题。</p>
+<p>解决方案的数量不受限制，但从2011年Revit API开始，唯一公开的故障解决方案是DeleteElements。当指定多个分辨率时，除非使用SetDefaultResolutionType（）方法显式更改，否则添加的第一个分辨率将成为默认分辨率。默认分辨率由Revit故障处理机制用于在适用时自动解决故障。Revit UI仅使用默认分辨率，但Revit附加模块可以通过Revit API使用任何适用的分辨率，并可以提供用于执行此操作的替代UI（如本章后面的“处理故障”部分所述）。</p>
+<p>在严重性为DocumentCorruption的故障的情况下，在故障解决可能发生时，事务已经中止，因此没有什么需要解决的。因此，不应将FailureResolutions添加到严重性为DocumentCorruption的API定义的故障中。</p>
+<p><strong>发布故障</strong></p>
+<p>PostFailure（）方法用于将问题通知给文档。失败将被验证，并可能在事务结束时解决。通过此方法发布的错误在解决后将不会存储在文档中。失败过帐用于处理文档的状态，该状态可能在事务结束之前发生更改，或者在有必要将解决方案推迟到事务结束时发生更改。并非外部命令遇到的所有失败都应该发布失败。如果失败与文档无关，则应使用任务对话框。例如，如果Revit UI处于无效状态，则无法执行外部命令。</p>
+<p>若要发布故障，请使用定义自定义故障时的FailureFailitionId创建新的FailureMessage，或使用Revit API提供的BuiltInFailure。在FailureMessage对象中设置任何其他信息，如失败元素，然后调用Document.PostFailure（），传入新的FailureMessage。请注意，文档必须是可修改的，才能发布失败。</p>
+<p>PostFailure（）返回的唯一FailureMessageKey可以在事务的生命周期内存储，并用于删除不再相关的失败消息。如果相同的FailureMessage被发布两次或更多次，则返回相同的FailureMessageKey。如果发布的故障的严重性为DocumentCorruption，则返回无效的FailureMessageKey。这是因为无法取消发布DocumentCorruption失败。</p>
+<p>下面的示例显示一个IUpdate类（在上面的“定义和注册故障”代码区域中引用），该类根据Execute（）方法中接收到的信息发布新故障。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">WallWarnUpdater</span> : <span class="title">IUpdater</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span> AddInId m_appId;</span><br><span class="line">    UpdaterId m_updaterId;</span><br><span class="line">    FailureDefinitionId m_failureId = <span class="literal">null</span>;</span><br><span class="line">    FailureDefinitionId m_warnId = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// constructor takes the AddInId for the add-in associated with this updater</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WallWarnUpdater</span>(<span class="params">AddInId id</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        m_appId = id;</span><br><span class="line">        m_updaterId = <span class="keyword">new</span> UpdaterId(m_appId, </span><br><span class="line">            <span class="keyword">new</span> Guid(<span class="string">&quot;69797663-7BCB-44f9-B756-E4189FE0DED8&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Execute</span>(<span class="params">UpdaterData data</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Document doc = data.GetDocument();</span><br><span class="line">        Autodesk.Revit.ApplicationServices.Application app = doc.Application;</span><br><span class="line">        <span class="keyword">foreach</span> (ElementId id <span class="keyword">in</span> data.GetModifiedElementIds())</span><br><span class="line">        &#123;</span><br><span class="line">            Wall wall = doc.GetElement(id) <span class="keyword">as</span> Wall;</span><br><span class="line">            Autodesk.Revit.DB.Parameter p = wall.LookupParameter(<span class="string">&quot;Unconnected Height&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (p != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (p.AsDouble() &gt; <span class="number">200</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    FailureMessage failMessage = <span class="keyword">new</span> FailureMessage(FailureId);</span><br><span class="line">                    failMessage.SetFailingElement(id);</span><br><span class="line">                    doc.PostFailure(failMessage);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (p.AsDouble() &gt; <span class="number">100</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    FailureMessage failMessage = <span class="keyword">new</span> FailureMessage(WarnId);</span><br><span class="line">                    failMessage.SetFailingElement(id);</span><br><span class="line">                    doc.PostFailure(failMessage);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> FailureDefinitionId FailureId</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">return</span> m_failureId; &#125;</span><br><span class="line">        <span class="keyword">set</span> &#123; m_failureId = <span class="keyword">value</span>; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> FailureDefinitionId WarnId</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">return</span> m_warnId; &#125;</span><br><span class="line">        <span class="keyword">set</span> &#123; m_warnId = <span class="keyword">value</span>; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetAdditionalInformation</span>()</span> </span><br><span class="line">    &#123; </span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Give warning and error if wall is too tall&quot;</span>; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ChangePriority <span class="title">GetChangePriority</span>()</span> </span><br><span class="line">    &#123; </span><br><span class="line">        <span class="keyword">return</span> ChangePriority.FloorsRoofsStructuralWalls; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> UpdaterId <span class="title">GetUpdaterId</span>()</span> </span><br><span class="line">    &#123; </span><br><span class="line">        <span class="keyword">return</span> m_updaterId; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetUpdaterName</span>()</span> </span><br><span class="line">    &#123; </span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Wall Height Check&quot;</span>; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>删除已发布的故障</strong></p>
+<p>由于在同一事务中可能存在对文档的多次更改和多次重新生成，因此可能有些故障不再相关，并且可能需要将其删除以防止“假警报”。通过调用Document.UnpostFailure（）方法并传入在调用PostFailure（）时获得的FailureMessageKey，可以取消发送特定的消息。如果失败的严重性是DocumentCorruption，UnpostFailure（）将抛出异常。</p>
+<p>当事务即将回滚时，还可以使用Transaction.SetFailureHandlingOptions（）方法自动删除所有已发布的失败（以便用户不必点击取消）。</p>
+<h2 id="处理故障"><a href="#处理故障" class="headerlink" title="处理故障"></a>处理故障</h2><p>通常，在事务结束时（特别是在调用Transaction.Commit（）或Transaction.Rollback（）时），由Revit的标准故障解决UI处理发布的故障。向用户呈现处理故障的信息和选项。</p>
+<p>如果文档上的某个操作（或一组操作）需要Revit附加模块对某些错误进行特殊处理，则可以自定义故障处理以执行此解决方案。可提供自定义故障处理：</p>
+<ul>
+<li>对于使用接口IFailuresPreprocessor的给定事务。</li>
+<li>对于使用FailuresProcessing事件的所有可能的错误。</li>
+</ul>
+<p>最后，该API提供了使用接口IFailuresProcessor完全替换标准故障处理用户界面的能力。虽然前两种处理故障的方法在大多数情况下应该足够了，但最后一个选项可以用于特殊情况，例如提供更好的故障处理UI或将应用程序用作Revit上的前端时。</p>
+<p><strong>故障处理概述</strong></p>
+<p>重要的是要记住，在调用Transaction.Commit（）和实际处理失败之间会发生许多事情。自动连接、重叠检查、组检查和工作集可编辑性检查仅举几例。这些检查和更改可能会使某些故障消失，或者更有可能会发布新的故障。因此，无法得出调用Transaction.Commit（）时要处理的故障状态的结论。为了正确处理故障，有必要连接到实际的故障处理机制。</p>
+<p>当失败处理开始时，对应该在事务中进行的文档的所有更改都将被执行，并且所有失败都将被发布。因此，在故障处理期间，不允许对文档进行不受控的更改。通过FailuresAccessor提供的受限接口解决故障的能力有限。如果发生这种情况，则必须重复所有事务结束检查和失败处理。因此，在一个事务结束时可能会有几个故障解决周期。</p>
+<p>每个故障处理周期包括3个步骤：</p>
+<ol>
+<li>故障预处理（FailuresPreprocessor）</li>
+<li>广播故障处理事件（FailuresProcessing事件）</li>
+<li>最终处理（FailuresProcessor）</li>
+</ol>
+<p>这3个步骤中的每一个都可以通过返回不同的FailureProcessingResults来控制接下来发生的事情。这些选项包括：</p>
+<ul>
+<li><em><strong>Continue</strong></em> - 对执行流没有影响。如果FailuresProcessor返回“Continue”（继续），但未解决故障，则Revit将按照返回“ProceedWithRollBack”的方式进行操作。</li>
+<li><em><strong>ProceedWithCommit</strong></em> - 中断故障处理，并立即触发另一个事务结束检查循环，然后进行另一个故障处理。在尝试解决故障后应返回。如果返回时没有任何成功的故障解决方案，则很容易导致无限循环。如果事务已经在回滚，则无法返回，在这种情况下将被视为“ProceedWithRollBack”。</li>
+<li><em><strong>ProceedWithRollback</strong></em> -继续执行失败处理，但强制回滚事务，即使最初请求提交事务也是如此。如果在返回ProceedWithRollBack之前，FailureHandlingOptions被设置为在回滚后清除错误，则不会进行进一步的错误处理，所有失败都将被删除，事务将以静默方式回滚。否则，默认的失败处理将继续，失败可能会传递给用户，但保证事务被回滚。</li>
+<li><em><strong>WaitForUserInput</strong></em> -只有当FailuresProcessor正在等待外部事件（通常是用户输入）来完成故障处理时，才能返回。</li>
+</ul>
+<p>根据事务中发布的故障的严重性以及事务是正在提交还是正在回滚，这3个步骤中的每一个都可能具有某些解决错误的选项。有关文档中发布的故障的所有信息、有关执行某些操作以解决故障的能力的信息以及执行此类操作的API都通过FailuresAccessor类提供。文档可用于获取其他信息，但只能通过FailuresAccessor进行更改。</p>
+<p><strong>故障访问器</strong></p>
+<p>FailuresAccessor对象作为参数传递给每个失败处理步骤，并且是获取文档中有关失败的信息的唯一可用接口。虽然允许在故障处理期间阅读文档，但在故障解决期间修改文档的唯一方法是通过此类提供的方法。从失败处理返回后，类的实例被停用，不能再使用。</p>
+<p><strong>故障访问器提供的信息</strong></p>
+<p>FailuresAccessor对象提供了一些通用信息，例如：</p>
+<ul>
+<li>正在处理或预处理失败的文档</li>
+<li>文档中公布的最高失效严重度</li>
+<li>正在完成的事务的事务名称和失败处理选项</li>
+<li>是否请求提交或回滚事务。</li>
+</ul>
+<p>FailuresAccessor对象还通过GetFailuresMessages（）方法提供有关特定故障的信息。</p>
+<p><strong>解决故障的选项</strong></p>
+<p>FailuresAccessor对象提供了几种解决故障的方法：</p>
+<ul>
+<li>可以使用DeleteWarning（）或DeleteAllWarning（）方法删除严重性为Warning的故障消息。</li>
+<li>ResolveFailure（）或ResolveFailures（）方法可用于使用为每个故障设置的最后一个故障解决类型来解决一个或多个故障。</li>
+<li>DeleteElements（）可以通过删除与失败相关的元素来解决失败。</li>
+<li>或者使用ReplaceFailures（）方法删除所有失败消息并将其替换为一个“一般”失败。</li>
+</ul>
+<p><strong>IFailuresPreprocessor</strong></p>
+<p>IFailuresPreprocessor接口可用于仅为特定事务提供自定义故障处理。IFailuresPreprocessor是一个接口，可用于执行预处理步骤，以过滤掉预期的事务失败或发布新的失败。故障可以通过以下方式“过滤掉”：</p>
+<ul>
+<li>静默地移除已知为事务发布的并且在特定事务的上下文中被认为与用户无关的警告</li>
+<li>静默地解决已知为事务发布的某些故障，并且这些故障应始终在给定事务的上下文中解决</li>
+<li>对于给定的工作流，在不应提交“不完美”事务的情况下静默地中止事务或者中止事务比用户交互更可取。</li>
+</ul>
+<p>IFailuresPreprocessor接口在故障解决过程中首先获得控制权。它几乎等同于在完成事务之前检查和解决故障，除了IFailuresPreprocessor在正确的时间获得控制权，在所有故障保证被发布和&#x2F;或所有不相关的被删除之后。</p>
+<p>每个事务只能有一个IFailuresPreprocessor，并且没有默认的故障预处理器。如果没有附加到事务（通过故障处理选项），则简单地省略故障解决的第一步。</p>
+<p>代码区域26-3：处理来自IFailuresPreprocessor的故障</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SwallowTransactionWarning</span> : <span class="title">IExternalCommand</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">public</span> Autodesk.Revit.UI.<span class="function">Result <span class="title">Execute</span>(<span class="params">ExternalCommandData commandData, <span class="keyword">ref</span> <span class="built_in">string</span> message, ElementSet elements</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                Autodesk.Revit.ApplicationServices.Application app =</span><br><span class="line">                        commandData.Application.Application;</span><br><span class="line">                Document doc = commandData.Application.ActiveUIDocument.Document;</span><br><span class="line">                UIDocument uidoc = commandData.Application.ActiveUIDocument;</span><br><span class="line"></span><br><span class="line">                FilteredElementCollector collector = <span class="keyword">new</span> FilteredElementCollector(doc);</span><br><span class="line">                ICollection elementCollection =</span><br><span class="line">                        collector.OfClass(<span class="keyword">typeof</span>(Level)).ToElements();</span><br><span class="line">                Level level = elementCollection.Cast().ElementAt(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">                Transaction t = <span class="keyword">new</span> Transaction(doc);</span><br><span class="line">                t.Start(<span class="string">&quot;room&quot;</span>);</span><br><span class="line">                FailureHandlingOptions failOpt = t.GetFailureHandlingOptions();</span><br><span class="line">                failOpt.SetFailuresPreprocessor(<span class="keyword">new</span> RoomWarningSwallower());</span><br><span class="line">                t.SetFailureHandlingOptions(failOpt);</span><br><span class="line"></span><br><span class="line">                doc.Create.NewRoom(level, <span class="keyword">new</span> UV(<span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">                t.Commit();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> Autodesk.Revit.UI.Result.Succeeded;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">RoomWarningSwallower</span> : <span class="title">IFailuresPreprocessor</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> FailureProcessingResult <span class="title">PreprocessFailures</span>(<span class="params">FailuresAccessor failuresAccessor</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                IList failList = <span class="keyword">new</span> List();</span><br><span class="line">                <span class="comment">// Inside event handler, get all warnings</span></span><br><span class="line">                failList = failuresAccessor.GetFailureMessages();                <span class="keyword">foreach</span> (FailureMessageAccessor failure <span class="keyword">in</span> failList)</span><br><span class="line">                &#123; </span><br><span class="line">                        <span class="comment">// check FailureDefinitionIds against ones that you want to dismiss, FailureDefinitionId failID = failure.GetFailureDefinitionId();</span></span><br><span class="line">                        <span class="comment">// prevent Revit from showing Unenclosed room warnings</span></span><br><span class="line">                        <span class="keyword">if</span> (failID == BuiltInFailures.RoomFailures.RoomNotEnclosed)</span><br><span class="line">                        &#123;</span><br><span class="line">                                failuresAccessor.DeleteWarning(failure);</span><br><span class="line">                        &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> FailureProcessingResult.Continue;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>故障处理事件</strong></p>
+<p>FailuresProcessing事件最适合于希望在没有用户界面的情况下为整个会话或许多不相关的事务提供自定义故障处理的应用程序。通过此事件处理故障的一些用例包括：</p>
+<ul>
+<li>自动删除某些警告和&#x2F;或基于办公室标准（或其他准则）自动解决某些错误</li>
+<li>自定义故障记录</li>
+</ul>
+<p>FailuresProcessing事件在IFailuresPreprocessor（如果有）完成后引发。它可以有任意数量的处理程序，并且所有的处理程序都将被调用。由于事件处理程序无法返回值，因此应该使用事件参数上的SetProcessingResult（）来传递状态。只能设置Continue、ProceedWithRollback或ProceedWithCommit。</p>
+<p>下面的示例演示FailuresProcessing事件的事件处理程序。</p>
+<p>代码区域26-4：处理FailuresProcessing事件</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">CheckWarnings</span>(<span class="params"><span class="built_in">object</span> sender, FailuresProcessingEventArgs e</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">        FailuresAccessor fa = e.GetFailuresAccessor();</span><br><span class="line">        IList failList = <span class="keyword">new</span> List();</span><br><span class="line">        failList = fa.GetFailureMessages(); <span class="comment">// Inside event handler, get all warnings</span></span><br><span class="line">        <span class="keyword">foreach</span> (FailureMessageAccessor failure <span class="keyword">in</span> failList)</span><br><span class="line">        &#123; </span><br><span class="line"></span><br><span class="line">                <span class="comment">// check FailureDefinitionIds against ones that you want to dismiss, FailureDefinitionId failID = failure.GetFailureDefinitionId();</span></span><br><span class="line">                <span class="comment">// prevent Revit from showing Unenclosed room warnings</span></span><br><span class="line">                <span class="keyword">if</span> (failID == BuiltInFailures.RoomFailures.RoomNotEnclosed)</span><br><span class="line">                &#123;</span><br><span class="line">                        fa.DeleteWarning(failure);</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>故障处理器</strong></p>
+<p>在处理FailuresProcessing事件之后，IFailuresProcessor接口最后获得控制权。Revit任务中只有一个活动IFailuresProcessor。要注册故障处理器，从IFailuresProcessor派生一个类，并使用Application.RegisterFailuresProcessor（）方法注册它。如果先前注册的处理器出现故障，则将其丢弃。如果Revit附加模块选择为Revit注册故障处理器，则该处理器将成为任务中所有Revit错误的默认错误处理程序，并且不会显示标准的Revit错误对话框。如果未设置故障处理器，则Revit UI中有一个默认的故障处理器，用于调用所有常规的Revit错误对话框。只有在使用自定义故障解决处理程序（可以是交互式的，也可以没有用户界面）替换现有Revit故障UI时，才应覆盖FailuresProcessor。</p>
+<p>如果传递给RegisterFailuresProcessor（）方法NULL，则任何失败的事务都将被静默中止（除非通过前两个失败处理步骤解决了失败）。</p>
+<p>允许IFailuresProcessor.ProcessFailures（）方法返回WaitForUserInput，这将使事务挂起。在这种情况下，预计FailuresProcessor会在屏幕上留下一些UI，这些UI最终将提交或回滚挂起的事务-否则挂起状态将无限期地持续下去，基本上会冻结文档。</p>
+<p>以下实现IFailuresProcessor的示例检查故障，删除失败的元素并为用户设置适当的消息。</p>
+<p>代码区域26-5：IFailuresProcessor</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.Manual)</span>]<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyFailuresUI</span> : <span class="title">IExternalApplication</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">static</span> AddInId m_appId = <span class="keyword">new</span> AddInId(<span class="keyword">new</span> Guid(<span class="string">&quot;9F179363-B349-4541-823F-A2DDB2B86AF3&quot;</span>));</span><br><span class="line">        <span class="keyword">public</span> Autodesk.Revit.UI.<span class="function">Result <span class="title">OnStartup</span>(<span class="params">UIControlledApplication uiControlledApplication</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                IFailuresProcessor myFailUI = <span class="keyword">new</span> FailUI();</span><br><span class="line">                Autodesk.Revit.ApplicationServices.Application.RegisterFailuresProcessor(myFailUI);</span><br><span class="line">                <span class="keyword">return</span> Result.Succeeded;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Autodesk.Revit.UI.<span class="function">Result <span class="title">OnShutdown</span>(<span class="params">UIControlledApplication application</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">return</span> Result.Succeeded;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">FailUI</span> : <span class="title">IFailuresProcessor</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Dismiss</span>(<span class="params">Document document</span>)</span></span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="comment">// This method is being called in case of exception or document destruction to </span></span><br><span class="line">                        <span class="comment">// dismiss any possible pending failure UI that may have left on the screen</span></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="function"><span class="keyword">public</span> FailureProcessingResult <span class="title">ProcessFailures</span>(<span class="params">FailuresAccessor failuresAccessor</span>)</span></span><br><span class="line">                &#123;</span><br><span class="line">                        IList resolutionTypeList =</span><br><span class="line">                                <span class="keyword">new</span> List(); </span><br><span class="line">                        IList failList = <span class="keyword">new</span> List();</span><br><span class="line">                        <span class="comment">// Inside event handler, get all warnings</span></span><br><span class="line">                        failList = failuresAccessor.GetFailureMessages(); </span><br><span class="line">                        <span class="built_in">string</span> errorString = <span class="string">&quot;&quot;</span>;</span><br><span class="line">                        <span class="built_in">bool</span> hasFailures = <span class="literal">false</span>;</span><br><span class="line">                        <span class="keyword">foreach</span> (FailureMessageAccessor failure <span class="keyword">in</span> failList)</span><br><span class="line">                        &#123;</span><br><span class="line"></span><br><span class="line">                                <span class="comment">// check how many resolutions types were attempted to try to prevent</span></span><br><span class="line">                                <span class="comment">// entering infinite loop</span></span><br><span class="line">                                resolutionTypeList = </span><br><span class="line">                                        failuresAccessor.GetAttemptedResolutionTypes(failure);</span><br><span class="line">                                <span class="keyword">if</span> (resolutionTypeList.Count &gt;= <span class="number">3</span>)</span><br><span class="line">                                &#123;</span><br><span class="line">                                        TaskDialog.Show(<span class="string">&quot;Error&quot;</span>, <span class="string">&quot;Cannot resolve failures - transaction will be rolled back.&quot;</span>);</span><br><span class="line">                                        <span class="keyword">return</span> FailureProcessingResult.ProceedWithRollBack;</span><br><span class="line">                                &#125;</span><br><span class="line"></span><br><span class="line">                                errorString += <span class="string">&quot;IDs &quot;</span>;</span><br><span class="line">                                <span class="keyword">foreach</span> (ElementId id <span class="keyword">in</span> failure.GetFailingElementIds())</span><br><span class="line">                                &#123;</span><br><span class="line">                                        errorString += id + <span class="string">&quot;, &quot;</span>;</span><br><span class="line">                                        hasFailures = <span class="literal">true</span>;</span><br><span class="line">                                &#125;</span><br><span class="line">                                errorString += <span class="string">&quot;\nWill be deleted because: &quot;</span> + failure.GetDescriptionText() + <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">                                failuresAccessor.DeleteElements(</span><br><span class="line">                                                        failure.GetFailingElementIds() <span class="keyword">as</span> IList);</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">if</span> (hasFailures)</span><br><span class="line">                        &#123;</span><br><span class="line">                                TaskDialog.Show(<span class="string">&quot;Error&quot;</span>, errorString);</span><br><span class="line">                                <span class="keyword">return</span> FailureProcessingResult.ProceedWithCommit;</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">return</span> FailureProcessingResult.Continue;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="注：翻译自Revit-API-Developers-Guide"><a href="#注：翻译自Revit-API-Developers-Guide" class="headerlink" title="注：翻译自Revit API Developers Guide"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/RVT/2018/ENU/?guid=Revit_API_Revit_API_Developers_Guide_html">Revit API Developers Guide</a></h2></article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Revit/">Revit</a></div><div class="post-share"><div class="social-share" data-image="/images/4stars.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/30/Revit%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/35%E6%80%A7%E8%83%BD%E9%A1%BE%E9%97%AE/" title="35性能顾问"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">35性能顾问</div></div><div class="info-2"><div class="info-item-1">性能顾问Revit API的性能顾问功能旨在分析文档，并为用户标记可能导致性能下降的任何元素和&#x2F;或设置。Performance Adviser命令执行一组规则并在标准审阅警告对话框中显示其结果。 性能顾问的API由两个类组成：  PerformanceAdviser -一个应用程序范围的对象，具有双重角色，既可以作为运行的规则注册表，以检测潜在的性能问题，也可以作为执行这些问题的引擎 IPerformanceAdviserRule - 允许您为Performance...</div></div></div></a><a class="pagination-related" href="/2024/12/30/Revit%E4%BA%8C%E5%BC%80%E6%8C%87%E5%8D%97/27%E6%9C%BA%E7%94%B5%E5%B7%A5%E7%A8%8B/" title="27机电工程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">27机电工程</div></div><div class="info-2"><div class="info-item-1">机电工程为了支持Revit软件的MEP工程功能，API提供了对Revit模型中HVAC和管道数据的读写访问，包括：  在系统中穿过风管、管道、管件和接头 添加、删除和更改风管、管道和其他设备 获取和设置系统属性 确定系统是否连接良好 访问机械设置 管理布管配置  本节中的页面  MEP元素创建 MEP系统 连接器 MEP预制件详述 族创建 机械设置 电气设置 布管系统配置  MEP元素创建可以使用Revit API创建MEP图元。 可以使用Autodesk.Revit.Creation.Document类中提供的以下方法创建与风管、管道和电气系统相关的许多图元：  NewFlexDuct NewFlexPipe NewMechanicalSystem  NewPipingSystem NewCrossFitting NewElbowFitting  NewTakeoffFitting  NewTeeFitting  NewTransitionFitting...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.RevitAddIns%20Namespace/" title="Autodesk.RevitAddIns Namespace"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-18</div><div class="info-item-2">Autodesk.RevitAddIns Namespace</div></div><div class="info-2"><div class="info-item-1">Autodesk.RevitAddIns Namespace类AddInManifestUtility此静态类提供从 Revit .addin 文件中读取清单内容的访问。   方法  GetRevitAddInBundleManifests  GetRevitAddInManifest  GetRevitAddInManifests     RevitAddInApplication表示 Revit 外部应用程序。  构造器  RevitAddInApplication 创建 external application info 类的新实例。    属性  Name  Application name    继承关系  System.Object  Autodesk.RevitAddIns.RevitAddInItem  Autodesk.RevitAddIns.RevitAddInApplication    RevitAddInCommand表示 Revit 外部命令。  构造器  RevitAddInCommand 创建 Add-In Command info...</div></div></div></a><a class="pagination-related" href="/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20CurveArray/" title="Autodesk.Revit.DB CurveArray"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-18</div><div class="info-item-2">Autodesk.Revit.DB CurveArray</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB CurveArray可以包含曲线的数组。 语法1public class CurveArray : APIObject, IEnumerable  继承层次结构System Object ​	Autodesk.Revit.DB APIObject ​		Autodesk.Revit.DB CurveArray 另见CurveArray Members Autodesk.Revit.DB Namespace 构造函数CurveArray创建CurveArray类的新实例 方法Append将曲线添加到数组的末尾。 Clear从数组中删除每条曲线，使其为空。 ForwardIterator将一个向前移动的迭代器添加到数组中。 GetEnumerator将一个向前移动的迭代器添加到数组中。 Insert将指定的曲线插入数组。 ReverseIterator返回一个向后移动的迭代器到数组。 属性IsEmpty测试数组是否为空。 Item获取或设置数组中指定索引处的曲线。 Size返回数组中的曲线数。 注：翻译自Revit Api docs 2018</div></div></div></a><a class="pagination-related" href="/2024/12/10/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20Opening/" title="Autodesk.Revit.DB Opening"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Autodesk.Revit.DB Opening</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB OpeningAutodesk Revit项目或族文档中的洞口。 语法1public class Opening : Element  附注该对象表示各种不同类型的洞口：  墙中由修订项目中的两个边界点创建的矩形洞口。 由应用于屋顶、楼板、天花板、梁、支撑或柱的一组曲线创建的洞口。 一个垂直的竖井开口延伸到一个或多个水平。 在族文档中的墙或天花板上创建的简单洞口。  根据打开的类型，此类的某些属性将不可用。 这个对象派生自Element基对象，并且支持该对象的所有方法，例如检索该对象的参数的能力。此对象还支持访问结构分析模型，但此功能仅适用于Autodesk Revit Structure。 示例123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051### private void Getinfo_Opening(Opening opening)&#123;    string message =...</div></div></div></a><a class="pagination-related" href="/2024/12/10/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20ReferenceIntersector/" title="Autodesk.Revit.DB ReferenceIntersector"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-10</div><div class="info-item-2">Autodesk.Revit.DB ReferenceIntersector</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB ReferenceIntersector用于查找和返回与从原点和方向创建的射线相交的元素的类。 语法1public class ReferenceIntersector : IDisposable    附注可以构造此类的实例，以返回与由原点和方向创建的射线，或者基于过滤和标志返回元素的子集。 调用者可以选择使用ElementFilter过滤结果，或者通过应用特定的可接受的元素。 调用方还可以指定要返回的对象的类型， 整个元素、几何体对象或其组合。 在所有情况下，要求调用者提供 用于评估的3D视图;输入视图上的视图和可见性设置将确定 返回特定元素（例如，此工具永远不会返回隐藏元素、 和几何图形位于视图剖面框之外的元素）。 该类配置为可以构建单个实例，并用于对多个不同光线进行多次评估。在同一个 ReferenceIntersector 上的调用之间，评估结果不会被保留。 该类还提供了一个选项，用于返回在Revit链接中遇到的图元结果。 当设置 FindReferencesInRevitLinks 标志...</div></div></div></a><a class="pagination-related" href="/2024/12/19/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.UI.Selection%20Namespace/" title="Autodesk.Revit.UI.Selection"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-19</div><div class="info-item-2">Autodesk.Revit.UI.Selection</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.UI.SelectionClassesPickedBox包含两个 XYZ 点的类，表示屏幕上的选取框。  Properties  Max 最大坐标数（拾取框的右上角）。  Min 最小坐标（拾取框的左下角）。     SelectableInViewFilter一个过滤器，用于传递在给定视图中可选的元素。  Constructors  SelectableInViewFilter  (Document, ElementId) 构造 SelectableInViewFilter 的新实例。  SelectableInViewFilter (Document, ElementId, Boolean) 构造 SelectableInViewFilter 的新实例，并可选择传递所有不可选择的元素。    Methods  PassesFilter(Element) 将筛选器应用于给定元素。  PassesFilter(Document,...</div></div></div></a><a class="pagination-related" href="/2024/12/20/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20Transform/" title="Autodesk.Revit.DB Transform"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-20</div><div class="info-item-2">Autodesk.Revit.DB Transform</div></div><div class="info-2"><div class="info-item-1">Autodesk.Revit.DB Transform仿射三维空间的一个变换。 语法public class Transform : APIObject示例12345678910111213141516171819202122### public static XYZ TransformPoint(XYZ point, Transform transform)&#123;    double x = point.X;    double y = point.Y;    double z = point.Z;    //transform basis of the old coordinate system in the new coordinate // system    XYZ b0 = transform.get_Basis(0);    XYZ b1 = transform.get_Basis(1);    XYZ b2 = transform.get_Basis(2);    XYZ origin = transform.Origin;       ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/4stars.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">funtim41@gmail.com</div><div class="author-info-description">实践-认识-再实践-再认识</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/FunTim41"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/FunTim41" target="_blank" title="Github"><i class="fab fa-github" style="color: #FFFFFF;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%85%E9%9A%9C%E5%8F%91%E5%B8%83%E5%92%8C%E5%A4%84%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">故障发布和处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E6%95%85%E9%9A%9C"><span class="toc-number">1.1.</span> <span class="toc-text">发布故障</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E6%95%85%E9%9A%9C"><span class="toc-number">1.2.</span> <span class="toc-text">处理故障</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%EF%BC%9A%E7%BF%BB%E8%AF%91%E8%87%AARevit-API-Developers-Guide"><span class="toc-number">1.3.</span> <span class="toc-text">注：翻译自Revit API Developers Guide</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/30/CAD%E4%BA%8C%E5%BC%80/AddInManager/" title="AddInManager">AddInManager</a><time datetime="2025-01-08T13:10:14.606Z" title="更新于 2025-01-08 21:10:14">2025-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/08/%E5%8D%9A%E5%AE%A2%E9%85%8D%E7%BD%AE/Hexo+Butterfly%E4%BB%A3%E7%A0%81%E5%9D%97%E6%B0%B4%E5%B9%B3%E6%BB%9A%E5%8A%A8%E6%9D%A1/" title="Hexo+Butterfly代码块水平滚动条">Hexo+Butterfly代码块水平滚动条</a><time datetime="2025-01-08T04:24:42.742Z" title="更新于 2025-01-08 12:24:42">2025-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/05/CAD%E4%BA%8C%E5%BC%80/01%E5%9B%BE%E5%B1%82%E7%9A%84%E5%A2%9E%E5%88%A0%E6%9F%A5/" title="01图层的增删查">01图层的增删查</a><time datetime="2025-01-06T02:26:57.051Z" title="更新于 2025-01-06 10:26:57">2025-01-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.RevitAddIns%20Namespace/" title="Autodesk.RevitAddIns Namespace">Autodesk.RevitAddIns Namespace</a><time datetime="2025-01-05T09:13:27.547Z" title="更新于 2025-01-05 17:13:27">2025-01-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/18/RevitApi%E5%90%88%E9%9B%86/Autodesk.Revit.DB%20CurveArray/" title="Autodesk.Revit.DB CurveArray">Autodesk.Revit.DB CurveArray</a><time datetime="2025-01-04T02:50:53.238Z" title="更新于 2025-01-04 10:50:53">2025-01-04</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/images/topback.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By funtim41@gmail.com</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">学而不思则罔，思而不学则殆。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>(() => {
+  const panguFn = () => {
+    if (typeof pangu === 'object') pangu.autoSpacingPage()
+    else {
+      btf.getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+        .then(() => {
+          pangu.autoSpacingPage()
+        })
+    }
+  }
+
+  const panguInit = () => {
+    if (false){
+      GLOBAL_CONFIG_SITE.isPost && panguFn()
+    } else {
+      panguFn()
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', panguInit, 'pangu')
+  document.addEventListener('DOMContentLoaded', panguInit)
+})()</script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'FunTim41/funtim41.github.io',
+      'data-repo-id': 'R_kgDONjG8ww',
+      'data-category-id': 'DIC_kwDONjG8w84Cllg2',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
