@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>AddInManager</title>
+    <url>/2025/01/08/CAD%E4%BA%8C%E5%BC%80/AddInManager/</url>
+    <content><![CDATA[<h1 id="AddInManager"><a href="#AddInManager" class="headerlink" title="AddInManager"></a>AddInManager</h1><p>每次调试cad插件，老是会有占用的问题。网上找到方法就是通过反射解决，但是只找到那个要自己手动配置的，嫌麻烦。GitHub上有个<a href="https://github.com/chuongmep/CadAddinManager">CADAddInManager</a>，用了一下，好像没什么反应，不知道是不是使用方式不对，文档也不详细。索性自己整一个。</p>
+<p>参照Revit SDK 里的那个AddinManager及网上给出的方法。通过反射。把dll复制到临时文件夹，然后委托调用。现在只做了CommandMethod部分的。VS2022+CAD2024。</p>
+<p><img src="/iframe/image-20250108201133703.png" alt="image-20250108201133703"></p>
+<p>使用方式：</p>
+<p>1、先自动加载：</p>
+<p>在cad根目录Support文件夹下找到acad2024.lsp。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(command&quot;netload&quot; &quot;Dll所在文件夹\\CADAddinManagerDemo.dll&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>2、把“引用文件”文件夹下的内容复制到cad根目录中，启动CAD后用“InitAddin”进行初始化，成功后菜单栏会显示“插件管理”UI及显示上图界面。</p>
+<p>3、下次运行可通过菜单栏添加“插件管理”UI或者“ShowAddInManager”进入。</p>
+<p>GitHub链接：<a href="https://github.com/FunTim41/CADAddInLoder">https://github.com/FunTim41/CADAddInLoder</a></p>
+]]></content>
+      <categories>
+        <category>CAD二开学习</category>
+      </categories>
+      <tags>
+        <tag>CAD</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo+Butterfly代码块水平滚动条</title>
     <url>/2025/01/08/%E5%8D%9A%E5%AE%A2%E9%85%8D%E7%BD%AE/Hexo+Butterfly%E4%BB%A3%E7%A0%81%E5%9D%97%E6%B0%B4%E5%B9%B3%E6%BB%9A%E5%8A%A8%E6%9D%A1/</url>
     <content><![CDATA[<h1 id="Hexo-Butterfly代码块水平滚动条"><a href="#Hexo-Butterfly代码块水平滚动条" class="headerlink" title="Hexo+Butterfly代码块水平滚动条"></a>Hexo+Butterfly代码块水平滚动条</h1><p>虽然Butterfly主题有滚动条，但是极其不明显。文档里也没找到配置方式，索性自己整一个。</p>
