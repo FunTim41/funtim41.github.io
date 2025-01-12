@@ -1,0 +1,580 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>01AutoCAD .NET API（.NET）的基础知识 | funtim的博客</title><meta name="author" content="funtim41@gmail.com"><meta name="copyright" content="funtim41@gmail.com"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="AutoCAD .NET API（.NET）的基础知识要有效地使用AutoCAD®.NET API，您应该熟悉与要自动执行的任务相关的AutoCAD图元、对象和功能。对对象的图形和非图形特性了解得越多，就越容易通过AutoCAD .NET API对其进行操作。 本节中的主题  了解AutoCAD对象层次（.NET） 访问对象层次结构（.NET） 集合对象（.NET） 了解属性和方法（.NET） 进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01AutoCAD .NET API（.NET）的基础知识">
+<meta property="og:url" content="https://funtim41.github.io/2025/01/12/ObjectARX%EF%BC%9AManaged.NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/01AutoCAD.NET%20API%EF%BC%88.NET%EF%BC%89%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+<meta property="og:site_name" content="funtim的博客">
+<meta property="og:description" content="AutoCAD .NET API（.NET）的基础知识要有效地使用AutoCAD®.NET API，您应该熟悉与要自动执行的任务相关的AutoCAD图元、对象和功能。对对象的图形和非图形特性了解得越多，就越容易通过AutoCAD .NET API对其进行操作。 本节中的主题  了解AutoCAD对象层次（.NET） 访问对象层次结构（.NET） 集合对象（.NET） 了解属性和方法（.NET） 进">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://funtim41.github.io/images/4stars.png">
+<meta property="article:published_time" content="2025-01-12T15:44:29.000Z">
+<meta property="article:modified_time" content="2025-01-12T15:42:54.439Z">
+<meta property="article:author" content="funtim41@gmail.com">
+<meta property="article:tag" content="CAD">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://funtim41.github.io/images/4stars.png"><link rel="shortcut icon" href="/images/OIP.jfif"><link rel="canonical" href="https://funtim41.github.io/2025/01/12/ObjectARX%EF%BC%9AManaged.NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/01AutoCAD.NET%20API%EF%BC%88.NET%EF%BC%89%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: funtim41@gmail.com","link":"链接: ","source":"来源: funtim的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '01AutoCAD .NET API（.NET）的基础知识',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/css/bar.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background: Color(#995a82);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/4stars.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">55</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/images/topback.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/OIP.jfif" alt="Logo"><span class="site-name">funtim的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">01AutoCAD .NET API（.NET）的基础知识</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">01AutoCAD .NET API（.NET）的基础知识</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-12T15:44:29.000Z" title="发表于 2025-01-12 23:44:29">2025-01-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-01-12T15:42:54.439Z" title="更新于 2025-01-12 23:42:54">2025-01-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ObjectARX%EF%BC%9A%E6%89%98%E7%AE%A1-NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/">ObjectARX：托管.NET开发人员指南</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="AutoCAD-NET-API（-NET）的基础知识"><a href="#AutoCAD-NET-API（-NET）的基础知识" class="headerlink" title="AutoCAD .NET API（.NET）的基础知识"></a>AutoCAD .NET API（.NET）的基础知识</h1><p>要有效地使用AutoCAD®.NET API，您应该熟悉与要自动执行的任务相关的AutoCAD图元、对象和功能。对对象的图形和非图形特性了解得越多，就越容易通过AutoCAD .NET API对其进行操作。</p>
+<p>本节中的主题</p>
+<ul>
+<li>了解AutoCAD对象层次（.NET）</li>
+<li>访问对象层次结构（.NET）</li>
+<li>集合对象（.NET）</li>
+<li>了解属性和方法（.NET）</li>
+<li>进程外与进程内（.NET）</li>
+<li>定义命令和AutoLISP函数（.NET）</li>
+</ul>
+<h2 id="了解AutoCAD对象层次（-NET）"><a href="#了解AutoCAD对象层次（-NET）" class="headerlink" title="了解AutoCAD对象层次（.NET）"></a>了解AutoCAD对象层次（.NET）</h2><p>对象是AutoCAD .NET API的主要构造块。每个暴露的对象都代表AutoCAD的一个精确部分。AutoCAD .NET API中有许多不同类型的对象。AutoCAD .NET API中表示的某些对象包括：</p>
+<ul>
+<li>图形对象，如直线、圆弧、文本和尺寸</li>
+<li>样式设置，如图层、线型和标注样式</li>
+<li>组织结构，如层、组和块</li>
+<li>图形显示，如视图和视口</li>
+<li>甚至绘图和AutoCAD应用程序</li>
+</ul>
+<p>这些对象以分层方式进行结构化，AutoCAD应用程序对象位于根。这种层次结构通常被称为对象模型。下图显示了 Application 对象与 BlockTableRecord （如模型空间）中的图元之间的基本关系。AutoCAD .NET API中还有许多对象未在此处表示。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-1AA8F78F-DF90-4AA4-A975-A06FBF65231C.png"></p>
+<p>本节中的主题</p>
+<ul>
+<li>应用程序对象（.NET）</li>
+<li>文档对象（.NET）</li>
+<li>数据库对象（.NET）</li>
+<li>图形和非图形对象（.NET）</li>
+<li>集合对象（.NET）</li>
+<li>非原生图形和非图形对象（.NET）</li>
+</ul>
+<h3 id="应用程序对象（-NET）"><a href="#应用程序对象（-NET）" class="headerlink" title="应用程序对象（.NET）"></a>应用程序对象（.NET）</h3><p>Application 对象是AutoCAD .NET API的根对象。从Application对象中，可以访问主窗口以及任何打开的图形。一旦有了图形，就可以访问图形中的对象。</p>
+<p>例如， Application 对象有一个返回 DocumentCollection 对象的 DocumentManager 属性。此对象提供对当前在AutoCAD中打开的图形的访问，并允许用户创建、保存和打开图形文件。Application对象的其他属性提供对应用程序特定数据（如信息中心、主窗口和状态栏）的访问。 MainWindow 属性允许访问应用程序名称、大小、位置和可见性。</p>
+<p>虽然Application对象的大多数特性允许访问AutoCAD .NET API中的对象，但也有一些特性引用AutoCAD ActiveX® Automation中的对象。这些属性包括应用程序对象的COM版本（ AcadApplication ）、菜单栏（ MenuBar ）、加载的菜单组（ MenuGroups ）和首选项（ Preferences ）。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-577A2AFF-CBE6-4FED-9F28-B2DCA9064A5D.png"></p>
+<p>DocumentManager<br>所有文档对象的容器（每个打开的图形都有一个文档对象)。</p>
+<p>DocumentWindowCollection<br>所有文档窗口对象的容器（DocumentManager中的每个文档对象都有一个文档窗口对象）。</p>
+<p>InfoCenter  InfoCenter信息<br>包含对信息中心工具栏的引用。</p>
+<p>MainWindow  MainWindow的<br>包含对AutoCAD的应用程序窗口对象的引用。</p>
+<p>MenuBar<br>包含对AutoCAD中菜单栏的MenuBar COM对象的引用。</p>
+<p>MenuGroups<br>包含对MenuGroups COM对象的引用，该对象包含每个加载的CUIx文件的自定义组名称。</p>
+<p>Preferences<br>包含对首选项COM对象的引用，该对象允许您修改“选项”对话框中的许多设置。</p>
+<p>Publisher<br>包含对用于发布图形的Publisher对象的引用。</p>
+<p>StatusBar<br>包含对应用程序窗口的StatusBar对象的引用。</p>
+<p>UserConfigurationManager<br>包含一个对UserconfigureationManager对象的引用，该对象允许您使用用户保存的配置文件。</p>
+<h3 id="文档对象（-NET）"><a href="#文档对象（-NET）" class="headerlink" title="文档对象（.NET）"></a>文档对象（.NET）</h3><p>实际上是AutoCAD图形的 Document 对象是 DocumentCollection 对象的一部分。使用 DocumentExtension 和 DocumentCollectionExtention 对象可以创建、打开和关闭图形文件。 Document 对象提供对 Database 对象的访问，该对象包含所有图形和大多数非图形AutoCAD对象。</p>
+<p>沿着 Database 对象， Document 对象提供对状态栏、打开文档的窗口、 Editor 和 TransactionManager 对象的访问。 Editor 对象提供对用于从用户获取输入的函数的访问，输入的形式为点、输入的字符串或数值。</p>
+<p>TransactionManager 对象用于在称为事务的单个操作下访问多个数据库对象。事务可以嵌套，当您完成事务时，您可以提交或中止所做的更改。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-E8265C60-AD9F-4C53-97B3-AD4CA4474DFA.png"></p>
+<h3 id="数据库对象（-NET）"><a href="#数据库对象（-NET）" class="headerlink" title="数据库对象（.NET）"></a>数据库对象（.NET）</h3><p>Database 对象包含所有图形和大多数非图形AutoCAD对象。数据库中包含的一些对象是实体、符号表和命名字典。数据库中的图元表示图形中的图形对象。直线、圆、圆弧、文字、图案填充和多段线都是图元的示例。用户可以看到屏幕上的实体，并可以操纵它。</p>
+<p>通过 Document 对象的 Database 成员属性访问当前文档的 Database 对象。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Application.DocumentManager.MdiActiveDocument.Database</span><br></pre></td></tr></table></figure>
+
+<p>符号表和字典</p>
+<p>符号表和字典对象提供对非图形对象（块、图层、线型、布局等）的访问。每个图形都包含一组九个固定的符号表，而图形中的字典数量可以根据AutoCAD中使用的应用程序的功能和类型而有所不同。无法将新符号表添加到数据库中。</p>
+<p>符号表的示例包括图层表（LayerTable）和块表（BlockTable），前者包含图层表记录，后者包含块表记录。所有图形实体（线、圆、弧等）都属于块表记录。默认情况下，每个图形都包含模型空间和图纸空间的预定义块表记录。每个图纸空间布局都有自己的块表记录。</p>
+<p>字典是一个容器对象，可以包含任何AutoCAD对象或 XRecord 。字典存储在数据库中的命名对象字典下，或者作为表记录或图形实体的扩展字典。命名对象字典是与数据库关联的所有字典的主表。与符号表不同，可以创建新字典并将其添加到命名对象字典中。</p>
+<p>注意：字典对象不能包含图形图元。</p>
+<p>ActiveX&#x2F;ActiveX交叉引用</p>
+<p>AutoCAD .NET API中的 Database 对象类似于ActiveX Automation库中的 Document 对象。要访问ActiveX Automation库的 Document 对象中可用的大多数特性，您需要使用AutoCAD .NET API的Document和Database对象。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-6D966F16-4E60-4C89-BA86-9F25D67E1AF0.png" alt="img"></p>
+<h3 id="图形和非图形对象（-NET）"><a href="#图形和非图形对象（-NET）" class="headerlink" title="图形和非图形对象（.NET）"></a>图形和非图形对象（.NET）</h3><p>图形对象（也称为实体）是构成图形的可见对象（直线、圆、光栅图像等）。将图形对象添加到图形的方法是：参照正确的块表记录，然后使用带有新对象的 AppendEntity 方法将其追加到图形。</p>
+<p>若要修改或查询对象，请从相应的块表记录中获取对象的引用，然后使用对象本身的方法或特性。每个图形对象都具有执行与AutoCAD编辑命令（如“复制”、“缩放”、“移动”、“镜像”等）相同功能的方法。</p>
+<p>这些对象还具有检索扩展数据（扩展数据）、高亮显示和取消高亮显示以及设置其他图元的属性的方法。大多数图形对象都有一些共同的属性，例如 LayerId 、 LinetypeId 、 Color 和 Handle 。每个图形对象还具有特定的属性，例如 Center 、 StartPoint 、 Radius 和 FitTolerance 。</p>
+<p>非图形对象是图形中不可见的（信息性）对象，例如图层、线型、标注样式、表格样式等。要创建新的符号表记录，请使用所有者表上的 Add 方法或使用 SetAt 方法将字典添加到命名对象字典。若要修改或查询这些对象，请使用对象本身的方法或属性。每个非图形对象都具有特定于其用途的方法和属性;所有对象都具有检索扩展数据（扩展数据）和擦除自身的方法。</p>
+<h3 id="集合对象（-NET）"><a href="#集合对象（-NET）" class="headerlink" title="集合对象（.NET）"></a>集合对象（.NET）</h3><p>AutoCAD将大多数图形和非图形对象分组到集合或容器对象中。虽然集合包含不同类型的数据，但可以使用类似的技术处理它们。每个集合都有一个向集合中添加对象或从集合中获取项的方法。大多数集合使用 Add 或 SetAt 方法将对象添加到集合中。</p>
+<p>大多数集合都提供类似的方法和属性，使它们易于使用和学习。 Count 属性返回集合中对象的计数，从零开始，而Item函数返回集合中的对象。AutoCAD .NET API中集合成员的示例包括：</p>
+<ul>
+<li>图层符号表中的图层表记录</li>
+<li>ACAD_LAYOUT字典中的布局</li>
+<li>DocumentCollection中的文档</li>
+<li>块参照中的属性</li>
+</ul>
+<h3 id="非原生图形和非图形对象（-NET）"><a href="#非原生图形和非图形对象（-NET）" class="headerlink" title="非原生图形和非图形对象（.NET）"></a>非原生图形和非图形对象（.NET）</h3><p>AutoCAD .NET API是ObjectARX和ActiveX Automation的交叉实现。虽然可以从ObjectARX应用程序使用ActiveX Automation，但AutoCAD .NET API提供对ActiveX Automation库对象的直接访问。使用本机AutoCAD .NET API处理对象时，还可以从特性访问等效的COM对象。在某些情况下，COM对象是以编程方式访问AutoCAD要素的唯一方法。通过AutoCAD .NET API显示COM对象的特性的一些示例包括 Preferences 、 Menubar 、 MenuGroups 、 AcadObject 和 AcadApplication 。</p>
+<p>注意：使用COM对象时，您需要确保引用AutoCAD类型库。</p>
+<p>应用程序对象的 Preferences 属性提供对一组COM对象的访问，每个对象对应于“选项”对话框中的一个选项卡。这些对象一起提供了对“选项”对话框中所有注册表存储的设置的访问。还可以使用 Application 对象的 SetSystemVariable 和 GetSystemVariable 方法设置和修改选项（以及不属于“选项”对话框的系统变量）。</p>
+<p>如果您正在使用可能最初为VB或VBA开发的现有代码，或者甚至在使用可能与AutoCAD ActiveX Automation库和AutoCAD .NET API一起使用的第三方库时，COM对象非常有用。与 Preferences 对象一样，您还可以使用 Utility 对象访问转换坐标或基于角度和距离定义新点的实用程序，该对象可以从 AcadApplication COM对象访问，该对象相当于AutoCAD中的 Application 对象。NET API。</p>
+<p>注意：同时使用AutoCAD .NET API和ActiveX Automation时，如果您创建了可能需要返回对象的自定义函数，建议返回 ObjectId 而不是对象本身。</p>
+<h2 id="访问对象层次结构（-NET）"><a href="#访问对象层次结构（-NET）" class="headerlink" title="访问对象层次结构（.NET）"></a>访问对象层次结构（.NET）</h2><p>虽然Application是AutoCAD .NET API中的根对象，但您通常将使用当前图形的数据库。 Application 对象的 DocumentManager 属性允许您使用 MdiActiveDocument 属性访问当前文档。从由 MdiActiveDocument 属性返回的 Document 对象，您可以使用 Database 属性访问其数据库。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Application.DocumentManager.MdiActiveDocument.Database.Clayer;</span><br></pre></td></tr></table></figure>
+
+<p> 本节中的主题</p>
+<ul>
+<li>引用对象层次结构（.NET）中的对象</li>
+<li>访问应用程序对象（.NET）</li>
+</ul>
+<h3 id="引用对象层次结构（-NET）中的对象"><a href="#引用对象层次结构（-NET）中的对象" class="headerlink" title="引用对象层次结构（.NET）中的对象"></a>引用对象层次结构（.NET）中的对象</h3><p>在AutoCAD .NET API中使用对象时，可以直接引用某些对象，也可以通过基于所使用对象的用户定义变量来引用某些对象。若要直接引用对象，请将该对象包含在调用层次结构中。例如，以下语句将图形文件附加到当前图形的数据库。请注意，层次结构从Application开始，然后转到 Database 对象。从 Database 对象中调用 方法：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> strFName, strBlkName;</span><br><span class="line">Autodesk.AutoCAD.DatabaseServices.ObjectId objId;</span><br><span class="line"> </span><br><span class="line">strFName = <span class="string">&quot;c:/clients/Proj 123/grid.dwg&quot;</span>;</span><br><span class="line">strBlkName = System.IO.Path.GetFileNameWithoutExtension(strFName);</span><br><span class="line"> </span><br><span class="line">objId = Application.DocumentManager.MdiActiveDocument.Database.AttachXref(strFName, strBlkName);</span><br></pre></td></tr></table></figure>
+
+<p>要通过用户定义的变量引用对象，请将变量定义为所需的类型，然后将变量设置为适当的对象。例如，以下代码定义了一个类型为 Autodesk.AutoCAD.DatabaseServices.Database 的变量（ acCurDb ），并将该变量设置为等于当前数据库：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Autodesk.AutoCAD.DatabaseServices.Database acCurDb;</span><br><span class="line">acCurDb = Application.DocumentManager.MdiActiveDocument.Database;</span><br></pre></td></tr></table></figure>
+
+<p>然后，以下语句使用 acCurDb 用户定义变量将图形文件附着到数据库：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> strFName, strBlkName;</span><br><span class="line">Autodesk.AutoCAD.DatabaseServices.ObjectId objId;</span><br><span class="line"> </span><br><span class="line">strFName = <span class="string">&quot;c:/clients/Proj 123/grid.dwg&quot;</span>;</span><br><span class="line">strBlkName = System.IO.Path.GetFileNameWithoutExtension(strFName);</span><br><span class="line"> </span><br><span class="line">objId = acCurDb.AttachXref(strFName, strBlkName);</span><br></pre></td></tr></table></figure>
+
+<p><strong>从模型空间中删除图元</strong></p>
+<p>下面的示例返回模型空间中的第一个实体对象。类似的代码可以对图纸空间图元执行相同的操作。请注意，所有图形对象都定义为 Entity 对象：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.Runtime;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.ApplicationServices;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.DatabaseServices;</span><br><span class="line"> </span><br><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;ListEntities&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ListEntities</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// Get the current document and database, and start a transaction</span></span><br><span class="line">  Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">  Database acCurDb = acDoc.Database;</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">  &#123;</span><br><span class="line">      <span class="comment">// Open the Block table record for read</span></span><br><span class="line">      BlockTable acBlkTbl;</span><br><span class="line">      acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                   OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// Open the Block table record Model space for read</span></span><br><span class="line">      BlockTableRecord acBlkTblRec;</span><br><span class="line">      acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                      OpenMode.ForRead) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"> </span><br><span class="line">      <span class="built_in">int</span> nCnt = <span class="number">0</span>;</span><br><span class="line">      acDoc.Editor.WriteMessage(<span class="string">&quot;\nModel space objects: &quot;</span>);</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// Step through each object in Model space and</span></span><br><span class="line">      <span class="comment">// display the type of object found</span></span><br><span class="line">      <span class="keyword">foreach</span> (ObjectId acObjId <span class="keyword">in</span> acBlkTblRec)</span><br><span class="line">      &#123;</span><br><span class="line">          acDoc.Editor.WriteMessage(<span class="string">&quot;\n&quot;</span> + acObjId.ObjectClass.DxfName);</span><br><span class="line"> </span><br><span class="line">          nCnt = nCnt + <span class="number">1</span>;</span><br><span class="line">      &#125;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// If no objects are found then display a message</span></span><br><span class="line">      <span class="keyword">if</span> (nCnt == <span class="number">0</span>)</span><br><span class="line">      &#123;</span><br><span class="line">          acDoc.Editor.WriteMessage(<span class="string">&quot;\n  No objects found&quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// Dispose of the transaction</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="访问Application对象（-NET）"><a href="#访问Application对象（-NET）" class="headerlink" title="访问Application对象（.NET）"></a>访问Application对象（.NET）</h3><p>Application对象位于对象层次的根，它提供对AutoCAD主窗口的访问。例如，下面的代码行更新应用程序：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Autodesk.AutoCAD.ApplicationServices.Application.UpdateScreen();</span><br></pre></td></tr></table></figure>
+
+<h2 id="集合对象（-NET）-1"><a href="#集合对象（-NET）-1" class="headerlink" title="集合对象（.NET）"></a>集合对象（.NET）</h2><p>集合是一种包含许多类似对象实例的对象类型。以下列表包含AutoCAD .NET API中的一些集合对象：</p>
+<p>Block Table Record<br>包含特定块定义中的所有图元。</p>
+<p>Block Table<br>包含图形中的所有块。</p>
+<p>Named Objects Dictionary<br>包含图形中的所有词典。</p>
+<p>Dimension Style Table<br>包含图形中的所有标注样式。</p>
+<p>Document Collection<br>包含当前任务中所有打开的图形。</p>
+<p>Group Dictionary<br>包含图形中的所有编组。</p>
+<p>Hyperlink Collection<br>包含给定实体的所有超链接。</p>
+<p>Layer Table<br>包含图形中的所有图层。</p>
+<p>Layout Dictionary<br>包含图形中的所有布局。</p>
+<p>Linetype Table<br>包含图形中的所有线型。</p>
+<p>MenuBar Collection<br>包含当前在AutoCAD中显示的所有菜单。</p>
+<p>MenuGroup Collection<br>包含AutoCAD中当前加载的所有自定义组。自定义组表示加载的CUIx文件，该文件可以包含菜单、菜单和功能区选项卡以及定义用户界面的其他元素。</p>
+<p>Plot Configuration Dictionary<br>包含图形中的命名打印设置。</p>
+<p>Registered Application Table<br>包含图形中所有注册的应用程序。</p>
+<p>Text Style Table<br>包含图形中的所有文字样式。</p>
+<p>UCS Table<br>包含图形中的所有用户坐标系（UCS）。</p>
+<p>View Table<br>包含图形中的所有视图。</p>
+<p>Viewport Table<br>包含图形中的所有视口。</p>
+<p>本节中的主题</p>
+<ul>
+<li>访问集合（.NET）</li>
+<li>向集合对象添加新成员（.NET）</li>
+<li>遍历集合对象（.NET）</li>
+<li>创建集合对象的成员（.NET）</li>
+</ul>
+<h3 id="访问集合（-NET）"><a href="#访问集合（-NET）" class="headerlink" title="访问集合（.NET）"></a>访问集合（.NET）</h3><p>大多数集合和容器对象都是通过 Document 或 Database 对象访问的。 Document 和 Database 对象包含一个属性，用于访问大多数可用Collection对象的对象或对象ID。例如，以下代码定义变量并检索表示当前图形中 Layers 集合的 LayersTable 对象：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Get the current document and start the Transaction Manager</span></span><br><span class="line">Database acCurDb = Application.DocumentManager.MdiActiveDocument.Database;</span><br><span class="line"><span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// This example returns the layer table for the current database</span></span><br><span class="line">    LayerTable acLyrTbl;</span><br><span class="line">    acLyrTbl = acTrans.GetObject(acCurDb.LayerTableId,</span><br><span class="line">                                 OpenMode.ForRead) <span class="keyword">as</span> LayerTable;</span><br><span class="line"> </span><br><span class="line">     <span class="comment">// Dispose of the transaction</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="向集合对象添加新成员（-NET）"><a href="#向集合对象添加新成员（-NET）" class="headerlink" title="向集合对象添加新成员（.NET）"></a>向集合对象添加新成员（.NET）</h3><p>要向集合中添加新成员，请使用 Add 方法。例如，以下代码创建一个新层并将其添加到“层”（Layer）表中：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.Runtime;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.ApplicationServices;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.DatabaseServices;</span><br><span class="line"> </span><br><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;AddMyLayer&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">AddMyLayer</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// Get the current document and database, and start a transaction</span></span><br><span class="line">  Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">  Database acCurDb = acDoc.Database;</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">  &#123;</span><br><span class="line">      <span class="comment">// Returns the layer table for the current database</span></span><br><span class="line">      LayerTable acLyrTbl;</span><br><span class="line">      acLyrTbl = acTrans.GetObject(acCurDb.LayerTableId,</span><br><span class="line">                                   OpenMode.ForRead) <span class="keyword">as</span> LayerTable;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// Check to see if MyLayer exists in the Layer table</span></span><br><span class="line">      <span class="keyword">if</span> (acLyrTbl.Has(<span class="string">&quot;MyLayer&quot;</span>) != <span class="literal">true</span>)</span><br><span class="line">      &#123;</span><br><span class="line">          <span class="comment">// Open the Layer Table for write</span></span><br><span class="line">          acTrans.GetObject(acCurDb.LayerTableId, OpenMode.ForWrite);</span><br><span class="line"> </span><br><span class="line">          <span class="comment">// Create a new layer table record and name the layer &quot;MyLayer&quot;</span></span><br><span class="line">          <span class="keyword">using</span> (LayerTableRecord acLyrTblRec = <span class="keyword">new</span> LayerTableRecord())</span><br><span class="line">          &#123;</span><br><span class="line">              acLyrTblRec.Name = <span class="string">&quot;MyLayer&quot;</span>;</span><br><span class="line"> </span><br><span class="line">              <span class="comment">// Add the new layer table record to the layer table and the transaction</span></span><br><span class="line">              acLyrTbl.Add(acLyrTblRec);</span><br><span class="line">              acTrans.AddNewlyCreatedDBObject(acLyrTblRec, <span class="literal">true</span>);</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="comment">// Commit the changes</span></span><br><span class="line">          acTrans.Commit();</span><br><span class="line">      &#125;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// Dispose of the transaction</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="遍历集合对象（-NET）"><a href="#遍历集合对象（-NET）" class="headerlink" title="遍历集合对象（.NET）"></a>遍历集合对象（.NET）</h3><p>要选择Collection对象的特定成员，请使用 Item 或 GetAt 方法。 Item 和 GetAt 方法需要一个字符串形式的键，其中表示项的名称。对于大多数集合，Item方法是隐含的，这意味着您实际上不需要使用方法。</p>
+<p>对于某些Collection对象，您还可以使用索引号来指定要检索的项在集合中的位置。您可以使用的方法根据您使用的语言以及使用符号表或字典而有所不同。</p>
+<p>以下语句显示如何访问图层符号表中的“MyLayer”表记录。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acObjId = acLyrTbl[<span class="string">&quot;MyLayer&quot;</span>];</span><br></pre></td></tr></table></figure>
+
+<p>遍历LayerTable对象</p>
+<p>以下示例遍历 LayerTable 对象并显示其所有图层表记录的名称：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.Runtime;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.ApplicationServices;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.DatabaseServices;</span><br><span class="line"> </span><br><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;IterateLayers&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">IterateLayers</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// Get the current document and database, and start a transaction</span></span><br><span class="line">  Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">  Database acCurDb = acDoc.Database;</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">  &#123;</span><br><span class="line">      <span class="comment">// This example returns the layer table for the current database</span></span><br><span class="line">      LayerTable acLyrTbl;</span><br><span class="line">      acLyrTbl = acTrans.GetObject(acCurDb.LayerTableId,</span><br><span class="line">                                   OpenMode.ForRead) <span class="keyword">as</span> LayerTable;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// Step through the Layer table and print each layer name</span></span><br><span class="line">      <span class="keyword">foreach</span> (ObjectId acObjId <span class="keyword">in</span> acLyrTbl)</span><br><span class="line">      &#123;</span><br><span class="line">          LayerTableRecord acLyrTblRec;</span><br><span class="line">          acLyrTblRec = acTrans.GetObject(acObjId,</span><br><span class="line">                                          OpenMode.ForRead) <span class="keyword">as</span> LayerTableRecord;</span><br><span class="line"> </span><br><span class="line">          acDoc.Editor.WriteMessage(<span class="string">&quot;\n&quot;</span> + acLyrTblRec.Name);</span><br><span class="line">      &#125;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// Dispose of the transaction</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在LayerTable对象中查找名为MyLayer的图层表记录</p>
+<p>以下示例检查 LayerTable 对象以确定名为MyLayer的图层是否存在，并显示相应的消息：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.Runtime;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.ApplicationServices;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.DatabaseServices;</span><br><span class="line"> </span><br><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;FindMyLayer&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">FindMyLayer</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// Get the current document and database, and start a transaction</span></span><br><span class="line">  Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">  Database acCurDb = acDoc.Database;</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">  &#123;</span><br><span class="line">      <span class="comment">// Returns the layer table for the current database</span></span><br><span class="line">      LayerTable acLyrTbl;</span><br><span class="line">      acLyrTbl = acTrans.GetObject(acCurDb.LayerTableId,</span><br><span class="line">                                   OpenMode.ForRead) <span class="keyword">as</span> LayerTable;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// Check to see if MyLayer exists in the Layer table</span></span><br><span class="line">      <span class="keyword">if</span> (acLyrTbl.Has(<span class="string">&quot;MyLayer&quot;</span>) != <span class="literal">true</span>)</span><br><span class="line">      &#123;</span><br><span class="line">          acDoc.Editor.WriteMessage(<span class="string">&quot;\n&#x27;MyLayer&#x27; does not exist&quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      &#123;</span><br><span class="line">          acDoc.Editor.WriteMessage(<span class="string">&quot;\n&#x27;MyLayer&#x27; exists&quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// Dispose of the transaction</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="擦除集合对象的成员（-NET）"><a href="#擦除集合对象的成员（-NET）" class="headerlink" title="擦除集合对象的成员（.NET）"></a>擦除集合对象的成员（.NET）</h3><p>可以使用成员对象上的 Erase 方法删除集合对象中的成员。例如，下面的代码从 LayerTable 对象中擦除图层MyLayer。</p>
+<p>在从图形中删除图层之前，应确保可以安全地删除该图层。若要确定是否可以擦除图层或其他命名对象（如块或文字样式），应使用 Purge 方法。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.Runtime;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.ApplicationServices;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.DatabaseServices;</span><br><span class="line"> </span><br><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;RemoveMyLayer&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">RemoveMyLayer</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// Get the current document and database, and start a transaction</span></span><br><span class="line">  Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">  Database acCurDb = acDoc.Database;</span><br><span class="line"> </span><br><span class="line">  <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">  &#123;</span><br><span class="line">      <span class="comment">// Returns the layer table for the current database</span></span><br><span class="line">      LayerTable acLyrTbl;</span><br><span class="line">      acLyrTbl = acTrans.GetObject(acCurDb.LayerTableId,</span><br><span class="line">                                   OpenMode.ForRead) <span class="keyword">as</span> LayerTable;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// Check to see if MyLayer exists in the Layer table</span></span><br><span class="line">      <span class="keyword">if</span> (acLyrTbl.Has(<span class="string">&quot;MyLayer&quot;</span>) == <span class="literal">true</span>)</span><br><span class="line">      &#123;</span><br><span class="line">          LayerTableRecord acLyrTblRec;</span><br><span class="line">          acLyrTblRec = acTrans.GetObject(acLyrTbl[<span class="string">&quot;MyLayer&quot;</span>],</span><br><span class="line">                                          OpenMode.ForWrite) <span class="keyword">as</span> LayerTableRecord;</span><br><span class="line"> </span><br><span class="line">          <span class="keyword">try</span></span><br><span class="line">          &#123;</span><br><span class="line">              acLyrTblRec.Erase();</span><br><span class="line">              acDoc.Editor.WriteMessage(<span class="string">&quot;\n&#x27;MyLayer&#x27; was erased&quot;</span>);</span><br><span class="line"> </span><br><span class="line">              <span class="comment">// Commit the changes</span></span><br><span class="line">              acTrans.Commit();</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">catch</span></span><br><span class="line">          &#123;</span><br><span class="line">              acDoc.Editor.WriteMessage(<span class="string">&quot;\n&#x27;MyLayer&#x27; could not be erased&quot;</span>);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      &#123;</span><br><span class="line">          acDoc.Editor.WriteMessage(<span class="string">&quot;\n&#x27;MyLayer&#x27; does not exist&quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">// Dispose of the transaction</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一旦对象被擦除，以后就不应该在程序中再次尝试访问该对象;否则将发生错误。上面的示例测试在再次访问对象之前查看对象是否存在。当请求删除一个对象时，你应该使用 Has 方法检查该对象是否存在，或者使用 Try 语句来捕获任何发生的异常。</p>
+<h2 id="了解属性和方法（-NET）"><a href="#了解属性和方法（-NET）" class="headerlink" title="了解属性和方法（.NET）"></a>了解属性和方法（.NET）</h2><p>每个对象都有关联的属性和方法。属性描述单个对象的各个方面，而方法是可以在单个对象上执行的操作。创建对象后，可以通过其属性和方法查询和编辑对象。</p>
+<p>例如，Circle对象具有 Center 属性。此属性表示世界坐标系（WCS）中位于该圆中心的点。要更改圆心，只需将 Center 属性设置为新点。 Circle 对象也有一个名为 GetOffsetCurves 的方法。此方法在距现有圆的指定偏移距离处创建新对象。</p>
+<p>若要查看 Circle 对象的所有属性和方法的列表，请参阅 Circle 对象参考主题或使用Microsoft® Visual Studio®中的对象浏览器。</p>
+<h3 id="进程外与进程内（-NET）"><a href="#进程外与进程内（-NET）" class="headerlink" title="进程外与进程内（.NET）"></a>进程外与进程内（.NET）</h3><p>当你开发一个新的应用程序时，它可以在进程内运行，也可以在进程外运行。AutoCAD .NET API设计为仅在进程内运行，这与可在进程内或进程外使用的ActiveX Automation库不同。</p>
+<ul>
+<li>进程内应用程序被设计为在与宿主应用程序相同的进程空间中运行。在这种情况下，DLL程序集将加载到宿主应用程序AutoCAD中。</li>
+<li>进程外应用程序不与宿主应用程序在同一空间中运行。这些应用程序通常构建为独立的可执行文件。</li>
+</ul>
+<p>如果需要创建独立应用程序来驱动AutoCAD，最好创建一个使用 CreateObject 和 GetObject 方法的应用程序，以创建AutoCAD应用程序的新实例或返回当前正在运行的实例之一。返回对 AcadApplication 的引用后，可以使用 SendCommand 方法将进程内.NET应用程序加载到AutoCAD中，该方法是 AcadApplication 的 ActiveDocument 属性的成员。</p>
+<p>作为在进程内执行.NET应用程序的替代方法，可以为应用程序使用COM互操作。</p>
+<p><strong>注意：</strong>COM应用程序访问AutoCAD 2024的ProgID为<em>AutoCAD.Application.24.3</em>。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Runtime.InteropServices;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.Interop;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.Runtime;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.ApplicationServices;</span><br><span class="line"> </span><br><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;ConnectToAcad&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ConnectToAcad</span>()</span></span><br><span class="line">&#123;</span><br><span class="line"> </span><br><span class="line">  AcadApplication acAppComObj = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="built_in">string</span> strProgId = <span class="string">&quot;AutoCAD.Application.24.3&quot;</span>;</span><br><span class="line"> </span><br><span class="line">  <span class="comment">// Get a running instance of AutoCAD</span></span><br><span class="line">  <span class="keyword">try</span></span><br><span class="line">  &#123;</span><br><span class="line">      acAppComObj = (AcadApplication)Marshal.GetActiveObject(strProgId);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> <span class="comment">// An error occurs if no instance is running</span></span><br><span class="line">  &#123;</span><br><span class="line">      <span class="keyword">try</span></span><br><span class="line">      &#123;</span><br><span class="line">          <span class="comment">// Create a new instance of AutoCAD</span></span><br><span class="line">          acAppComObj = (AcadApplication)Activator.CreateInstance(Type.GetTypeFromProgID(strProgId), <span class="literal">true</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">catch</span></span><br><span class="line">      &#123;</span><br><span class="line">          <span class="comment">// If an instance of AutoCAD is not created then message and exit</span></span><br><span class="line">          System.Windows.Forms.MessageBox.Show(<span class="string">&quot;Instance of &#x27;AutoCAD.Application&#x27;&quot;</span> +</span><br><span class="line">                                               <span class="string">&quot; could not be created.&quot;</span>);</span><br><span class="line"> </span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line">  <span class="comment">// Display the application and return the name and version</span></span><br><span class="line">  acAppComObj.Visible = <span class="literal">true</span>;</span><br><span class="line">  System.Windows.Forms.MessageBox.Show(<span class="string">&quot;Now running &quot;</span> + acAppComObj.Name + </span><br><span class="line">                                       <span class="string">&quot; version &quot;</span> + acAppComObj.Version);</span><br><span class="line"> </span><br><span class="line">  <span class="comment">// Get the active document</span></span><br><span class="line">  AcadDocument acDocComObj;</span><br><span class="line">  acDocComObj = acAppComObj.ActiveDocument;</span><br><span class="line"> </span><br><span class="line">  <span class="comment">// Optionally, load your assembly and start your command or if your assembly</span></span><br><span class="line">  <span class="comment">// is demandloaded, simply start the command of your in-process assembly.</span></span><br><span class="line">  acDocComObj.SendCommand(<span class="string">&quot;(command &quot;</span> + (<span class="built_in">char</span>)<span class="number">34</span> + <span class="string">&quot;NETLOAD&quot;</span> + (<span class="built_in">char</span>)<span class="number">34</span> + <span class="string">&quot; &quot;</span> +</span><br><span class="line">                          (<span class="built_in">char</span>)<span class="number">34</span> + <span class="string">&quot;c:/myapps/mycommands.dll&quot;</span> + (<span class="built_in">char</span>)<span class="number">34</span> + <span class="string">&quot;) &quot;</span>);</span><br><span class="line"> </span><br><span class="line">  acDocComObj.SendCommand(<span class="string">&quot;MyCommand &quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="定义命令和AutoLISP函数（-NET）"><a href="#定义命令和AutoLISP函数（-NET）" class="headerlink" title="定义命令和AutoLISP函数（.NET）"></a>定义命令和AutoLISP函数（.NET）</h2><p>可以使用AutoCAD .NET API通过使用两个属性（ CommandMethod 和 LispFunction ）来定义命令和AutoLISP®函数。在AutoCAD中执行命令或AutoLISP函数时，将两个特性之一放置在应调用的方法之前。</p>
+<p>用于命令的方法不应使用参数定义。但是，用于定义AutoLISP函数的方法应使用 ResultBuffer 对象类型的单个参数进行定义。</p>
+<p>Topics in this section  本节中的主题</p>
+<ul>
+<li>命令定义（.NET）</li>
+<li>AutoLISP函数定义（.NET）</li>
+</ul>
+<h3 id="命令定义（-NET）"><a href="#命令定义（-NET）" class="headerlink" title="命令定义（.NET）"></a>命令定义（.NET）</h3><p>定义命令时，使用 CommandMethod 属性。 CommandMethod 属性需要一个字符串值作为正在定义的命令的全局名称。沿着全局命令名， CommandMethod 属性可以接受以下值：</p>
+<ul>
+<li><strong>命令标志</strong>-定义命令的行为</li>
+<li><strong>Group Name</strong>-命令组名称</li>
+<li><strong>本地名称</strong>-本地命令名称，通常是特定于语言的</li>
+<li><strong>Help Topic Name</strong>-按F1时应显示的帮助主题名称</li>
+<li><strong>上下文菜单类型标志</strong>-定义命令激活时的上下文菜单行为</li>
+<li><strong>Help File Name</strong>-包含帮助主题的帮助文件，当命令处于活动状态并按下F1键时，将显示该帮助主题</li>
+</ul>
+<p>下表列出了可用于定义命令行为的可用标志。</p>
+<table>
+<thead>
+<tr>
+<th align="left">枚举值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ActionMacro</td>
+<td align="left">命令可以用动作录制器录制为动作。</td>
+</tr>
+<tr>
+<td align="left">Defun</td>
+<td align="left">命令可以作为LISP函数调用，因此可以使用 acedGetArgs() 从LISP接收参数，并可以使用 acedRetXxx() 函数将值返回到LISP。此标志只能由Visual LISP引擎设置。</td>
+</tr>
+<tr>
+<td align="left">DocExclusiveLock</td>
+<td align="left">当命令被调用时，文档将被独占锁定。</td>
+</tr>
+<tr>
+<td align="left">DocReadLock</td>
+<td align="left">当命令被调用时，文档将被读锁定。</td>
+</tr>
+<tr>
+<td align="left">Interruptible</td>
+<td align="left">当提示用户输入时，命令可能会中断。</td>
+</tr>
+<tr>
+<td align="left">Modal</td>
+<td align="left">当另一个命令处于活动状态时，无法调用该命令。</td>
+</tr>
+<tr>
+<td align="left">NoActionRecording</td>
+<td align="left">命令不能用动作录制器录制为动作。</td>
+</tr>
+<tr>
+<td align="left">NoBlockEditor</td>
+<td align="left">不能从块编辑器中使用命令。</td>
+</tr>
+<tr>
+<td align="left">NoHistory</td>
+<td align="left">命令未添加到repeat-last-command历史记录列表。</td>
+</tr>
+<tr>
+<td align="left">NoInferConstraint</td>
+<td align="left">推断约束时不能使用命令。</td>
+</tr>
+<tr>
+<td align="left">NoInternalLock</td>
+<td align="left">文档不能内部锁定。</td>
+</tr>
+<tr>
+<td align="left">NoMultiple</td>
+<td align="left">命令宏中带有星号（*）前缀时，命令不支持多重行为。</td>
+</tr>
+<tr>
+<td align="left">NoNewStack</td>
+<td align="left">命令不在堆栈上创建新项。</td>
+</tr>
+<tr>
+<td align="left">NoOEM</td>
+<td align="left">无法从AutoCAD OEM访问命令。</td>
+</tr>
+<tr>
+<td align="left">NoPaperSpace</td>
+<td align="left">不能从图纸空间使用命令。</td>
+</tr>
+<tr>
+<td align="left">NoPerspective</td>
+<td align="left">当PERSPECTIVE设置为1时，无法使用命令。</td>
+</tr>
+<tr>
+<td align="left">NoTileMode</td>
+<td align="left">当TILEMODE设置为1时，无法使用命令。</td>
+</tr>
+<tr>
+<td align="left">NoUndoMarker</td>
+<td align="left">命令不支持撤消标记。这适用于不修改数据库的命令，因此不应显示在撤消文件中。</td>
+</tr>
+<tr>
+<td align="left">Redraw</td>
+<td align="left">检索优先拾取集或夹点集时，不会清除它们。</td>
+</tr>
+<tr>
+<td align="left">Session</td>
+<td align="left">命令在应用程序的上下文中而不是在当前文档上下文中执行。</td>
+</tr>
+<tr>
+<td align="left">TempShowDynDimension</td>
+<td align="left">命令允许在选定图元时临时显示动态尺寸。</td>
+</tr>
+<tr>
+<td align="left">Transparent</td>
+<td align="left">命令可以在另一个命令处于活动状态时使用。</td>
+</tr>
+<tr>
+<td align="left">Undefined</td>
+<td align="left">命令只能通过其全局名称使用。</td>
+</tr>
+<tr>
+<td align="left">UsePickSet</td>
+<td align="left">检索到优先拾取集时，将清除该集。</td>
+</tr>
+</tbody></table>
+<p><strong>实例和静态命令方法</strong></p>
+<p>命令方法可以声明为实例方法或静态方法。静态命令方法在C#中使用static关键字声明，在VB. NET中使用 Shared 关键字声明。实例命令方法是不使用static或 Shared 关键字声明的公共类成员。</p>
+<p>对于实例命令方法，方法的封闭类型为每个打开的文档单独实例化。这意味着每个文档都获得命令实例数据的私有副本。因此，当用户切换文档时，不存在丢失特定于文档的数据的危险。如果一个实例方法需要全局共享数据，它可以通过声明static或Shared成员变量来实现。</p>
+<p>对于静态命令方法，托管包装运行时模块不需要实例化封闭类型。无论文档上下文如何，都使用方法数据的单个副本。静态命令通常不使用每个文档的数据，也不需要特别考虑MDI模式。</p>
+<p>实例和静态方法可以用命令标志来定义，以适应特殊要求。例如，一个实例方法可以用一个设置 CommandFlags.Session 标志的属性来声明。这意味着该命令在应用程序执行上下文中运行，但也维护每个文档的数据。此类命令的AutoCAD示例是PROPERTIES命令。</p>
+<p>同样地，静态方法可以在没有 CommandFlags.Session 标志的情况下声明。这种组合对于在文档上下文中运行但不需要维护每个文档数据的命令很有用。</p>
+<p><strong>定义命令的语法</strong></p>
+<p>下面演示了如何创建一个 CommandMethod 属性，该属性定义了一个名为CheckForPickfirstSelection的命令。该属性还使用命令标志 UsePickSet 来指示允许命令使用在命令启动之前选择的对象。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;CheckForPickfirstSelection&quot;</span>, CommandFlags.UsePickSet)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CheckForPickfirstSelection</span>()</span></span><br><span class="line">&#123;</span><br><span class="line"> . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以通过在VB.NET中使用“+”运算符和C#中的“|”操作符。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;CheckForPickfirstSelection&quot;</span>, CommandFlags.UsePickSet |</span></span><br><span class="line"><span class="meta">                                             CommandFlags.NoBlockEditor)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CheckForPickfirstSelection</span>()</span></span><br><span class="line">&#123;</span><br><span class="line"> . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="AutoLISP函数定义（-NET）"><a href="#AutoLISP函数定义（-NET）" class="headerlink" title="AutoLISP函数定义（.NET）"></a>AutoLISP函数定义（.NET）</h3><p>定义AutoLISP函数时，使用 LispFunction 属性。 LispFunction 属性需要一个字符串值，用作所定义AutoLISP函数的全局名称。沿着全局函数名， LispFunction 结构可以接受以下值：</p>
+<ul>
+<li><strong>本地名称</strong>-本地函数名，通常是特定于语言的</li>
+<li><strong>Help Topic Name</strong>-应与AutoLISP函数关联的帮助主题名称</li>
+<li><strong>Help File Name</strong>-包含帮助主题的帮助文件，当命令处于活动状态并按下F1键时，将显示该帮助主题</li>
+</ul>
+<p><strong>定义AutoLISP函数的命令</strong></p>
+<p>下面演示如何创建一个 LispFunction 属性，该属性定义名为InsertDynamicBlock的AutoLISP函数。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">LispFunction(<span class="string">&quot;DisplayFullName&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">DisplayFullName</span>(<span class="params">ResultBuffer rbArgs</span>)</span></span><br><span class="line">&#123;</span><br><span class="line"> . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>传递给AutoLISP函数的值</strong></p>
+<p>使用 Foreach 循环遍历AutoLISP函数在 ResultBuffer 中返回的值。 ResultBuffer 是 TypedValue 对象的集合。 TypedValue 对象的 TypeCode 属性可用于确定传递到AutoLISP函数中的每个值的值类型。 Value 属性用于返回 TypedValue 对象的值。</p>
+<p>支持的数据类型包括：</p>
+<ul>
+<li>Boolean or bool  </li>
+<li>Double or double  </li>
+<li>Integer or int  </li>
+<li>Null or void  </li>
+<li>ObjectId</li>
+<li>Point2d</li>
+<li>Point3d</li>
+<li>ResultBuffer</li>
+<li>SelectionSet  </li>
+<li>String or string  </li>
+<li>TypedValue</li>
+</ul>
+<p><strong>定义AutoLISP函数的步骤</strong></p>
+<p>此示例代码定义名为 DisplayFullName 的AutoLISP函数。虽然.NET项目中定义的方法接受单个值，但AutoLISP函数需要两个字符串值来生成正确的输出。</p>
+<p>将.NET项目加载到AutoCAD中，然后在命令提示下输入以下命令：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(displayfullname <span class="string">&quot;First&quot;</span> <span class="string">&quot;Last&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>以下是执行AutoLISP函数后显示的输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Name: First Last</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.Runtime;</span><br><span class="line"><span class="keyword">using</span> Autodesk.AutoCAD.ApplicationServices;</span><br><span class="line"> </span><br><span class="line">[<span class="meta">LispFunction(<span class="string">&quot;DisplayFullName&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">DisplayFullName</span>(<span class="params">ResultBuffer rbArgs</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">if</span> (rbArgs != <span class="literal">null</span>)</span><br><span class="line">  &#123;</span><br><span class="line">      <span class="built_in">string</span> strVal1 = <span class="string">&quot;&quot;</span>;</span><br><span class="line">      <span class="built_in">string</span> strVal2 = <span class="string">&quot;&quot;</span>;</span><br><span class="line"> </span><br><span class="line">      <span class="built_in">int</span> nCnt = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">foreach</span> (TypedValue rb <span class="keyword">in</span> rbArgs)</span><br><span class="line">      &#123;</span><br><span class="line">          <span class="keyword">if</span> (rb.TypeCode == (<span class="built_in">int</span>)Autodesk.AutoCAD.Runtime.LispDataType.Text)</span><br><span class="line">          &#123;</span><br><span class="line">              <span class="keyword">switch</span>(nCnt)</span><br><span class="line">              &#123;</span><br><span class="line">                  <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">                      strVal1 = rb.Value.ToString();</span><br><span class="line">                      <span class="keyword">break</span>;</span><br><span class="line">                  <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">                      strVal2 = rb.Value.ToString();</span><br><span class="line">                      <span class="keyword">break</span>;</span><br><span class="line">              &#125;</span><br><span class="line"> </span><br><span class="line">              nCnt = nCnt + <span class="number">1</span>;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line"> </span><br><span class="line">      Application.DocumentManager.MdiActiveDocument.Editor.</span><br><span class="line">         WriteMessage(<span class="string">&quot;\nName: &quot;</span> + strVal1 + <span class="string">&quot; &quot;</span> + strVal2);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="注：翻译自ObjectARX-Managed-NET-Developer’s-Guide，且只保留了C-部分的代码"><a href="#注：翻译自ObjectARX-Managed-NET-Developer’s-Guide，且只保留了C-部分的代码" class="headerlink" title="注：翻译自ObjectARX: Managed .NET Developer’s Guide，且只保留了C#部分的代码"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/OARX/2024/ENU/?guid=GUID-C3F3C736-40CF-44A0-9210-55F6A939B6F2">ObjectARX: Managed .NET Developer’s Guide</a>，且只保留了C#部分的代码</h2></article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CAD/">CAD</a></div><div class="post-share"><div class="social-share" data-image="/images/4stars.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/01/08/CAD%E4%BA%8C%E5%BC%80/AddInManager/" title="AddInManager"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">AddInManager</div></div><div class="info-2"><div class="info-item-1">AddInManager每次调试cad插件，老是会有占用的问题。网上找到方法就是通过反射解决，但是只找到那个要自己手动配置的，嫌麻烦。GitHub上有个CADAddInManager，用了一下，好像没什么反应，不知道是不是使用方式不对，文档也不详细。索性自己整一个。 参照Revit SDK 里的那个AddinManager及网上给出的方法。通过反射。把dll复制到临时文件夹，然后委托调用。现在只做了CommandMethod部分的。VS2022+CAD2024。  使用方式： 1、先自动加载： 在cad根目录Support文件夹下找到acad2024.lsp。 1(command&quot;netload&quot;...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/01/08/CAD%E4%BA%8C%E5%BC%80/AddInManager/" title="AddInManager"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-08</div><div class="info-item-2">AddInManager</div></div><div class="info-2"><div class="info-item-1">AddInManager每次调试cad插件，老是会有占用的问题。网上找到方法就是通过反射解决，但是只找到那个要自己手动配置的，嫌麻烦。GitHub上有个CADAddInManager，用了一下，好像没什么反应，不知道是不是使用方式不对，文档也不详细。索性自己整一个。 参照Revit SDK 里的那个AddinManager及网上给出的方法。通过反射。把dll复制到临时文件夹，然后委托调用。现在只做了CommandMethod部分的。VS2022+CAD2024。  使用方式： 1、先自动加载： 在cad根目录Support文件夹下找到acad2024.lsp。 1(command&quot;netload&quot;...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/4stars.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">funtim41@gmail.com</div><div class="author-info-description">实践-认识-再实践-再认识</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">55</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/FunTim41"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/FunTim41" target="_blank" title="Github"><i class="fab fa-github" style="color: #FFFFFF;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AutoCAD-NET-API%EF%BC%88-NET%EF%BC%89%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">AutoCAD .NET API（.NET）的基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3AutoCAD%E5%AF%B9%E8%B1%A1%E5%B1%82%E6%AC%A1%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">了解AutoCAD对象层次（.NET）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%AF%B9%E8%B1%A1%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">应用程序对象（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.2.</span> <span class="toc-text">文档对象（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E8%B1%A1%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.3.</span> <span class="toc-text">数据库对象（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E5%BD%A2%E5%92%8C%E9%9D%9E%E5%9B%BE%E5%BD%A2%E5%AF%B9%E8%B1%A1%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.4.</span> <span class="toc-text">图形和非图形对象（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E5%AF%B9%E8%B1%A1%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.5.</span> <span class="toc-text">集合对象（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E5%8E%9F%E7%94%9F%E5%9B%BE%E5%BD%A2%E5%92%8C%E9%9D%9E%E5%9B%BE%E5%BD%A2%E5%AF%B9%E8%B1%A1%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.6.</span> <span class="toc-text">非原生图形和非图形对象（.NET）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E5%AF%B9%E8%B1%A1%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">访问对象层次结构（.NET）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E5%AF%B9%E8%B1%A1%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%EF%BC%88-NET%EF%BC%89%E4%B8%AD%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.2.1.</span> <span class="toc-text">引用对象层次结构（.NET）中的对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AEApplication%E5%AF%B9%E8%B1%A1%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">访问Application对象（.NET）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E5%AF%B9%E8%B1%A1%EF%BC%88-NET%EF%BC%89-1"><span class="toc-number">1.3.</span> <span class="toc-text">集合对象（.NET）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E9%9B%86%E5%90%88%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.3.1.</span> <span class="toc-text">访问集合（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%91%E9%9B%86%E5%90%88%E5%AF%B9%E8%B1%A1%E6%B7%BB%E5%8A%A0%E6%96%B0%E6%88%90%E5%91%98%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.3.2.</span> <span class="toc-text">向集合对象添加新成员（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%81%8D%E5%8E%86%E9%9B%86%E5%90%88%E5%AF%B9%E8%B1%A1%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.3.3.</span> <span class="toc-text">遍历集合对象（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%A6%E9%99%A4%E9%9B%86%E5%90%88%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%88%90%E5%91%98%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.3.4.</span> <span class="toc-text">擦除集合对象的成员（.NET）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">了解属性和方法（.NET）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%A4%96%E4%B8%8E%E8%BF%9B%E7%A8%8B%E5%86%85%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.4.1.</span> <span class="toc-text">进程外与进程内（.NET）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E5%92%8CAutoLISP%E5%87%BD%E6%95%B0%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.5.</span> <span class="toc-text">定义命令和AutoLISP函数（.NET）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E5%AE%9A%E4%B9%89%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.5.1.</span> <span class="toc-text">命令定义（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AutoLISP%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.5.2.</span> <span class="toc-text">AutoLISP函数定义（.NET）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%EF%BC%9A%E7%BF%BB%E8%AF%91%E8%87%AAObjectARX-Managed-NET-Developer%E2%80%99s-Guide%EF%BC%8C%E4%B8%94%E5%8F%AA%E4%BF%9D%E7%95%99%E4%BA%86C-%E9%83%A8%E5%88%86%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="toc-number">1.6.</span> <span class="toc-text">注：翻译自ObjectARX: Managed .NET Developer’s Guide，且只保留了C#部分的代码</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/12/ObjectARX%EF%BC%9AManaged.NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/01AutoCAD.NET%20API%EF%BC%88.NET%EF%BC%89%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="01AutoCAD .NET API（.NET）的基础知识">01AutoCAD .NET API（.NET）的基础知识</a><time datetime="2025-01-12T15:42:54.439Z" title="更新于 2025-01-12 23:42:54">2025-01-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/30/CSharp/%E7%BA%BF%E7%A8%8B/" title="线程">线程</a><time datetime="2025-01-11T12:26:01.333Z" title="更新于 2025-01-11 20:26:01">2025-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/16/CSharp/LINQ/" title="Linq标准查询运算符">Linq标准查询运算符</a><time datetime="2025-01-11T12:23:21.403Z" title="更新于 2025-01-11 20:23:21">2025-01-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/08/CAD%E4%BA%8C%E5%BC%80/AddInManager/" title="AddInManager">AddInManager</a><time datetime="2025-01-08T13:14:43.495Z" title="更新于 2025-01-08 21:14:43">2025-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/08/%E5%8D%9A%E5%AE%A2%E9%85%8D%E7%BD%AE/Hexo+Butterfly%E4%BB%A3%E7%A0%81%E5%9D%97%E6%B0%B4%E5%B9%B3%E6%BB%9A%E5%8A%A8%E6%9D%A1/" title="Hexo+Butterfly代码块水平滚动条">Hexo+Butterfly代码块水平滚动条</a><time datetime="2025-01-08T04:24:42.742Z" title="更新于 2025-01-08 12:24:42">2025-01-08</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/images/topback.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By funtim41@gmail.com</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">学而不思则罔，思而不学则殆。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>(() => {
+  const panguFn = () => {
+    if (typeof pangu === 'object') pangu.autoSpacingPage()
+    else {
+      btf.getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+        .then(() => {
+          pangu.autoSpacingPage()
+        })
+    }
+  }
+
+  const panguInit = () => {
+    if (false){
+      GLOBAL_CONFIG_SITE.isPost && panguFn()
+    } else {
+      panguFn()
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', panguInit, 'pangu')
+  document.addEventListener('DOMContentLoaded', panguInit)
+})()</script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'FunTim41/funtim41.github.io',
+      'data-repo-id': 'R_kgDONjG8ww',
+      'data-category-id': 'DIC_kwDONjG8w84Cllg2',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
