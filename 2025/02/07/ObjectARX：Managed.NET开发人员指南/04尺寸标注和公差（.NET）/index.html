@@ -1,0 +1,655 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>04 尺寸标注和公差（.NET） | funtim的博客</title><meta name="author" content="funtim41@gmail.com"><meta name="copyright" content="funtim41@gmail.com"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="尺寸标注和公差（.NET）标注将测量值添加到图形中。公差指定尺寸可以变化的程度。使用AutoCAD .NET API，可以使用标注样式和重写来管理标注。 本节中的主题  尺寸标注概念（.NET） 创建标注（.NET） 编辑标注（.NET） 使用标注样式（.NET） 模型空间和图纸空间中的尺寸标注（.NET） 创建引线和注释（.NET） 使用几何公差（.NET）  尺寸标注概念（.NET）尺寸显示对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="04 尺寸标注和公差（.NET）">
+<meta property="og:url" content="https://funtim41.github.io/2025/02/07/ObjectARX%EF%BC%9AManaged.NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/04%E5%B0%BA%E5%AF%B8%E6%A0%87%E6%B3%A8%E5%92%8C%E5%85%AC%E5%B7%AE%EF%BC%88.NET%EF%BC%89/">
+<meta property="og:site_name" content="funtim的博客">
+<meta property="og:description" content="尺寸标注和公差（.NET）标注将测量值添加到图形中。公差指定尺寸可以变化的程度。使用AutoCAD .NET API，可以使用标注样式和重写来管理标注。 本节中的主题  尺寸标注概念（.NET） 创建标注（.NET） 编辑标注（.NET） 使用标注样式（.NET） 模型空间和图纸空间中的尺寸标注（.NET） 创建引线和注释（.NET） 使用几何公差（.NET）  尺寸标注概念（.NET）尺寸显示对">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://funtim41.github.io/images/4stars.png">
+<meta property="article:published_time" content="2025-02-07T03:14:29.000Z">
+<meta property="article:modified_time" content="2025-02-07T07:32:15.924Z">
+<meta property="article:author" content="funtim41@gmail.com">
+<meta property="article:tag" content="CAD">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://funtim41.github.io/images/4stars.png"><link rel="shortcut icon" href="/images/OIP.jfif"><link rel="canonical" href="https://funtim41.github.io/2025/02/07/ObjectARX%EF%BC%9AManaged.NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/04%E5%B0%BA%E5%AF%B8%E6%A0%87%E6%B3%A8%E5%92%8C%E5%85%AC%E5%B7%AE%EF%BC%88.NET%EF%BC%89/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: funtim41@gmail.com","link":"链接: ","source":"来源: funtim的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '04 尺寸标注和公差（.NET）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/css/bar.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background: Color(#995a82);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/4stars.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">59</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/images/topback.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/OIP.jfif" alt="Logo"><span class="site-name">funtim的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">04 尺寸标注和公差（.NET）</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/Links/"><i class="fa-fw fas fa-link"></i><span> Links</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">04 尺寸标注和公差（.NET）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-07T03:14:29.000Z" title="发表于 2025-02-07 11:14:29">2025-02-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-07T07:32:15.924Z" title="更新于 2025-02-07 15:32:15">2025-02-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ObjectARX%EF%BC%9AManaged-NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/">ObjectARX：Managed.NET开发人员指南</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="尺寸标注和公差（-NET）"><a href="#尺寸标注和公差（-NET）" class="headerlink" title="尺寸标注和公差（.NET）"></a>尺寸标注和公差（.NET）</h1><p>标注将测量值添加到图形中。公差指定尺寸可以变化的程度。使用AutoCAD .NET API，可以使用标注样式和重写来管理标注。</p>
+<p>本节中的主题</p>
+<ul>
+<li>尺寸标注概念（.NET）</li>
+<li>创建标注（.NET）</li>
+<li>编辑标注（.NET）</li>
+<li>使用标注样式（.NET）</li>
+<li>模型空间和图纸空间中的尺寸标注（.NET）</li>
+<li>创建引线和注释（.NET）</li>
+<li>使用几何公差（.NET）</li>
+</ul>
+<h2 id="尺寸标注概念（-NET）"><a href="#尺寸标注概念（-NET）" class="headerlink" title="尺寸标注概念（.NET）"></a>尺寸标注概念（.NET）</h2><p>尺寸显示对象的几何测量值、对象之间的距离或角度，或要素的<em>X</em>和<em>Y</em>坐标。AutoCAD®提供三种基本的尺寸标注类型：线性、径向和角度。线性标注包括对齐标注、旋转标注和坐标标注。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-8167887C-451D-47EF-BA6A-0909E43C4850.png" alt="img"></p>
+<p>可以为直线、多线、圆弧、圆和圆弧段创建标注，也可以创建独立的标注。</p>
+<p>AutoCAD在当前图层上绘制尺寸标注。每个标注都有一个与之关联的标注样式，无论是默认样式还是您定义的样式。样式控制诸如颜色、文字样式、箭头和标注中元素的比例等特性。尺寸标注不支持对象厚度。样式族允许对不同类型标注的基础样式进行细微修改。替代允许对特定标注进行样式修改。</p>
+<p>本节中的主题</p>
+<ul>
+<li>标注的组成部分（.NET）</li>
+<li>定义标注的系统变量（.NET）</li>
+<li>设置标注文字样式（.NET）</li>
+<li>理解引线（.NET）</li>
+<li>了解关联标注（.NET）</li>
+</ul>
+<h3 id="标注的组成部分（-NET）"><a href="#标注的组成部分（-NET）" class="headerlink" title="标注的组成部分（.NET）"></a>标注的组成部分（.NET）</h3><p>尺寸标注由许多不同的对象组成，如直线、文字、实体填充和块。虽然每种尺寸类型看起来可能略有不同，但它们确实有几个共同点。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-54632F71-4FA8-46CE-9283-CEABB9DDC9EA.png" alt="img"></p>
+<ul>
+<li><strong>尺寸线。</strong>指示尺寸方向和范围的直线。对于角度标注，尺寸线为圆弧。</li>
+<li><strong>延长线。</strong>从被标注的特征延伸到尺寸线的直线。延长线也称为投影线或尺寸界线。</li>
+<li><strong>箭头</strong>用于指示尺寸线端点的符号。箭头也被称为终止符号或只是终止。</li>
+<li><strong>尺寸文本。</strong>一个text字符串，通常表示正在测量的距离或角度的实际测量值。文本还可以包括前缀、后缀和公差。</li>
+<li><strong>引线</strong>从某个注释到参照特征的实线。</li>
+</ul>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-D9A24CCC-E495-4BB3-B8B1-11B6BE85788C.png" alt="img"></p>
+<ul>
+<li><strong>中间标记。</strong>十字标记圆或弧的中心的小十字</li>
+<li><strong>中线。</strong>一组虚线，标记圆或弧的中心</li>
+</ul>
+<h3 id="定义标注的系统变量（-NET）"><a href="#定义标注的系统变量（-NET）" class="headerlink" title="定义标注的系统变量（.NET）"></a>定义标注的系统变量（.NET）</h3><p>标注系统变量控制标注的外观。尺寸标注系统变量包括DIMAUNIT、DIMUPT、DIMTOFL、DIMFIT、DIMTIH、DIMTOH、DIMJUST和DIMJUST。您可以使用 SetSystemVariable 方法设置这些变量，该方法可以从 Application 对象访问。例如，以下代码行将DIMAUNIT系统变量（角度标注的单位格式）设置为弧度（3）：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Application.SetSystemVariable(<span class="string">&quot;DIMAUNIT&quot;</span>, <span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置标注文字样式（-NET）"><a href="#设置标注文字样式（-NET）" class="headerlink" title="设置标注文字样式（.NET）"></a>设置标注文字样式（.NET）</h3><p>尺寸文本是指与尺寸相关的任何类型的文本，包括测量、公差（横向和几何）、前缀、后缀以及单行或段落形式的文本注释。您可以使用AutoCAD计算的默认测量值作为文本，提供自己的文本或完全隐藏文本。可以使用标注文字添加信息，如特殊制造步骤或装配说明。标注文字使用由DIMTXSTY系统变量指定的文字样式。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-90C330A9-8D1A-4732-8FDF-52B3B71588BD.png" alt="img"></p>
+<h3 id="理解引线（-NET）"><a href="#理解引线（-NET）" class="headerlink" title="理解引线（.NET）"></a>理解引线（.NET）</h3><p>默认引线是一条带箭头的直线，指向图形中的特征。通常，引线的功能是将注释与特征连接起来。在这种情况下，注释意味着段落文本、块或特征控制框架。此类引线不同于AutoCAD为半径标注、直径标注和线性标注自动创建的简单引线，这些标注的文字不适合尺寸界线之间。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-BF99AD0A-D107-4C25-8C26-09B6743150F6.png" alt="img"></p>
+<p>引线对象与注释相关联，因此编辑注释时，引线也会相应更新。可以复制图形中其他位置使用的注释并将其附加到引线，也可以创建新注释。也可以创建不附加注释的引线。</p>
+<h3 id="了解关联标注（-NET）"><a href="#了解关联标注（-NET）" class="headerlink" title="了解关联标注（.NET）"></a>了解关联标注（.NET）</h3><p>修改关联标注关联的几何对象时，关联标注会自动调整其位置、方向和测量值。DIMASSOC系统变量控制关联标注。将DIMASSOC设置为2以启用关联标注。</p>
+<h2 id="创建标注（-NET）"><a href="#创建标注（-NET）" class="headerlink" title="创建标注（.NET）"></a>创建标注（.NET）</h2><p>可以创建线性、径向、角度和纵坐标标注。</p>
+<p>创建标注时，将使用激活的标注样式。创建尺寸界线后，可以修改尺寸界线原点、标注文字位置、标注文字内容及其相对于尺寸线的角度。也可以修改标注使用的标注样式。</p>
+<p>本节中的主题</p>
+<ul>
+<li>创建线性标注（.NET）</li>
+<li>创建径向标注（.NET）</li>
+<li>创建角度标注（.NET）</li>
+<li>创建折弯半径标注（.NET）</li>
+<li>创建弧长标注（.NET）</li>
+<li>创建坐标标注（.NET）</li>
+</ul>
+<h3 id="创建线性标注（-NET）"><a href="#创建线性标注（-NET）" class="headerlink" title="创建线性标注（.NET）"></a>创建线性标注（.NET）</h3><p>可以对齐或旋转线性标注。对齐标注的尺寸线平行于尺寸界线原点所在的线沿着。旋转尺寸的尺寸线与尺寸界线原点成一定角度放置。</p>
+<p>可以通过创建 AlignedDimension 和 RotatedDimension 对象的实例来创建线性标注。创建线性标注的实例后，可以修改文字、文字的角度或尺寸线的角度。下图显示了线性标注的类型和尺寸界线原点的放置如何影响尺寸线和文字的角度。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-D84FF305-958E-464D-950E-7505B1A64546.png" alt="img"></p>
+<p>创建 AlignedDimension 对象的实例时，可以选择指定尺寸界线原点、尺寸线位置、标注文字和要应用的标注样式。如果没有向 AlignedDimension 对象构造函数传递任何参数，则对象将被分配一组默认属性值。</p>
+<p>RotatedDimension 对象构造函数提供了与 AlignedDimension 对象构造函数相同的选项，但有一个例外。 RotatedDimension 对象构造函数接受一个附加参数，该参数指定尺寸线旋转的角度。</p>
+<p><strong>标注折弯线</strong></p>
+<p>线性标注上的纵行不是通过一组特性添加的，而是通过扩展数据（扩展数据）添加的。负责标注折弯线的应用程序名称为ACAD_DSTYLE_DIMJAG_POSITION。下面是需要附加到线性维度的Xdata结构的示例。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Open the Registered Application table for read</span></span><br><span class="line">RegAppTable acRegAppTbl;</span><br><span class="line">acRegAppTbl = &lt;transaction&gt;.GetObject(&lt;current_database&gt;.RegAppTableId,</span><br><span class="line">                                      OpenMode.ForRead) <span class="keyword">as</span> RegAppTable;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Check to see if the app &quot;ACAD_DSTYLE_DIMJAG_POSITION&quot; is</span></span><br><span class="line"><span class="comment">// registered and if not add it to the RegApp table</span></span><br><span class="line"><span class="keyword">if</span> (acRegAppTbl.Has(<span class="string">&quot;ACAD_DSTYLE_DIMJAG_POSITION&quot;</span>) == <span class="literal">false</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">using</span> (RegAppTableRecord acRegAppTblRec = <span class="keyword">new</span> RegAppTableRecord())</span><br><span class="line">    &#123;</span><br><span class="line">        acRegAppTblRec.Name = <span class="string">&quot;ACAD_DSTYLE_DIMJAG_POSITION&quot;</span>;</span><br><span class="line"> </span><br><span class="line">        &lt;transaction&gt;.GetObject(&lt;current_database&gt;.RegAppTableId, OpenMode.ForWrite);</span><br><span class="line"> </span><br><span class="line">        acRegAppTbl.Add(acRegAppTblRec);</span><br><span class="line">        &lt;transaction&gt;.AddNewlyCreatedDBObject(acRegAppTblRec, <span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Create a result buffer to define the Xdata</span></span><br><span class="line">ResultBuffer acResBuf = <span class="keyword">new</span> ResultBuffer();</span><br><span class="line">acResBuf.Add(<span class="keyword">new</span> TypedValue((<span class="built_in">int</span>)DxfCode.ExtendedDataRegAppName,</span><br><span class="line">                                         <span class="string">&quot;ACAD_DSTYLE_DIMJAG_POSITION&quot;</span>));</span><br><span class="line">acResBuf.Add(<span class="keyword">new</span> TypedValue((<span class="built_in">int</span>)DxfCode.ExtendedDataInteger16, <span class="number">387</span>));</span><br><span class="line">acResBuf.Add(<span class="keyword">new</span> TypedValue((<span class="built_in">int</span>)DxfCode.ExtendedDataInteger16, <span class="number">3</span>));</span><br><span class="line">acResBuf.Add(<span class="keyword">new</span> TypedValue((<span class="built_in">int</span>)DxfCode.ExtendedDataInteger16, <span class="number">389</span>));</span><br><span class="line">acResBuf.Add(<span class="keyword">new</span> TypedValue((<span class="built_in">int</span>)DxfCode.ExtendedDataXCoordinate,</span><br><span class="line">                                         <span class="keyword">new</span> Point3d(<span class="number">-1.26985</span>, <span class="number">3.91514</span>, <span class="number">0</span>)));</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Attach the Xdata to the dimension</span></span><br><span class="line">&lt;dimension_object&gt;.XData = acResBuf;</span><br></pre></td></tr></table></figure>
+
+<p><strong>创建旋转线性标注</strong></p>
+<p>本示例在模型空间中创建旋转标注。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;CreateRotatedDimension&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CreateRotatedDimension</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the current database</span></span><br><span class="line">    Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">    Database acCurDb = acDoc.Database;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Open the Block table for read</span></span><br><span class="line">        BlockTable acBlkTbl;</span><br><span class="line">        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the Block table record Model space for write</span></span><br><span class="line">        BlockTableRecord acBlkTblRec;</span><br><span class="line">        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                        OpenMode.ForWrite) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create the rotated dimension</span></span><br><span class="line">        <span class="keyword">using</span> (RotatedDimension acRotDim = <span class="keyword">new</span> RotatedDimension())</span><br><span class="line">        &#123;</span><br><span class="line">            acRotDim.XLine1Point = <span class="keyword">new</span> Point3d(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">            acRotDim.XLine2Point = <span class="keyword">new</span> Point3d(<span class="number">6</span>, <span class="number">3</span>, <span class="number">0</span>);</span><br><span class="line">            acRotDim.Rotation = <span class="number">0.707</span>;</span><br><span class="line">            acRotDim.DimLinePoint = <span class="keyword">new</span> Point3d(<span class="number">0</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">            acRotDim.DimensionStyle = acCurDb.Dimstyle;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Add the new object to Model space and the transaction</span></span><br><span class="line">            acBlkTblRec.AppendEntity(acRotDim);</span><br><span class="line">            acTrans.AddNewlyCreatedDBObject(acRotDim, <span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Commit the changes and dispose of the transaction</span></span><br><span class="line">        acTrans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建径向标注（-NET）"><a href="#创建径向标注（-NET）" class="headerlink" title="创建径向标注（.NET）"></a>创建径向标注（.NET）</h3><p>径向尺寸测量圆弧和圆的半径和直径。通过创建 RadialDimension 和 DiametricDimension 对象的实例来创建径向和直径尺寸。</p>
+<p>根据圆或圆弧的大小、标注文字的位置以及DIMUPT、DIMTOFL、DIMFIT、DIMTIH、DIMTOH、DIMJUST和DIMJUST标注系统变量中的值，可以创建不同类型的径向标注。（可以使用 GetSystemVariable 和 SetSystemVariable 方法查询或设置系统变量。）</p>
+<p>对于水平标注文字，如果尺寸线与水平线的角度大于15度，并且位于圆或圆弧之外，则AutoCAD将绘制一条弯钩线，也称为基线或折线。钩线放置在标注文字的旁边或下方，如下图所示：</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-D09B48A1-80E1-4D97-A78D-324EFF2341EA.png" alt="img"></p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-4118F66E-ECB4-4E94-A8E7-9BF431D14F0D.png" alt="img"></p>
+<p>创建 RadialDimension 对象的实例时，可以选择指定中心点和弦点、引线长度、标注文字和要应用的标注样式。创建 DiametricDimension 对象与创建 RadialDimension 对象类似，不同之处在于指定弦和远弦点，而不是中心和弦点。</p>
+<p>LeaderLength 属性指定从 ChordPoint 到注释文字的距离（如果不需要钩线，则为停止）。</p>
+<p><strong>创建径向尺寸标注</strong></p>
+<p>本示例在模型空间中创建径向标注。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;CreateRadialDimension&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CreateRadialDimension</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the current database</span></span><br><span class="line">    Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">    Database acCurDb = acDoc.Database;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Open the Block table for read</span></span><br><span class="line">        BlockTable acBlkTbl;</span><br><span class="line">        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the Block table record Model space for write</span></span><br><span class="line">        BlockTableRecord acBlkTblRec;</span><br><span class="line">        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                        OpenMode.ForWrite) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create the radial dimension</span></span><br><span class="line">        <span class="keyword">using</span> (RadialDimension acRadDim = <span class="keyword">new</span> RadialDimension())</span><br><span class="line">        &#123;</span><br><span class="line">            acRadDim.Center = <span class="keyword">new</span> Point3d(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">            acRadDim.ChordPoint = <span class="keyword">new</span> Point3d(<span class="number">5</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">            acRadDim.LeaderLength = <span class="number">5</span>;</span><br><span class="line">            acRadDim.DimensionStyle = acCurDb.Dimstyle;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Add the new object to Model space and the transaction</span></span><br><span class="line">            acBlkTblRec.AppendEntity(acRadDim);</span><br><span class="line">            acTrans.AddNewlyCreatedDBObject(acRadDim, <span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Commit the changes and dispose of the transaction</span></span><br><span class="line">        acTrans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建角度标注（-NET）"><a href="#创建角度标注（-NET）" class="headerlink" title="创建角度标注（.NET）"></a>创建角度标注（.NET）</h3><p>角度标注测量两条线或三点之间的角度。例如，您可以使用它们来测量圆的两个半径之间的角度。尺寸线形成圆弧。角度尺寸是通过创建 LineAngularDimension2 或 Point3AngularDimension 对象的实例来创建的。</p>
+<ul>
+<li><strong>LineAngularDimension2.</strong> 表示由两条直线定义的角度标注。</li>
+<li><strong>Point3AngularDimension.</strong> 表示由三个点定义的角度标注。</li>
+</ul>
+<p>当您创建 LineAngularDimension2 或 Point3AngularDimension 对象的实例时，构造函数可以选择接受一组参数。创建新的 LineAngularDimension2 对象时，可以提供以下参数：</p>
+<ul>
+<li>延长线1起点（ XLine1Start 属性）</li>
+<li>延长线1终点（ XLine1End 属性）</li>
+<li>延长线2起点（ XLine2Start 属性）</li>
+<li>延长线1终点（ XLine2End 属性）</li>
+<li>弧点（ ArcPoint 属性）</li>
+<li>标注文字（ DimensionText 属性）</li>
+<li>标注样式（ DimensionStyleName 或 DimensionStyle 属性）</li>
+</ul>
+<p>创建新的 Point3AngularDimension 对象时，可以提供以下参数：</p>
+<ul>
+<li>中心点（ CenterPoint 属性）</li>
+<li>延长线1点（ XLine1Point 属性）</li>
+<li>延长线2点（ XLine2Point 属性）</li>
+<li>弧点（ ArcPoint 属性）</li>
+<li>标注文字（ DimensionText 属性）</li>
+<li>标注样式（ DimensionStyleName 或 DimensionStyle 属性）</li>
+</ul>
+<p><strong>创建角度标注</strong></p>
+<p>本示例在模型空间中创建角度标注。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;CreateAngularDimension&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CreateAngularDimension</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the current database</span></span><br><span class="line">    Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">    Database acCurDb = acDoc.Database;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Open the Block table for read</span></span><br><span class="line">        BlockTable acBlkTbl;</span><br><span class="line">        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the Block table record Model space for write</span></span><br><span class="line">        BlockTableRecord acBlkTblRec;</span><br><span class="line">        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                        OpenMode.ForWrite) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create an angular dimension</span></span><br><span class="line">        <span class="keyword">using</span> (LineAngularDimension2 acLinAngDim = <span class="keyword">new</span> LineAngularDimension2())</span><br><span class="line">        &#123;</span><br><span class="line">            acLinAngDim.XLine1Start = <span class="keyword">new</span> Point3d(<span class="number">0</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">            acLinAngDim.XLine1End = <span class="keyword">new</span> Point3d(<span class="number">1</span>, <span class="number">7</span>, <span class="number">0</span>);</span><br><span class="line">            acLinAngDim.XLine2Start = <span class="keyword">new</span> Point3d(<span class="number">0</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">            acLinAngDim.XLine2End = <span class="keyword">new</span> Point3d(<span class="number">1</span>, <span class="number">3</span>, <span class="number">0</span>);</span><br><span class="line">            acLinAngDim.ArcPoint = <span class="keyword">new</span> Point3d(<span class="number">3</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">            acLinAngDim.DimensionStyle = acCurDb.Dimstyle;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Add the new object to Model space and the transaction</span></span><br><span class="line">            acBlkTblRec.AppendEntity(acLinAngDim);</span><br><span class="line">            acTrans.AddNewlyCreatedDBObject(acLinAngDim, <span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Commit the changes and dispose of the transaction</span></span><br><span class="line">        acTrans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建折弯半径标注（-NET）"><a href="#创建折弯半径标注（-NET）" class="headerlink" title="创建折弯半径标注（.NET）"></a>创建折弯半径标注（.NET）</h3><p>折弯半径尺寸测量对象的半径，并显示前面带有半径符号的尺寸文本。在以下情况下，您可能会在径向尺寸对象上使用折弯尺寸：</p>
+<ul>
+<li>对象的中心点位于布局之外，或者位于模型中没有足够空间放置径向尺寸标注的区域上</li>
+<li>物体的半径很大</li>
+</ul>
+<p>通过创建 RadialDimensionLarge 对象的实例来创建慢跑半径尺寸。当你创建一个 RadialDimensionLarge 对象的实例时，它的构造函数可以有选择地接受一组参数。创建新的 RadialDimensionLarge 对象时，可以提供以下参数：</p>
+<ul>
+<li>中心点（ Center 属性）</li>
+<li>弦点（ ChordPoint 属性）</li>
+<li>覆写中间点（ OverrideCenter 属性）</li>
+<li>折弯线的位置（ JogPoint 属性）</li>
+<li>折弯线的角度（ JogAngle 属性）</li>
+<li>标注文字（ DimensionText 属性）</li>
+<li>标注样式（ DimensionStyleName 或 DimensionStyle 属性）</li>
+</ul>
+<p><strong>创建折弯半径标注</strong></p>
+<p>本示例在模型空间中创建折弯半径标注。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;CreateJoggedDimension&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CreateJoggedDimension</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the current database</span></span><br><span class="line">    Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">    Database acCurDb = acDoc.Database;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Open the Block table for read</span></span><br><span class="line">        BlockTable acBlkTbl;</span><br><span class="line">        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the Block table record Model space for write</span></span><br><span class="line">        BlockTableRecord acBlkTblRec;</span><br><span class="line">        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                        OpenMode.ForWrite) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create a large radius dimension</span></span><br><span class="line">        <span class="keyword">using</span> (RadialDimensionLarge acRadDimLrg = <span class="keyword">new</span> RadialDimensionLarge())</span><br><span class="line">        &#123;</span><br><span class="line">            acRadDimLrg.Center = <span class="keyword">new</span> Point3d(<span class="number">-3</span>, <span class="number">-4</span>, <span class="number">0</span>);</span><br><span class="line">            acRadDimLrg.ChordPoint = <span class="keyword">new</span> Point3d(<span class="number">2</span>, <span class="number">7</span>, <span class="number">0</span>);</span><br><span class="line">            acRadDimLrg.OverrideCenter = <span class="keyword">new</span> Point3d(<span class="number">0</span>, <span class="number">2</span>, <span class="number">0</span>);</span><br><span class="line">            acRadDimLrg.JogPoint = <span class="keyword">new</span> Point3d(<span class="number">1</span>, <span class="number">4.5</span>, <span class="number">0</span>);</span><br><span class="line">            acRadDimLrg.JogAngle = <span class="number">0.707</span>;</span><br><span class="line">            acRadDimLrg.DimensionStyle = acCurDb.Dimstyle;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Add the new object to Model space and the transaction</span></span><br><span class="line">            acBlkTblRec.AppendEntity(acRadDimLrg);</span><br><span class="line">            acTrans.AddNewlyCreatedDBObject(acRadDimLrg, <span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Commit the changes and dispose of the transaction</span></span><br><span class="line">        acTrans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建弧长标注（-NET）"><a href="#创建弧长标注（-NET）" class="headerlink" title="创建弧长标注（.NET）"></a>创建弧长标注（.NET）</h3><p>弧长标注测量沿弧的沿着长度，并显示标注文字，标注文字带有位于弧上方或弧前方的弧符号。当需要标注弧的实际长度而不仅仅是其起点和终点之间的距离时，可以使用弧长标注。</p>
+<p>可以通过创建 ArcDimension 对象的实例来创建弧长半径标注。创建 ArcDimension 对象的实例时，需要一组定义尺寸的参数。创建新的 ArcDimension 对象时，必须提供以下参数：</p>
+<ul>
+<li>中心点（ Center 属性）</li>
+<li>延长线1点（ XLine1Point 物业）</li>
+<li>延长线2点（ XLine2Point 属性）</li>
+<li>弧点（ ArcPoint 属性）</li>
+<li>标注文字（ DimensionText 属性）</li>
+<li>标注样式（ DimensionStyleName 或 DimensionStyle 属性）</li>
+</ul>
+<p><strong>注意：</strong>DIMARCSYM系统变量控制是否显示圆弧符号以及该符号相对于标注文字的显示位置。</p>
+<p><strong>创建弧长标注</strong></p>
+<p>本示例在模型空间中创建弧长标注。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;CreateArcLengthDimension&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CreateArcLengthDimension</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the current database</span></span><br><span class="line">    Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">    Database acCurDb = acDoc.Database;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Open the Block table for read</span></span><br><span class="line">        BlockTable acBlkTbl;</span><br><span class="line">        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the Block table record Model space for write</span></span><br><span class="line">        BlockTableRecord acBlkTblRec;</span><br><span class="line">        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                        OpenMode.ForWrite) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create an arc length dimension</span></span><br><span class="line">        <span class="keyword">using</span> (ArcDimension acArcDim = <span class="keyword">new</span> ArcDimension(<span class="keyword">new</span> Point3d(<span class="number">4.5</span>, <span class="number">1.5</span>, <span class="number">0</span>),</span><br><span class="line">                                                        <span class="keyword">new</span> Point3d(<span class="number">8</span>, <span class="number">4.25</span>, <span class="number">0</span>),</span><br><span class="line">                                                        <span class="keyword">new</span> Point3d(<span class="number">0</span>, <span class="number">2</span>, <span class="number">0</span>),</span><br><span class="line">                                                        <span class="keyword">new</span> Point3d(<span class="number">5</span>, <span class="number">7</span>, <span class="number">0</span>),</span><br><span class="line">                                                        <span class="string">&quot;&lt;&gt;&quot;</span>,</span><br><span class="line">                                                        acCurDb.Dimstyle))</span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Add the new object to Model space and the transaction</span></span><br><span class="line">            acBlkTblRec.AppendEntity(acArcDim);</span><br><span class="line">            acTrans.AddNewlyCreatedDBObject(acArcDim, <span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Commit the changes and dispose of the transaction</span></span><br><span class="line">        acTrans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建坐标尺寸（-NET）"><a href="#创建坐标尺寸（-NET）" class="headerlink" title="创建坐标尺寸（.NET）"></a>创建坐标尺寸（.NET）</h3><p>坐标或基准尺寸测量从原点（称为基准）到标注特征（如零件中的孔）的垂直距离。这些尺寸通过保持特征与基准的精确偏移来防止误差的增加。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-B0D74148-4C3E-46DC-8B4E-5EC58AD23D88.png" alt="img"></p>
+<p>坐标尺寸由带有引线的<em>X</em>或<em>Y</em>纵坐标组成。<em>X</em>基准坐标尺寸测量特征沿<em>X</em>轴沿着距基准的距离。<em>Y</em>基准坐标尺寸沿<em>Y</em>轴沿着测量相同的距离。AutoCAD使用当前用户坐标系（UCS）的原点来确定测量坐标。使用坐标的绝对值。</p>
+<p>无论当前尺寸样式定义的方向如何，尺寸文本都会与坐标引线对齐。您可以接受默认文本或使用自己的文本覆盖它。</p>
+<p>通过创建 OrdinateDimension 对象的实例来创建同基准尺寸。当你创建一个 OrdinateDimension 对象的实例时，它的构造函数可以接受一组可选的参数。创建新的 OrdinateDimension 对象时，可以提供以下参数：</p>
+<ul>
+<li>使用X轴（ UsingXAxis 属性）</li>
+<li>定义点（ DefiningPoint 属性）</li>
+<li>引线端点（ LeaderEndPoint 属性）</li>
+<li>标注文字（ DimensionText 属性）</li>
+<li>标注样式（ DimensionStyleName 或 DimensionStyle 属性）</li>
+</ul>
+<p>当将值传递到 OrdinateDimension 对象构造器时，第一个值是布尔标志，它指定尺寸是<em>X</em>基准还是<em>Y</em>基准坐标尺寸。如果输入 TRUE ，将创建<em>X</em>基准坐标尺寸。如果输入 FALSE ，将创建<em>Y</em>基准坐标尺寸。 UsingXAxis 特性也可用于指定坐标尺寸是<em>X</em>基准还是<em>Y</em>基准。</p>
+<p><strong>创建坐标尺寸</strong></p>
+<p>本示例在“模型”空间中创建纵坐标标注。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;CreateOrdinateDimension&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CreateOrdinateDimension</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the current database</span></span><br><span class="line">    Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">    Database acCurDb = acDoc.Database;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Open the Block table for read</span></span><br><span class="line">        BlockTable acBlkTbl;</span><br><span class="line">        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the Block table record Model space for write</span></span><br><span class="line">        BlockTableRecord acBlkTblRec;</span><br><span class="line">        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                        OpenMode.ForWrite) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create an ordinate dimension</span></span><br><span class="line">        <span class="keyword">using</span> (OrdinateDimension acOrdDim = <span class="keyword">new</span> OrdinateDimension())</span><br><span class="line">        &#123;</span><br><span class="line">            acOrdDim.UsingXAxis = <span class="literal">true</span>;</span><br><span class="line">            acOrdDim.DefiningPoint = <span class="keyword">new</span> Point3d(<span class="number">5</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">            acOrdDim.LeaderEndPoint = <span class="keyword">new</span> Point3d(<span class="number">10</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">            acOrdDim.DimensionStyle = acCurDb.Dimstyle;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Add the new object to Model space and the transaction</span></span><br><span class="line">            acBlkTblRec.AppendEntity(acOrdDim);</span><br><span class="line">            acTrans.AddNewlyCreatedDBObject(acOrdDim, <span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Commit the changes and dispose of the transaction</span></span><br><span class="line">        acTrans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="编辑标注（-NET）"><a href="#编辑标注（-NET）" class="headerlink" title="编辑标注（.NET）"></a>编辑标注（.NET）</h2><p>与AutoCAD中的其他图形对象一样，可以使用为对象提供的方法和属性编辑标注。</p>
+<p>以下属性可用于大多数标注对象：</p>
+<ul>
+<li><p>DimensionStyle </p>
+<p>指定尺寸样式的对象ID。</p>
+</li>
+<li><p>DimensionStyleName </p>
+<p>指定标注样式的名称。</p>
+</li>
+<li><p>DimensionText </p>
+<p>指定用户定义的标注文字字符串。</p>
+</li>
+<li><p>HorizontalRotation </p>
+<p>以弧度为单位指定尺寸的旋转角度。</p>
+</li>
+<li><p>Measurement </p>
+<p>指定标注的实际测量值。</p>
+</li>
+<li><p>TextPosition </p>
+<p>指定标注文字位置。</p>
+</li>
+<li><p>TextRotation</p>
+<p>指定标注文字的旋转角度。</p>
+</li>
+</ul>
+<p>此外，要使用标注对象的特定属性和方法修改标注对象，还可以复制和变换标注对象。</p>
+<p>本节中的主题</p>
+<ul>
+<li>重写标注文字（.NET）</li>
+</ul>
+<h3 id="重写标注文字（-NET）"><a href="#重写标注文字（-NET）" class="headerlink" title="重写标注文字（.NET）"></a>重写标注文字（.NET）</h3><p>可以使用 DimensionText 特性替换显示的尺寸值。使用此属性可以完全替换尺寸的显示值，也可以将文本附加到值。要在重写尺寸文本中表示测量值，请在文本中使用字符串“&lt;&gt;”。</p>
+<p><strong>修改标注文字</strong></p>
+<p>此示例将一些文本附加到值，以便同时显示字符串和尺寸值。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;OverrideDimensionText&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">OverrideDimensionText</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the current database</span></span><br><span class="line">    Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">    Database acCurDb = acDoc.Database;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Open the Block table for read</span></span><br><span class="line">        BlockTable acBlkTbl;</span><br><span class="line">        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the Block table record Model space for write</span></span><br><span class="line">        BlockTableRecord acBlkTblRec;</span><br><span class="line">        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                        OpenMode.ForWrite) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create the aligned dimension</span></span><br><span class="line">        <span class="keyword">using</span> (AlignedDimension acAliDim = <span class="keyword">new</span> AlignedDimension())</span><br><span class="line">        &#123;</span><br><span class="line">            acAliDim.XLine1Point = <span class="keyword">new</span> Point3d(<span class="number">5</span>, <span class="number">3</span>, <span class="number">0</span>);</span><br><span class="line">            acAliDim.XLine2Point = <span class="keyword">new</span> Point3d(<span class="number">10</span>, <span class="number">3</span>, <span class="number">0</span>);</span><br><span class="line">            acAliDim.DimLinePoint = <span class="keyword">new</span> Point3d(<span class="number">7.5</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">            acAliDim.DimensionStyle = acCurDb.Dimstyle;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Override the dimension text</span></span><br><span class="line">            acAliDim.DimensionText = <span class="string">&quot;The value is &lt;&gt;&quot;</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Add the new object to Model space and the transaction</span></span><br><span class="line">            acBlkTblRec.AppendEntity(acAliDim);</span><br><span class="line">            acTrans.AddNewlyCreatedDBObject(acAliDim, <span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Commit the changes and dispose of the transaction</span></span><br><span class="line">        acTrans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用标注样式（-NET）"><a href="#使用标注样式（-NET）" class="headerlink" title="使用标注样式（.NET）"></a>使用标注样式（.NET）</h2><p>命名标注样式是确定标注外观的一组设置。使用命名标注样式，可以为工程图中的标注建立和实施绘图标准。</p>
+<p>所有标注都使用激活的标注样式创建。如果在创建标注之前未定义或应用样式，AutoCAD将应用默认样式STANDARD。要设置活动维度样式，请使用当前数据库的 Dimstyle 属性。</p>
+<p>若要设置标注样式，请开始命名并保存样式。新样式以当前样式为基础，并包括定义尺寸部分、文字定位和注释外观的所有设置。在这种情况下，注释意味着主单位和换算单位、公差和文本。</p>
+<p>本节中的主题</p>
+<ul>
+<li>创建、修改和复制标注样式（.NET）</li>
+<li>更改标注样式（.NET）</li>
+</ul>
+<h3 id="创建、修改和复制标注样式（-NET）"><a href="#创建、修改和复制标注样式（-NET）" class="headerlink" title="创建、修改和复制标注样式（.NET）"></a>创建、修改和复制标注样式（.NET）</h3><p>通过创建 DimStyleTableRecord 对象的实例，然后使用 Add 方法将其添加到 DimStyleTable 中，可以创建新的标注样式。在将标注样式添加到表中之前，请使用 Name 特性设置新样式的名称。</p>
+<p>也可以复制现有样式或具有重载的样式。使用 CopyFrom 方法将尺寸样式从源对象复制到尺寸样式。源对象可以是另一个 DimStyleTableRecord 对象、 Dimension 、 Tolerance 或 Leader 对象，甚至是 Database 对象。如果从其他标注样式复制样式设置，则当前样式将完全复制。如果从 Dimension 、 Tolerance 或 Leader 对象复制样式设置，则当前设置（包括任何对象替代）将复制到样式中。如果复制 Database 对象的当前样式，则标注样式和任何图形重载都将复制到新样式中。</p>
+<p><strong>复制标注样式和重载</strong></p>
+<p>本示例创建三个新标注样式，并将当前设置从当前 Database 、给定标注样式和给定标注分别复制到每个新标注样式。通过在运行此示例之前执行相应的设置，您将发现已创建了不同的标注样式。</p>
+<ol>
+<li>创建新图形并使其成为活动图形。</li>
+<li>在新图形中创建线性尺寸标注。此尺寸应是图形中的唯一对象。</li>
+<li>将尺寸线的颜色更改为黄色。</li>
+<li>将DIMCLRD系统变量更改为5（蓝色）。</li>
+<li>运行以下示例：</li>
+</ol>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;CopyDimStyles&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CopyDimStyles</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the current database</span></span><br><span class="line">    Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">    Database acCurDb = acDoc.Database;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Open the Block table for read</span></span><br><span class="line">        BlockTable acBlkTbl;</span><br><span class="line">        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the Block table record Model space for read</span></span><br><span class="line">        BlockTableRecord acBlkTblRec;</span><br><span class="line">        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">object</span> acObj = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">foreach</span> (ObjectId acObjId <span class="keyword">in</span> acBlkTblRec)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// Get the first object in Model space</span></span><br><span class="line">            acObj = acTrans.GetObject(acObjId,</span><br><span class="line">                                        OpenMode.ForRead);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the DimStyle table for read</span></span><br><span class="line">        DimStyleTable acDimStyleTbl;</span><br><span class="line">        acDimStyleTbl = acTrans.GetObject(acCurDb.DimStyleTableId,</span><br><span class="line">                                            OpenMode.ForRead) <span class="keyword">as</span> DimStyleTable;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">string</span>[] strDimStyleNames = <span class="keyword">new</span> <span class="built_in">string</span>[<span class="number">3</span>];</span><br><span class="line">        strDimStyleNames[<span class="number">0</span>] = <span class="string">&quot;Style 1 copied from a dim&quot;</span>;</span><br><span class="line">        strDimStyleNames[<span class="number">1</span>] = <span class="string">&quot;Style 2 copied from Style 1&quot;</span>;</span><br><span class="line">        strDimStyleNames[<span class="number">2</span>] = <span class="string">&quot;Style 3 copied from the running drawing values&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">int</span> nCnt = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Keep a reference of the first dimension style for later</span></span><br><span class="line">        DimStyleTableRecord acDimStyleTblRec1 = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Iterate the array of dimension style names</span></span><br><span class="line">        <span class="keyword">foreach</span> (<span class="built_in">string</span> strDimStyleName <span class="keyword">in</span> strDimStyleNames)</span><br><span class="line">        &#123;</span><br><span class="line">            DimStyleTableRecord acDimStyleTblRec;</span><br><span class="line">            DimStyleTableRecord acDimStyleTblRecCopy = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Check to see if the dimension style exists or not</span></span><br><span class="line">            <span class="keyword">if</span> (acDimStyleTbl.Has(strDimStyleName) == <span class="literal">false</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (acDimStyleTbl.IsWriteEnabled == <span class="literal">false</span>) acTrans.GetObject(acCurDb.DimStyleTableId, OpenMode.ForWrite);</span><br><span class="line"></span><br><span class="line">                acDimStyleTblRec = <span class="keyword">new</span> DimStyleTableRecord();</span><br><span class="line">                acDimStyleTblRec.Name = strDimStyleName;</span><br><span class="line"></span><br><span class="line">                acDimStyleTbl.Add(acDimStyleTblRec);</span><br><span class="line">                acTrans.AddNewlyCreatedDBObject(acDimStyleTblRec, <span class="literal">true</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                acDimStyleTblRec = acTrans.GetObject(acDimStyleTbl[strDimStyleName],</span><br><span class="line">                                                        OpenMode.ForWrite) <span class="keyword">as</span> DimStyleTableRecord;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Determine how the new dimension style is populated</span></span><br><span class="line">            <span class="keyword">switch</span> ((<span class="built_in">int</span>)nCnt)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// Assign the values of the dimension object to the new dimension style</span></span><br><span class="line">                <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">                    <span class="keyword">try</span></span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="comment">// Cast the object to a Dimension</span></span><br><span class="line">                        Dimension acDim = acObj <span class="keyword">as</span> Dimension;</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// Copy the dimension style data from the dimension and</span></span><br><span class="line">                        <span class="comment">// set the name of the dimension style as the copied settings</span></span><br><span class="line">                        <span class="comment">// are unnamed.</span></span><br><span class="line">                        acDimStyleTblRecCopy = acDim.GetDimstyleData();</span><br><span class="line">                        acDimStyleTblRec1 = acDimStyleTblRec;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">catch</span></span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="comment">// Object was not a dimension</span></span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Assign the values of the dimension style to the new dimension style</span></span><br><span class="line">                <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">                    acDimStyleTblRecCopy = acDimStyleTblRec1;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="comment">// Assign the values of the current drawing to the dimension style</span></span><br><span class="line">                <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">                    acDimStyleTblRecCopy = acCurDb.GetDimstyleData();</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Copy the dimension settings and set the name of the dimension style</span></span><br><span class="line">            acDimStyleTblRec.CopyFrom(acDimStyleTblRecCopy);</span><br><span class="line">            acDimStyleTblRec.Name = strDimStyleName;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Dispose of the copied dimension style</span></span><br><span class="line">            acDimStyleTblRecCopy.Dispose();</span><br><span class="line"></span><br><span class="line">            nCnt = nCnt + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Commit the changes and dispose of the transaction</span></span><br><span class="line">        acTrans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用DIMSTYLE命令打开标注样式管理器。现在应该列出了三种标注样式。样式1应具有黄色尺寸线。样式2应该与样式1相同。样式3应具有蓝色尺寸线。</p>
+<h3 id="重写标注样式（-NET）"><a href="#重写标注样式（-NET）" class="headerlink" title="重写标注样式（.NET）"></a>重写标注样式（.NET）</h3><p>每个标注都可以重写由标注样式指定给它的设置。以下属性可用于大多数标注对象：</p>
+<ul>
+<li><p>Dimatfit</p>
+<p>指定尺寸线仅显示在尺寸界线内，并强制尺寸文字和箭头显示在尺寸界线内或外。</p>
+</li>
+<li><p>Dimaltrnd </p>
+<p>指定换算单位的舍入。</p>
+</li>
+<li><p>Dimasz</p>
+<p>指定尺寸线箭头、引线箭头和钩线的大小。</p>
+</li>
+<li><p>Dimaunit</p>
+<p>指定角度标注的单位格式。</p>
+</li>
+<li><p>Dimblk1, Dimblk2 ，</p>
+<p>指定用于尺寸线箭头的块。</p>
+</li>
+<li><p>Dimcen </p>
+<p> 指定径向和直径标注的中心标记的类型和大小。</p>
+</li>
+<li><p>Dimclrd</p>
+<p>指定尺寸、引线或公差对象的尺寸线颜色。</p>
+</li>
+<li><p>Dimclre</p>
+<p>指定尺寸界线的颜色。</p>
+</li>
+<li><p>Dimclrt </p>
+<p>指定尺寸和公差对象的文字颜色。</p>
+</li>
+<li><p>Dimdec</p>
+<p>指定为尺寸或公差的基本单位显示的小数位数。</p>
+</li>
+<li><p>Dimdsep Dimdsep的</p>
+<p>指定在小数尺寸和公差值中用作小数分隔符的字符。</p>
+</li>
+<li><p>Dimexe</p>
+<p>指定尺寸界线超出尺寸线的距离。</p>
+</li>
+<li><p>Dimexo </p>
+<p>指定尺寸界线距原点的偏移距离。</p>
+</li>
+<li><p>Dimfrac </p>
+<p>指定尺寸和公差中分数值的格式。</p>
+</li>
+<li><p>Dimgap</p>
+<p>指定打断尺寸线以容纳标注文字时标注文字与尺寸线之间的距离。</p>
+</li>
+<li><p>Dimlfac </p>
+<p>指定线性标注测量的全局比例因子。</p>
+</li>
+<li><p>Dimltex1, Dimltex2 </p>
+<p>指定尺寸界线的线型。</p>
+</li>
+<li><p>Dimlwd </p>
+<p>指定尺寸线的线宽。</p>
+</li>
+<li><p>Dimlwe</p>
+<p>指定尺寸界线的线宽。</p>
+</li>
+<li><p>Dimjust</p>
+<p>指定标注文字的水平对齐方式。</p>
+</li>
+<li><p>Dimrnd </p>
+<p>指定尺寸测量的距离舍入。</p>
+</li>
+<li><p>Dimsd1, Dimsd2 </p>
+<p>指定尺寸线的抑制。</p>
+</li>
+<li><p>Dimse1, Dimse2 </p>
+<p>指定尺寸界线的抑制。</p>
+</li>
+<li><p>Dimtad</p>
+<p>指定文字相对于尺寸线的垂直位置。</p>
+</li>
+<li><p>Dimtdec </p>
+<p>指定主尺寸中公差值的精度。</p>
+</li>
+<li><p>Dimtfac </p>
+<p>指定公差值的文字高度相对于标注文字高度的比例因子。</p>
+</li>
+<li><p>Dimlunit </p>
+<p>指定除角度标注外的所有标注的单位格式。</p>
+</li>
+<li><p>Dimtih </p>
+<p>指定是否在尺寸界线内绘制标注文字。</p>
+</li>
+<li><p>Dimtm</p>
+<p>指定标注文字的最小公差限制。</p>
+</li>
+<li><p>Dimtmove</p>
+<p>指定移动文字时如何绘制标注文字。</p>
+</li>
+<li><p>Dimtofl </p>
+<p>指定是否在尺寸界线之间绘制尺寸线（即使文字放置在尺寸界线之外）。</p>
+</li>
+<li><p>Dimtoh </p>
+<p>为除纵坐标外的所有标注类型指定尺寸标注文字在尺寸界线外的位置。</p>
+</li>
+<li><p>Dimtol</p>
+<p>指定公差是否与标注文字一起显示。</p>
+</li>
+<li><p>Dimtolj </p>
+<p>指定公差值相对于公称尺寸文字的垂直对正。</p>
+</li>
+<li><p>Dimtp </p>
+<p>指定标注文字的最大公差限制。</p>
+</li>
+<li><p>Dimtxt </p>
+<p>指定尺寸或公差文字的高度。</p>
+</li>
+<li><p>Dimzin </p>
+<p>指定尺寸值中是否隐藏前导零和尾随零以及零英尺和零英寸测量值。</p>
+</li>
+<li><p>Prefix </p>
+<p>指定标注值前缀。</p>
+</li>
+<li><p>Suffix </p>
+<p>指定标注值后缀。</p>
+</li>
+<li><p>TextPrecision </p>
+<p>指定角度标注文字的精度。</p>
+</li>
+<li><p>TextPosition </p>
+<p>指定标注文字位置。</p>
+</li>
+<li><p>TextRotation</p>
+<p>指定标注文字的旋转角度。</p>
+</li>
+</ul>
+<p><strong>为对齐的标注输入用户定义的后缀</strong></p>
+<p>此示例在模型空间中创建对齐尺寸，并使用Suffix属性允许用户更改尺寸的文本后缀。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;AddDimensionTextSuffix&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">AddDimensionTextSuffix</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the current database</span></span><br><span class="line">    Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">    Database acCurDb = acDoc.Database;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Open the Block table for read</span></span><br><span class="line">        BlockTable acBlkTbl;</span><br><span class="line">        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the Block table record Model space for write</span></span><br><span class="line">        BlockTableRecord acBlkTblRec;</span><br><span class="line">        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                        OpenMode.ForWrite) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create the aligned dimension</span></span><br><span class="line">        <span class="keyword">using</span> (AlignedDimension acAliDim = <span class="keyword">new</span> AlignedDimension())</span><br><span class="line">        &#123;</span><br><span class="line">            acAliDim.XLine1Point = <span class="keyword">new</span> Point3d(<span class="number">0</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">            acAliDim.XLine2Point = <span class="keyword">new</span> Point3d(<span class="number">5</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">            acAliDim.DimLinePoint = <span class="keyword">new</span> Point3d(<span class="number">5</span>, <span class="number">7</span>, <span class="number">0</span>);</span><br><span class="line">            acAliDim.DimensionStyle = acCurDb.Dimstyle;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Add the new object to Model space and the transaction</span></span><br><span class="line">            acBlkTblRec.AppendEntity(acAliDim);</span><br><span class="line">            acTrans.AddNewlyCreatedDBObject(acAliDim, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Append a suffix to the dimension text</span></span><br><span class="line">            PromptStringOptions pStrOpts = <span class="keyword">new</span> PromptStringOptions(<span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br><span class="line">            pStrOpts.Message = <span class="string">&quot;\nEnter a new text suffix for the dimension: &quot;</span>;</span><br><span class="line">            pStrOpts.AllowSpaces = <span class="literal">true</span>;</span><br><span class="line">            PromptResult pStrRes = acDoc.Editor.GetString(pStrOpts);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (pStrRes.Status == PromptStatus.OK)</span><br><span class="line">            &#123;</span><br><span class="line">                acAliDim.Suffix = pStrRes.StringResult;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Commit the changes and dispose of the transaction</span></span><br><span class="line">        acTrans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="模型空间和图纸空间中的尺寸标注（-NET）"><a href="#模型空间和图纸空间中的尺寸标注（-NET）" class="headerlink" title="模型空间和图纸空间中的尺寸标注（.NET）"></a>模型空间和图纸空间中的尺寸标注（.NET）</h2><p>可以在模型空间和图纸空间中绘制尺寸。但是，如果要标注尺寸的几何图形位于模型空间中，则最好在模型空间中绘制尺寸，因为AutoCAD会将定义点放置在绘制几何图形的空间中。</p>
+<p>如果在图纸空间中绘制描述模型中几何图形的尺寸，则在使用编辑命令或更改“模型空间”视口中显示的放大率时，图纸空间尺寸不会更改。将视图从图纸空间更改为模型空间时，图纸空间尺寸的位置也保持不变。</p>
+<p>如果在图纸空间中标注尺寸，并且线性标注的全局比例因子（DIMLFAC系统变量）设置为小于0，则测量的距离将乘以DIMLFAC的绝对值。如果在“模型”空间中标注尺寸，则即使DIMLFAC小于0，也将使用值1.0。如果在“尺寸”提示下更改变量并选择“视口”选项，AutoCAD将计算DIMLFAC的值。AutoCAD计算模型空间与图纸空间的比例，并将该值的负值指定给DIMLFAC。</p>
+<h2 id="创建引线和注释（-NET）"><a href="#创建引线和注释（-NET）" class="headerlink" title="创建引线和注释（.NET）"></a>创建引线和注释（.NET）</h2><p>引线是将某个注释连接到图形中某个要素的线。引线及其注释是关联的，这意味着如果修改注释，引线将相应更新。不要将引线对象与AutoCAD自动生成为尺寸线一部分的引线混淆。</p>
+<p>本节中的主题</p>
+<ul>
+<li>创建引线（.NET）</li>
+<li>向引线添加注释（.NET）</li>
+<li>引线关联性（.NET）</li>
+<li>编辑引线关联性（.NET）</li>
+<li>编辑引线（.NET）</li>
+</ul>
+<h3 id="创建引线（-NET）"><a href="#创建引线（-NET）" class="headerlink" title="创建引线（.NET）"></a>创建引线（.NET）</h3><p>可以从图形中的任何点或特征创建引线并控制其外观。引线可以是直线段或平滑的样条曲线。引线颜色由当前尺寸线颜色控制。引线比例由活动标注样式中设置的总体标注比例控制。如果存在箭头，则其类型和大小由活动样式中定义的箭头控制。</p>
+<p>一条称为钩线的细线通常将注释连接到引线。如果最后一条引线线段与水平线的夹角大于15度，则勾线将与多行文字和几何公差框一起显示。钩线是单个箭头的长度。如果引线没有注释，则它没有钩线。</p>
+<p><img src="https://help.autodesk.com/cloudhelp/2024/ENU/OARX-DevGuide-Managed/images/GUID-9FCA8620-3D1E-4847-86C7-34FB341059DA.png" alt="img"></p>
+<p>可以通过创建引线对象的实例来创建引线。创建Leader对象的实例时，其构造函数不接受任何参数。 AppendVertex 方法用于定义所创建引线的位置和长度。</p>
+<p><strong>创建引线</strong></p>
+<p>本示例在模型空间中创建引线。没有与引线关联的注释。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;CreateLeader&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CreateLeader</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the current database</span></span><br><span class="line">    Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">    Database acCurDb = acDoc.Database;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Open the Block table for read</span></span><br><span class="line">        BlockTable acBlkTbl;</span><br><span class="line">        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the Block table record Model space for write</span></span><br><span class="line">        BlockTableRecord acBlkTblRec;</span><br><span class="line">        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                        OpenMode.ForWrite) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create the leader</span></span><br><span class="line">        <span class="keyword">using</span> (Leader acLdr = <span class="keyword">new</span> Leader())</span><br><span class="line">        &#123;</span><br><span class="line">            acLdr.AppendVertex(<span class="keyword">new</span> Point3d(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">            acLdr.AppendVertex(<span class="keyword">new</span> Point3d(<span class="number">4</span>, <span class="number">4</span>, <span class="number">0</span>));</span><br><span class="line">            acLdr.AppendVertex(<span class="keyword">new</span> Point3d(<span class="number">4</span>, <span class="number">5</span>, <span class="number">0</span>));</span><br><span class="line">            acLdr.HasArrowHead = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Add the new object to Model space and the transaction</span></span><br><span class="line">            acBlkTblRec.AppendEntity(acLdr);</span><br><span class="line">            acTrans.AddNewlyCreatedDBObject(acLdr, <span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Commit the changes and dispose of the transaction</span></span><br><span class="line">        acTrans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="向引线添加注释（-NET）"><a href="#向引线添加注释（-NET）" class="headerlink" title="向引线添加注释（.NET）"></a>向引线添加注释（.NET）</h3><p>Leader 对象的注释可以是 Tolerance 、 MText 或 BlockReference 对象。可以创建新注释对象，也可以附加现有注释对象的副本。通过将注释对象的对象ID分配给 Annotation 属性，可以将注释添加到引线。</p>
+<h3 id="引线关联性（-NET）"><a href="#引线关联性（-NET）" class="headerlink" title="引线关联性（.NET）"></a>引线关联性（.NET）</h3><p>引线与其注释相关联，因此当注释移动时，引线的端点也随之移动。当您移动文字和几何公差符号注释时，最终引线线段根据注释与引线倒数第二点（倒数第二点）的关系，在附着到注释的左侧和右侧之间交替。如果注释的中点位于倒数第二个引线点的右侧，则引线将附着到右侧;否则，它将附着到左侧。</p>
+<p>使用 Erase 、 Add （添加块）或 WBlock 方法从图形中删除任何一个对象都会破坏关联性。如果引线及其注释在单个操作中一起复制，则新副本是关联的。如果单独复制它们，它们将是非关联的。如果由于任何原因（例如，仅复制引线对象或删除注释）而破坏了关联性，则将从引线中删除钩线。</p>
+<p><strong>将引线与注记关联</strong></p>
+<p>这个例子创建了一个 MText 对象。然后使用 MText 对象作为其注释创建引线。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;AddLeaderAnnotation&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">AddLeaderAnnotation</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the current database</span></span><br><span class="line">    Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">    Database acCurDb = acDoc.Database;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Open the Block table for read</span></span><br><span class="line">        BlockTable acBlkTbl;</span><br><span class="line">        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the Block table record Model space for write</span></span><br><span class="line">        BlockTableRecord acBlkTblRec;</span><br><span class="line">        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                        OpenMode.ForWrite) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create the MText annotation</span></span><br><span class="line">        <span class="keyword">using</span> (MText acMText = <span class="keyword">new</span> MText())</span><br><span class="line">        &#123;</span><br><span class="line">            acMText.Contents = <span class="string">&quot;Hello, World.&quot;</span>;</span><br><span class="line">            acMText.Location = <span class="keyword">new</span> Point3d(<span class="number">5</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">            acMText.Width = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Add the new object to Model space and the transaction</span></span><br><span class="line">            acBlkTblRec.AppendEntity(acMText);</span><br><span class="line">            acTrans.AddNewlyCreatedDBObject(acMText, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Create the leader with annotation</span></span><br><span class="line">            <span class="keyword">using</span> (Leader acLdr = <span class="keyword">new</span> Leader())</span><br><span class="line">            &#123;</span><br><span class="line">                acLdr.AppendVertex(<span class="keyword">new</span> Point3d(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">                acLdr.AppendVertex(<span class="keyword">new</span> Point3d(<span class="number">4</span>, <span class="number">4</span>, <span class="number">0</span>));</span><br><span class="line">                acLdr.AppendVertex(<span class="keyword">new</span> Point3d(<span class="number">4</span>, <span class="number">5</span>, <span class="number">0</span>));</span><br><span class="line">                acLdr.HasArrowHead = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Add the new object to Model space and the transaction</span></span><br><span class="line">                acBlkTblRec.AppendEntity(acLdr);</span><br><span class="line">                acTrans.AddNewlyCreatedDBObject(acLdr, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Attach the annotation after the leader object is added</span></span><br><span class="line">                acLdr.Annotation = acMText.ObjectId;</span><br><span class="line">                acLdr.EvaluateLeader();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Commit the changes and dispose of the transaction</span></span><br><span class="line">        acTrans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="编辑引线关联性（-NET）"><a href="#编辑引线关联性（-NET）" class="headerlink" title="编辑引线关联性（.NET）"></a>编辑引线关联性（.NET）</h3><p>除了引线和注释之间的关联关系之外，引线及其注释在图形中是完全独立的对象。编辑引线不会影响注释，编辑注释也不会影响引线。</p>
+<p>虽然文字注释是使用DIMCLRT、DIMTXT和DIMTXSTY系统变量创建的，以定义其颜色、高度和样式，但不能通过这些系统变量进行更改，因为它不是真正的标注对象。文本注释的编辑方式必须与任何其他 MText 对象相同。</p>
+<p>使用 Evaluate 方法计算引线与其关联注释的关系。如果需要，此方法将更新引线几何图形。</p>
+<h3 id="编辑引线（-NET）"><a href="#编辑引线（-NET）" class="headerlink" title="编辑引线（.NET）"></a>编辑引线（.NET）</h3><p>对引线注释所做的任何更改其位置的修改都会影响关联引线端点的位置。此外，旋转注释会导致引线钩线（如果有）旋转。</p>
+<p>通过缩放引线来调整引线的大小。如果缩放引线，注释将保持在相对于引线端点的相同位置，但不会缩放。除了缩放之外，还可以移动、镜像和旋转引线。使用 TransformBy 方法编辑引线。使用其成员属性和方法修改关联的批注</p>
+<h2 id="使用几何公差（-NET）"><a href="#使用几何公差（-NET）" class="headerlink" title="使用几何公差（.NET）"></a>使用几何公差（.NET）</h2><p>几何公差显示了特征的形状、轮廓、方向、位置和跳动的偏差。在几何公差符号中添加几何公差。这些框包含单个尺寸的所有公差信息。</p>
+<p>本节中的主题</p>
+<ul>
+<li>创建几何公差（.NET）</li>
+<li>编辑几何公差（.NET）</li>
+</ul>
+<h3 id="创建几何公差（-NET）"><a href="#创建几何公差（-NET）" class="headerlink" title="创建几何公差（.NET）"></a>创建几何公差（.NET）</h3><p>通过创建 FeatureControlFrame 对象的实例来创建几何公差。当你创建一个 FeatureControlFrame 对象的实例时，它的构造函数可以接受一组可选的参数。创建新的 FeatureControlFrame 对象时，可以提供以下参数：</p>
+<ul>
+<li>包含公差符号的文本字符串（ Text 属性）</li>
+<li>插入点（ Location 属性）</li>
+<li>法向量（ Normal 属性）</li>
+<li>方向矢量（ Direction 属性）</li>
+</ul>
+<p><strong>创建几何公差</strong></p>
+<p>此示例在模型空间中创建简单的几何公差。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CommandMethod(<span class="string">&quot;CreateGeometricTolerance&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CreateGeometricTolerance</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Get the current database</span></span><br><span class="line">    Document acDoc = Application.DocumentManager.MdiActiveDocument;</span><br><span class="line">    Database acCurDb = acDoc.Database;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start a transaction</span></span><br><span class="line">    <span class="keyword">using</span> (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Open the Block table for read</span></span><br><span class="line">        BlockTable acBlkTbl;</span><br><span class="line">        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId,</span><br><span class="line">                                        OpenMode.ForRead) <span class="keyword">as</span> BlockTable;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Open the Block table record Model space for write</span></span><br><span class="line">        BlockTableRecord acBlkTblRec;</span><br><span class="line">        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace],</span><br><span class="line">                                        OpenMode.ForWrite) <span class="keyword">as</span> BlockTableRecord;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create the Geometric Tolerance (Feature Control Frame)</span></span><br><span class="line">        <span class="keyword">using</span> (FeatureControlFrame acFcf = <span class="keyword">new</span> FeatureControlFrame())</span><br><span class="line">        &#123;</span><br><span class="line">            acFcf.Text = <span class="string">&quot;&#123;\\Fgdt;j&#125;%%v&#123;\\Fgdt;n&#125;0.001%%v%%v%%v%%v&quot;</span>;</span><br><span class="line">            acFcf.Location = <span class="keyword">new</span> Point3d(<span class="number">5</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Add the new object to Model space and the transaction</span></span><br><span class="line">            acBlkTblRec.AppendEntity(acFcf);</span><br><span class="line">            acTrans.AddNewlyCreatedDBObject(acFcf, <span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Commit the changes and dispose of the transaction</span></span><br><span class="line">        acTrans.Commit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="编辑几何公差（-NET）"><a href="#编辑几何公差（-NET）" class="headerlink" title="编辑几何公差（.NET）"></a>编辑几何公差（.NET）</h3><p>几何公差受多个系统变量和特性的影响。下列系统变量和特性会影响几何公差的外观：</p>
+<p>DIMCLRD</p>
+<p>控制几何公差符号的颜色。</p>
+<p>DIMCLRT</p>
+<p>控制公差文字的颜色。</p>
+<p>DIMGAP</p>
+<p>控制几何公差符号和文字之间的差距。</p>
+<p>DIMTXT</p>
+<p>控制公差文字的大小。</p>
+<p>DIMTXTSTY</p>
+<p>控制公差文字的样式。</p>
+<h2 id="注：翻译自ObjectARX-Managed-NET-Developer’s-Guide，且只保留了C-部分的代码"><a href="#注：翻译自ObjectARX-Managed-NET-Developer’s-Guide，且只保留了C-部分的代码" class="headerlink" title="注：翻译自ObjectARX: Managed .NET Developer’s Guide，且只保留了C#部分的代码"></a><em><strong>注：</strong></em>翻译自<a target="_blank" rel="noopener" href="https://help.autodesk.com/view/OARX/2024/ENU/?guid=GUID-C3F3C736-40CF-44A0-9210-55F6A939B6F2">ObjectARX: Managed .NET Developer’s Guide</a>，且只保留了C#部分的代码</h2></article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CAD/">CAD</a></div><div class="post-share"><div class="social-share" data-image="/images/4stars.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/01/16/Revit%E4%BA%8C%E5%BC%80%E7%A4%BA%E4%BE%8B/Revit%E4%B8%8EExcel%E4%BA%A4%E4%BA%92/" title="Revit与Excel交互"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Revit与Excel交互</div></div><div class="info-2"><div class="info-item-1">  Excel检测更改自动保存，Revit自动读取数据生成元素 </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/01/08/CAD%E4%BA%8C%E5%BC%80/AddInManager/" title="AddInManager"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-08</div><div class="info-item-2">AddInManager</div></div><div class="info-2"><div class="info-item-1">AddInManager每次调试cad插件，老是会有占用的问题。网上找到方法就是通过反射解决，但是只找到那个要自己手动配置的，嫌麻烦。GitHub上有个CADAddInManager，用了一下，好像没什么反应，不知道是不是使用方式不对，文档也不详细。索性自己整一个。 参照Revit SDK 里的那个AddinManager及网上给出的方法。通过反射。把dll复制到临时文件夹，然后委托调用。现在只做了CommandMethod部分的。VS2022+CAD2024。  使用方式： 1、先自动加载： 在cad根目录Support文件夹下找到acad2024.lsp。 1(command&quot;netload&quot;...</div></div></div></a><a class="pagination-related" href="/2025/01/13/ObjectARX%EF%BC%9AManaged.NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/02%E6%8E%A7%E5%88%B6AutoCAD%E7%8E%AF%E5%A2%83%EF%BC%88.NET%EF%BC%89/" title="02控制AutoCAD环境（.NET）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-13</div><div class="info-item-2">02控制AutoCAD环境（.NET）</div></div><div class="info-2"><div class="info-item-1">控制AutoCAD环境（.NET）本章介绍开发与AutoCAD一起运行的进程内应用程序的基础知识。它解释了许多概念，以控制和有效地使用AutoCAD环境。 本节中的主题  控制应用程序窗口（.NET） 控制绘图窗口（.NET） 创建、打开、保存和关闭图形（.NET） 锁定和删除文档（.NET） AutoCAD的首选项（.NET） 设置和返回系统变量（.NET） 精确绘图（.NET） 提示用户输入（.NET） 访问命令行（.NET） 扩展AutoCAD用户界面（.NET） 自定义对话框可用于获取用户输入并扩展AutoCAD用户界面的功能。  控制应用程序窗口（.NET）控制应用程序窗口的能力使开发人员能够灵活地创建有效和智能的应用程序。有时，您的应用程序最小化AutoCAD窗口是合适的，可能是在您的代码在另一个应用程序（如Microsoft® Excel®）中执行工作时。此外，在执行提示用户输入等任务之前，通常需要验证AutoCAD窗口的状态。 使用Application对象上的方法和属性，可以更改Application窗口的位置、大小和可见性。您还可以使用...</div></div></div></a><a class="pagination-related" href="/2025/01/12/ObjectARX%EF%BC%9AManaged.NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/01AutoCAD.NET%20API%EF%BC%88.NET%EF%BC%89%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="01AutoCAD .NET API（.NET）的基础知识"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-12</div><div class="info-item-2">01AutoCAD .NET API（.NET）的基础知识</div></div><div class="info-2"><div class="info-item-1">AutoCAD .NET API（.NET）的基础知识要有效地使用AutoCAD®.NET API，您应该熟悉与要自动执行的任务相关的AutoCAD图元、对象和功能。对对象的图形和非图形特性了解得越多，就越容易通过AutoCAD .NET API对其进行操作。 本节中的主题  了解AutoCAD对象层次（.NET） 访问对象层次结构（.NET） 集合对象（.NET） 了解属性和方法（.NET） 进程外与进程内（.NET） 定义命令和AutoLISP函数（.NET）  了解AutoCAD对象层次（.NET）对象是AutoCAD .NET API的主要构造块。每个暴露的对象都代表AutoCAD的一个精确部分。AutoCAD .NET API中有许多不同类型的对象。AutoCAD .NET API中表示的某些对象包括：  图形对象，如直线、圆弧、文本和尺寸 样式设置，如图层、线型和标注样式 组织结构，如层、组和块 图形显示，如视图和视口 甚至绘图和AutoCAD应用程序  这些对象以分层方式进行结构化，AutoCAD应用程序对象位于根。这种层次结构通常被称为对象模型。下图显示了...</div></div></div></a><a class="pagination-related" href="/2025/01/14/ObjectARX%EF%BC%9AManaged.NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/03%E5%88%9B%E5%BB%BA%E5%92%8C%E7%BC%96%E8%BE%91AutoCAD%E5%9B%BE%E5%85%83%EF%BC%88.NET%EF%BC%89/" title="03创建和编辑AutoCAD图元（.NET）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-14</div><div class="info-item-2">03创建和编辑AutoCAD图元（.NET）</div></div><div class="info-2"><div class="info-item-1">创建和编辑AutoCAD图元（.NET）可以创建一系列对象，从简单的直线和圆到样条曲线、椭圆和关联填充区域。一般来说，您可以使用 AppendEntity 函数将对象添加到 BlockTableRecord 对象。创建对象后，可以更改其特性，例如图层、颜色和线型。 图形数据库与其他数据库程序类似，可以将模型空间中的Line对象视为表记录，将模型空间视为其数据库表。使用数据库时，必须先打开和关闭记录，然后才能使用它们。存储在 Database 对象中的对象没有什么不同，您可以使用 GetObject...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/4stars.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">funtim41@gmail.com</div><div class="author-info-description">实践-认识-再实践-再认识</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">59</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/FunTim41"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/FunTim41" target="_blank" title="Github"><i class="fab fa-github" style="color: #FFFFFF;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%BA%E5%AF%B8%E6%A0%87%E6%B3%A8%E5%92%8C%E5%85%AC%E5%B7%AE%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">尺寸标注和公差（.NET）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%BA%E5%AF%B8%E6%A0%87%E6%B3%A8%E6%A6%82%E5%BF%B5%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">尺寸标注概念（.NET）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E6%B3%A8%E7%9A%84%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">标注的组成部分（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E6%A0%87%E6%B3%A8%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.2.</span> <span class="toc-text">定义标注的系统变量（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%A0%87%E6%B3%A8%E6%96%87%E5%AD%97%E6%A0%B7%E5%BC%8F%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.3.</span> <span class="toc-text">设置标注文字样式（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%90%86%E8%A7%A3%E5%BC%95%E7%BA%BF%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.4.</span> <span class="toc-text">理解引线（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3%E5%85%B3%E8%81%94%E6%A0%87%E6%B3%A8%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.1.5.</span> <span class="toc-text">了解关联标注（.NET）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%A0%87%E6%B3%A8%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">创建标注（.NET）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%BA%BF%E6%80%A7%E6%A0%87%E6%B3%A8%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">创建线性标注（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%BE%84%E5%90%91%E6%A0%87%E6%B3%A8%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">创建径向标注（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%A7%92%E5%BA%A6%E6%A0%87%E6%B3%A8%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.2.3.</span> <span class="toc-text">创建角度标注（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%8A%98%E5%BC%AF%E5%8D%8A%E5%BE%84%E6%A0%87%E6%B3%A8%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.2.4.</span> <span class="toc-text">创建折弯半径标注（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%BC%A7%E9%95%BF%E6%A0%87%E6%B3%A8%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.2.5.</span> <span class="toc-text">创建弧长标注（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9D%90%E6%A0%87%E5%B0%BA%E5%AF%B8%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.2.6.</span> <span class="toc-text">创建坐标尺寸（.NET）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%BE%91%E6%A0%87%E6%B3%A8%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">编辑标注（.NET）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%86%99%E6%A0%87%E6%B3%A8%E6%96%87%E5%AD%97%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.3.1.</span> <span class="toc-text">重写标注文字（.NET）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E6%A0%B7%E5%BC%8F%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">使用标注样式（.NET）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E3%80%81%E4%BF%AE%E6%94%B9%E5%92%8C%E5%A4%8D%E5%88%B6%E6%A0%87%E6%B3%A8%E6%A0%B7%E5%BC%8F%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.4.1.</span> <span class="toc-text">创建、修改和复制标注样式（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%86%99%E6%A0%87%E6%B3%A8%E6%A0%B7%E5%BC%8F%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.4.2.</span> <span class="toc-text">重写标注样式（.NET）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E7%A9%BA%E9%97%B4%E5%92%8C%E5%9B%BE%E7%BA%B8%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%9A%84%E5%B0%BA%E5%AF%B8%E6%A0%87%E6%B3%A8%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.5.</span> <span class="toc-text">模型空间和图纸空间中的尺寸标注（.NET）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%BC%95%E7%BA%BF%E5%92%8C%E6%B3%A8%E9%87%8A%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">创建引线和注释（.NET）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%BC%95%E7%BA%BF%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.6.1.</span> <span class="toc-text">创建引线（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%91%E5%BC%95%E7%BA%BF%E6%B7%BB%E5%8A%A0%E6%B3%A8%E9%87%8A%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.6.2.</span> <span class="toc-text">向引线添加注释（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%BA%BF%E5%85%B3%E8%81%94%E6%80%A7%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.6.3.</span> <span class="toc-text">引线关联性（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%BE%91%E5%BC%95%E7%BA%BF%E5%85%B3%E8%81%94%E6%80%A7%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.6.4.</span> <span class="toc-text">编辑引线关联性（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%BE%91%E5%BC%95%E7%BA%BF%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.6.5.</span> <span class="toc-text">编辑引线（.NET）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%87%A0%E4%BD%95%E5%85%AC%E5%B7%AE%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.7.</span> <span class="toc-text">使用几何公差（.NET）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%87%A0%E4%BD%95%E5%85%AC%E5%B7%AE%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.7.1.</span> <span class="toc-text">创建几何公差（.NET）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%BE%91%E5%87%A0%E4%BD%95%E5%85%AC%E5%B7%AE%EF%BC%88-NET%EF%BC%89"><span class="toc-number">1.7.2.</span> <span class="toc-text">编辑几何公差（.NET）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%EF%BC%9A%E7%BF%BB%E8%AF%91%E8%87%AAObjectARX-Managed-NET-Developer%E2%80%99s-Guide%EF%BC%8C%E4%B8%94%E5%8F%AA%E4%BF%9D%E7%95%99%E4%BA%86C-%E9%83%A8%E5%88%86%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="toc-number">1.8.</span> <span class="toc-text">注：翻译自ObjectARX: Managed .NET Developer’s Guide，且只保留了C#部分的代码</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/07/ObjectARX%EF%BC%9AManaged.NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/04%E5%B0%BA%E5%AF%B8%E6%A0%87%E6%B3%A8%E5%92%8C%E5%85%AC%E5%B7%AE%EF%BC%88.NET%EF%BC%89/" title="04 尺寸标注和公差（.NET）">04 尺寸标注和公差（.NET）</a><time datetime="2025-02-07T07:32:15.924Z" title="更新于 2025-02-07 15:32:15">2025-02-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/14/ObjectARX%EF%BC%9AManaged.NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/03%E5%88%9B%E5%BB%BA%E5%92%8C%E7%BC%96%E8%BE%91AutoCAD%E5%9B%BE%E5%85%83%EF%BC%88.NET%EF%BC%89/" title="03创建和编辑AutoCAD图元（.NET）">03创建和编辑AutoCAD图元（.NET）</a><time datetime="2025-01-19T03:40:40.285Z" title="更新于 2025-01-19 11:40:40">2025-01-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/13/ObjectARX%EF%BC%9AManaged.NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/02%E6%8E%A7%E5%88%B6AutoCAD%E7%8E%AF%E5%A2%83%EF%BC%88.NET%EF%BC%89/" title="02控制AutoCAD环境（.NET）">02控制AutoCAD环境（.NET）</a><time datetime="2025-01-17T10:16:52.559Z" title="更新于 2025-01-17 18:16:52">2025-01-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/12/ObjectARX%EF%BC%9AManaged.NET%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%8C%87%E5%8D%97/01AutoCAD.NET%20API%EF%BC%88.NET%EF%BC%89%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="01AutoCAD .NET API（.NET）的基础知识">01AutoCAD .NET API（.NET）的基础知识</a><time datetime="2025-01-17T10:16:40.962Z" title="更新于 2025-01-17 18:16:40">2025-01-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/16/Revit%E4%BA%8C%E5%BC%80%E7%A4%BA%E4%BE%8B/Revit%E4%B8%8EExcel%E4%BA%A4%E4%BA%92/" title="Revit与Excel交互">Revit与Excel交互</a><time datetime="2025-01-16T08:43:45.327Z" title="更新于 2025-01-16 16:43:45">2025-01-16</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/images/topback.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By funtim41@gmail.com</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">学而不思则罔，思而不学则殆。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>(() => {
+  const panguFn = () => {
+    if (typeof pangu === 'object') pangu.autoSpacingPage()
+    else {
+      btf.getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+        .then(() => {
+          pangu.autoSpacingPage()
+        })
+    }
+  }
+
+  const panguInit = () => {
+    if (false){
+      GLOBAL_CONFIG_SITE.isPost && panguFn()
+    } else {
+      panguFn()
+    }
+  }
+
+  btf.addGlobalFn('pjaxComplete', panguInit, 'pangu')
+  document.addEventListener('DOMContentLoaded', panguInit)
+})()</script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'FunTim41/funtim41.github.io',
+      'data-repo-id': 'R_kgDONjG8ww',
+      'data-category-id': 'DIC_kwDONjG8w84Cllg2',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
